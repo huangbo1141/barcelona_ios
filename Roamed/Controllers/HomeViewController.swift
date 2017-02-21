@@ -8,10 +8,16 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
+    @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let nib = UINib.init(nibName: "PurchaseTableViewCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "cell")
+        tableView.delegate = self
+        tableView.dataSource = self
         getPurchased()
         // Do any additional setup after loading the view.
     }
@@ -20,6 +26,7 @@ class HomeViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    var response:PurchaseResponse?
     func getPurchased(){
         let global = GlobalSwift.sharedManager
         if let user = global.curUser{
@@ -34,12 +41,8 @@ class HomeViewController: UIViewController {
                 //            let loginResp = LoginResponse.init(dictionary: dict)
                 //            debugPrint(loginResp.response)
                 if error == nil {
-                    let loginResp = PurchaseResponse.init(dictionary: dict)
-                    if let array = loginResp.past_purchase{
-                        //
-                        debugPrint("ddd")
-                    }
-                    
+                    self.response = PurchaseResponse.init(dictionary: dict)
+                    self.tableView.reloadData()
                 }else{
                     CGlobal.alertMessage("Username or Password is incorrect", title: nil)
                     
@@ -50,7 +53,40 @@ class HomeViewController: UIViewController {
         
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        
+        return 1
+    }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let response = self.response, let present = response.present_purchase {
+            return present.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:PurchaseTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PurchaseTableViewCell
+        if let response = self.response, let present = response.present_purchase {
+            cell.setData(data: present[indexPath.row])
+        }
+        return cell
+    }
+    let tableHeight:CGFloat = 50.0
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return tableHeight;
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // did select
+        if let response = self.response, let present = response.present_purchase {
+            let ms = UIStoryboard.init(name: "Main", bundle: nil);
+            DispatchQueue.main.async {
+                let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
+                viewcon.inputData = present[indexPath.row]
+                self.navigationController?.pushViewController(viewcon, animated: true)
+            }
+        }
+    }
     /*
      // MARK: - Navigation
      

@@ -28,9 +28,9 @@ class Constants:NSObject{
     
     static let ACTION_LOGIN = "/api/register/";
     static let ACTION_GET_PURCHASE = "/api/get_purchased/";
-    static let ACTION_FRESH = "/assets/rest/" + PATH_APNS + "/loadfresh.php";
-    static let ACTION_FOLLOWED = "/assets/rest/" + PATH_APNS + "/loadfollowed.php";
-    static let ACTION_TOGO = "/assets/rest/" + PATH_APNS + "/loadtogo.php";
+    static let ACTION_DIVERT = "/api/divert/";
+    static let ACTION_CHANGECOUNTRY = "/api/change_country/";
+    static let ACTION_CALLLIST = "/api/calls/";
     static let ACTION_CONQUERED = "/assets/rest/" + PATH_APNS + "/loadconquered1.php";
     static let ACTION_TOGO_COUNTRY = "/assets/rest/" + PATH_APNS + "/loadtogo_country.php";
     static let ACTION_CONQUERED_COUNTRY = "/assets/rest/" + PATH_APNS + "/loadconquered_country.php";
@@ -75,7 +75,7 @@ class Constants:NSObject{
     static let MENU_HEIGHT:CGFloat = 30.0
     static let COLOR_TOOLBAR_TEXT = UIColor.white
 //    static let COLOR_TOOLBAR_TEXT = CGlobal.color(withHexString: "aaaaaa", alpha: 1.0)
-    static let COLOR_TOOLBAR_BACK = UIColor.white
+    static let COLOR_TOOLBAR_BACK = CGlobal.color(withHexString: "#759ED3", alpha: 1.0)
     
     
     // notifications

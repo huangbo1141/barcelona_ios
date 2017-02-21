@@ -16,14 +16,31 @@ class PurchaseResponse:BaseModelSwift{
         super.init()
         if let dict = dictionary {
             BaseModelSwift.parseResponse(targetClass: self, dict: dict)
+            let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = delegate.persistentContainer.viewContext
             
-            if let obj = dict["present_purchase"]{
+            if let obj = dict["present_purchase"] as? [String:AnyObject]{
                 present_purchase = [PresentPurchase]()
-                for item in obj as! [AnyObject] {
-                    if let item = item as? [AnyHashable:Any]{
-                        let data = PresentPurchase()
+                
+                for (key,value) in obj {
+                    if let item = value as? [AnyHashable:Any]{
+                        
+                        let data = PresentPurchase(context:context)
                         BaseModel.parseResponse(data, dict: item)
                         present_purchase?.append(data);
+                    }
+                    
+                }
+            }
+            if let obj = dict["past_purchase"] as? [String:AnyObject]{
+                past_purchase = [PastPurchase]()
+                
+                for (key,value) in obj {
+                    if let item = value as? [AnyHashable:Any]{
+                        
+                        let data = PastPurchase(context:context)
+                        BaseModel.parseResponse(data, dict: item)
+                        past_purchase?.append(data);
                     }
                     
                 }

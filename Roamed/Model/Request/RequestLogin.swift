@@ -15,6 +15,10 @@ class RequestLogin:BaseModelSwift{
     var country:String?
     var name:String?
     var userid:String?
+    var purchase_id:String?
+    var divert_phone:String?
+    var country_iso:String?
+    var next:String?
     
     func setDefaultkeySecret(){
         key = "abc123"

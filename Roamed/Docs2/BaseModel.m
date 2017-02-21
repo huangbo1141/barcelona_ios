@@ -62,7 +62,12 @@
         id value = [dict objectForKey:name];
         
         if (value!=nil && [value isKindOfClass:[NSString class]] && value != [NSNull null] ) {
-            [targetClass setValue:value forKey:name];
+            @try {
+                [targetClass setValue:value forKey:name];
+            } @catch (NSException *exception) {
+                
+            }
+            
         }
         //NSLog(@"Property %@ attributes: %@", name, name);
     }

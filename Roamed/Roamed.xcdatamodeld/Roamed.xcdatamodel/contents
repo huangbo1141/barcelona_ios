@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16B2657" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CallModel" representedClassName="CallModel" syncable="YES" codeGenerationType="class">
+        <attribute name="caller_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="country_iso" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="minutes" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="HelpModel" representedClassName="HelpModel" syncable="YES" codeGenerationType="class">
+        <attribute name="html" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="iso" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="PastPurchase" representedClassName="PastPurchase" syncable="YES" codeGenerationType="class">
         <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="country_iso" optional="YES" attributeType="String" syncable="YES"/>
@@ -19,8 +30,10 @@
         <attribute name="userid" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="User" positionX="-63" positionY="-18" width="128" height="75"/>
-        <element name="PresentPurchase" positionX="-54" positionY="9" width="128" height="120"/>
+        <element name="CallModel" positionX="-18" positionY="81" width="128" height="120"/>
         <element name="PastPurchase" positionX="-36" positionY="54" width="128" height="120"/>
+        <element name="PresentPurchase" positionX="-54" positionY="9" width="128" height="120"/>
+        <element name="User" positionX="-63" positionY="-18" width="128" height="75"/>
+        <element name="HelpModel" positionX="-36" positionY="72" width="128" height="75"/>
     </elements>
 </model>
