@@ -16,7 +16,7 @@ pod “SDWebImage”, ‘~>3.7’
 #pod 'RSKImageCropper'
 pod 'AFNetworking', '~> 3.0'
 #pod "MobilePlayer"
-#pod 'Socket.IO-Client-Swift', '~> 8.2.0'
+pod 'Socket.IO-Client-Swift', '~> 8.2.0'
 #pod 'HCSStarRatingView', '~> 1.4.5'
   # Pods for Roamed
 
