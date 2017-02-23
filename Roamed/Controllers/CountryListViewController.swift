@@ -92,6 +92,7 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
             request.country_iso = selectedData.webCode.lowercased()
             
             CGlobal.showIndicator(self)
+            debugPrint(request)
             manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_CHANGECOUNTRY) { (dict, error) in
                 
                 if error == nil {

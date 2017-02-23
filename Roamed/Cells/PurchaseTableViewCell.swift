@@ -24,7 +24,12 @@ class PurchaseTableViewCell: UITableViewCell {
             let image = UIImage.init(named: name)
             imgFlag.image = image;
         }
-        lblDaysLeft.text = data.days_left
+        if let dayleft = data.days_left {
+            lblDaysLeft.text = dayleft + " Days Left"
+        }else{
+            lblDaysLeft.text = "0 Days Left"
+        }
+        
         lblCountry.text = data.country
         
         

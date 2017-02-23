@@ -7,6 +7,7 @@
  //
  
  import UIKit
+ import CoreData
  
  class HelpViewController: UIViewController {
     var textToShow:String = ""
@@ -19,9 +20,58 @@
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        textToShow = "<style>a{ color:#43ABEA } p{ line-height:1.5; }</style>";
-        // Do any additional setup after loading the view, typically from a nib.
-        let urlStr:String = "http://prepaid-data-sim-card.wikia.com/api/v1/Search/List?query="+iso+"&minArticleQuality=10&batch=1&namespaces=0%2C14"
+        
+        
+        if let html = self.getTextShow() {
+            self.renderText(text: html)
+        }else{
+            textToShow = "<style>a{ color:#43ABEA } p{ line-height:1.5; }</style>";
+            // Do any additional setup after loading the view, typically from a nib.
+            self.iso = "New+Zeland"
+            let urlStr:String = "http://prepaid-data-sim-card.wikia.com/api/v1/Search/List?query="+iso+"&minArticleQuality=10&batch=1&namespaces=0%2C14"
+            debugPrint(urlStr)
+            self.show(urlStr: urlStr)
+        }
+        
+        
+    }
+    func getTextShow()->String?{
+        let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = delegate.persistentContainer.viewContext
+        do {
+            
+            let request = NSFetchRequest<HelpModel>.init(entityName: "HelpModel")
+            request.predicate = NSPredicate(format: "iso == %@",iso)
+            
+            let rows = try context.fetch(request)
+            if rows.count>0 {
+                let model:HelpModel = rows[0] 
+                return model.html
+            }
+        } catch  {
+            debugPrint("Fetch Failed")
+        }
+        return nil
+    }
+    func renderText(text:String){
+        DispatchQueue.main.async{
+            // print(self.textToShow)
+            self.webView.loadHTMLString(text, baseURL: nil)
+        }
+    }
+    func saveTexttoShow(text:String)->Bool{
+        
+        let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = delegate.persistentContainer.viewContext
+        let user = HelpModel(context:context)
+        
+        user.iso = iso
+        user.html = text
+        
+        return delegate.saveContext()
+        
+    }
+    func show(urlStr:String){
         let url = URL(string: urlStr) //set url
         let task = URLSession.shared.dataTask(with: url!, completionHandler: {
             (data, response, error) in
@@ -118,16 +168,16 @@
                                                 
                                                 
                                             }
-                                            DispatchQueue.main.async{
-                                                // print(self.textToShow)
-                                                self.webView.loadHTMLString(self.textToShow, baseURL: nil)
-                                                
+                                            self.renderText(text: self.textToShow)
+                                            if self.saveTexttoShow(text: self.textToShow) {
+                                                debugPrint("save succ")
                                             }
+                                            
                                         }
                                         
                                         
                                     }catch{
-                                        
+                                        debugPrint("catch1");
                                     }
                                     
                                     
@@ -145,15 +195,16 @@
                     }
                     
                     
-                }catch{
-                    
+                }catch {
+//                    let nserror = error as NSError
+//                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                    debugPrint("catch2");
                 }
             }
             
         }) //like a mini webrowser to go the the url; open browser in background
         
         task.resume()
-        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

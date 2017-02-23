@@ -10,6 +10,7 @@ import UIKit
 
 class PurchaseDetailViewController: UIViewController {
 
+    @IBOutlet weak var lblDaysLeft: UILabel!
     var inputData:PresentPurchase?
     @IBOutlet weak var btnChange: UIButton!
     @IBOutlet weak var lblCountry: UILabel!
@@ -41,10 +42,24 @@ class PurchaseDetailViewController: UIViewController {
             
             self.navigationItem.rightBarButtonItems = [barButton]
         }
+        self.initData()
         // Do any additional setup after loading the view.
     }
 
-    func initViews(){
+    func initData(){
+        if let data = self.inputData {
+            if let name = data.country_iso {
+                let image = UIImage.init(named: name)
+                imgFlag.image = image;
+            }
+            if let dayleft = data.days_left {
+                lblDaysLeft.text = dayleft + " Days Left"
+            }else{
+                lblDaysLeft.text = "0 Days Left"
+            }
+            
+            lblCountry.text = data.country
+        }
         
     }
     func clickView(sender:UIView){
@@ -91,6 +106,7 @@ class PurchaseDetailViewController: UIViewController {
                     request.purchase_id = inputData.id
                     request.divert_phone = divNum
                     
+                    request.divert_phone = "6597668866"
                     CGlobal.showIndicator(self)
                     manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_DIVERT) { (dict, error) in
                         
@@ -105,7 +121,7 @@ class PurchaseDetailViewController: UIViewController {
                                 }
                             }
                         }else{
-                            CGlobal.alertMessage("Username or Password is incorrect", title: nil)
+                            CGlobal.alertMessage("Server Error", title: nil)
                             
                         }
                         CGlobal.stopIndicator(self)

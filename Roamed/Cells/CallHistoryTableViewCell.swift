@@ -37,7 +37,7 @@ class CallHistoryTableViewCell: UITableViewCell {
         }
         lblTo.text = ""
         if let min = data.minutes {
-            lblDuration.text = min + " minutes"
+            lblDuration.text = min + " min"
         }else{
             lblDuration.text = "0 minutes"
         }
