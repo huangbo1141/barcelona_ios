@@ -89,7 +89,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     self.response = global.purchaseResponse
                     self.tableView.reloadData()
                 }else{
-                    CGlobal.alertMessage("Username or Password is incorrect", title: nil)
+                    CGlobal.alertMessage("Fail to Load", title: nil)
                     
                 }
                 CGlobal.stopIndicator(self)

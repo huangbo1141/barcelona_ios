@@ -95,6 +95,7 @@ class PurchaseDetailViewController: UIViewController {
                         // success
                         let row:TblPurchaseDetail  = rows[0]
                         
+                        self.purchaseDetail = row
                         if let country = user.country,let divert_number = row.divert_number ,divert_number.characters.count > 0 {
                             
                             
@@ -120,11 +121,9 @@ class PurchaseDetailViewController: UIViewController {
                 CGlobal.stopIndicator(self)
             }
         }
-        
-        
-        
 
     }
+    var purchaseDetail:TblPurchaseDetail?
     func clickGesture(gesture:UITapGestureRecognizer){
         if let sender = gesture.view {
             self.clickView(sender:sender)
@@ -164,7 +163,7 @@ class PurchaseDetailViewController: UIViewController {
         case 101:
             // divert code
             if checkValidate() {
-                if let inputData = self.inputData {
+                if let inputData = self.inputData, let detail = self.purchaseDetail {
                     let divNum = txtInputNumber.text
                     let global = GlobalSwift.sharedManager
                     if let user = global.curUser{
@@ -174,7 +173,7 @@ class PurchaseDetailViewController: UIViewController {
                         request.userid = user.userid
                         request.phone = user.phoneno
                         request.purchase_id = inputData.id
-                        request.divert_phone = divNum
+                        request.divert_phone = detail.divert_number
                         
                         //                    request.divert_phone = "6597668866"
                         CGlobal.showIndicator(self)
