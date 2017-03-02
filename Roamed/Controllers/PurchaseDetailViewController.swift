@@ -28,8 +28,9 @@ class PurchaseDetailViewController: UIViewController {
 //        btnDivert.tag = 101 clickGesture
         
         let gesture = UITapGestureRecognizer.init(target: self, action: #selector(PurchaseDetailViewController.clickGesture(gesture:)));
-        lblDivert.
-        lblDivert.addGestureRe(gesture)
+        lblDivert.isUserInteractionEnabled = true
+        lblDivert.addGestureRecognizer(gesture)
+        lblDivert.tag = 101
         
         if let navc = self.navigationController {
             let button: UIButton = UIButton.init(type: .custom)
@@ -99,12 +100,15 @@ class PurchaseDetailViewController: UIViewController {
                             
                             let title = "Divert your \(country) number to \(divert_number)"
                             
-                            self.btnDivert.setTitle(title, for: .normal)
+                            //self.btnDivert.setTitle(title, for: .normal)
+                            self.lblDivert.text = title
                         }else{
                             if let message = row.divert_message {
                                 //CGlobal.alertMessage(message, title: nil)
-                                self.btnDivert.setTitle(message, for: .normal)
-                                self.btnDivert.isEnabled = false
+//                                self.btnDivert.setTitle(message, for: .normal)
+//                                self.btnDivert.isEnabled = false
+                                self.lblDivert.text = message
+                                self.lblDivert.isUserInteractionEnabled = false
                             }
                         }
                     }else{
@@ -121,7 +125,7 @@ class PurchaseDetailViewController: UIViewController {
         
 
     }
-    func clickGesture(gesture:UIView){
+    func clickGesture(gesture:UITapGestureRecognizer){
         if let sender = gesture.view {
             self.clickView(sender:sender)
         }
