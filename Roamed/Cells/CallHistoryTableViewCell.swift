@@ -13,7 +13,7 @@ class CallHistoryTableViewCell: UITableViewCell {
     @IBOutlet weak var imgFlag: UIImageView!
     @IBOutlet weak var lblDate: UILabel!
     @IBOutlet weak var lblDuration: UILabel!
-    @IBOutlet weak var lblTo: UILabel!
+//    @IBOutlet weak var lblTo: UILabel!
     @IBOutlet weak var lblFrom: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,11 +35,11 @@ class CallHistoryTableViewCell: UITableViewCell {
                 lblFrom.text = country.countryName
             }
         }
-        lblTo.text = ""
+//        lblTo.text = ""
         if let min = data.minutes {
-            lblDuration.text = min + " min"
+            lblDuration.text = min + ""
         }else{
-            lblDuration.text = "0 minutes"
+            lblDuration.text = "0 "
         }
         lblDate.text = data.date
     }

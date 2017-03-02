@@ -19,10 +19,35 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
         tableView.delegate = self
         tableView.dataSource = self
         
-        loadData()
+        DispatchQueue.main.async {
+            let refreshControl:UIRefreshControl = UIRefreshControl.init()
+            self.tableView.refreshControl = refreshControl
+            refreshControl.addTarget(self, action: #selector(HomeViewController.refresh(control:)), for: UIControlEvents.valueChanged)
+            self.refreshControl = refreshControl
+            self.loadData()
+            
+            let gesture = UISwipeGestureRecognizer.init(target: self, action: #selector(CallHistoryViewController.swipeLeft(gesture:)))
+            gesture.direction = .right
+            self.tableView.addGestureRecognizer(gesture)
+        }
+        
         // Do any additional setup after loading the view.
     }
-    
+    var refreshControl:UIRefreshControl?
+    func swipeLeft(gesture:UISwipeGestureRecognizer){
+        if let tabvc  = self.tabBarController {
+            self.tableView.slideIn(fromLeft: 0.5, delegate: nil, bounds: CGRect.zero)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                // your code here
+                tabvc.selectedIndex = 0
+            }
+        }
+    }
+    func refresh(control:UIRefreshControl){
+        self.loadData()
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -39,6 +64,7 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
             request.phone = user.phoneno
             request.next = String(pageIndex)
             
+            self.isLoading = true
             CGlobal.showIndicator(self)
             manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_CALLLIST) { (dict, error) in
                 //            let loginResp = LoginResponse.init(dictionary: dict)
@@ -57,6 +83,9 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
                     
                 }
                 CGlobal.stopIndicator(self)
+                self.refreshControl?.endRefreshing()
+                self.isLoading = false
+                self.scrollViewSize = self.tableView.frame.size
             }
         }
         
@@ -64,6 +93,7 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
     var arrowUp = 0
     var arrowDown = 0
     var scrollViewSize:CGSize?
+    var isLoading:Bool = false;
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset
         if let scrollViewSize = scrollViewSize {
@@ -75,10 +105,11 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
                     
                 }
             }else{
+                
                 let bottomEdge = offset.y + scrollViewSize.height;
                 let contentHeight = scrollView.contentSize.height
                 let p = max(contentHeight,scrollViewSize.height)
-                if (bottomEdge >= p && offset.y>0) {
+                if (bottomEdge >= p && offset.y>0 && isLoading == false) {
                     debugPrint(" we are at the end")
                     arrowDown = arrowDown + 1
                     if arrowDown >= 1 {

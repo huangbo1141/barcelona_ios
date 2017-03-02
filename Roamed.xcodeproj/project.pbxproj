@@ -8,6 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		0F9BCE9157C6441D8208F23A /* Pods_Roamed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AAE91820C8FDA8CD19B898D /* Pods_Roamed.framework */; };
+		4D3B65B21E684A0F00929A59 /* PastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65B11E684A0F00929A59 /* PastViewController.swift */; };
+		4D3B65B51E684D0800929A59 /* PastTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65B31E684D0800929A59 /* PastTableViewCell.swift */; };
+		4D3B65B61E684D0800929A59 /* PastTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D3B65B41E684D0800929A59 /* PastTableViewCell.xib */; };
+		4D3B65B81E6852DA00929A59 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65B71E6852DA00929A59 /* TabViewController.swift */; };
+		4D3B65BA1E6859FB00929A59 /* PurchaseDetailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65B91E6859FB00929A59 /* PurchaseDetailResponse.swift */; };
+		4D3B65BC1E685A4000929A59 /* TblPurchaseDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65BB1E685A4000929A59 /* TblPurchaseDetail.swift */; };
+		4D3B65BE1E6862B300929A59 /* CountryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65BD1E6862B300929A59 /* CountryResponse.swift */; };
+		4D3B65C01E68632600929A59 /* TblCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65BF1E68632600929A59 /* TblCountry.swift */; };
+		4D3B65C61E68757500929A59 /* UIImage+Decompression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65C21E68757500929A59 /* UIImage+Decompression.swift */; };
+		4D3B65C71E68757500929A59 /* UIView+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65C41E68757500929A59 /* UIView+Animation.m */; };
+		4D3B65C81E68757500929A59 /* UIView+Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65C51E68757500929A59 /* UIView+Property.swift */; };
 		4D3DAEE61E5CB8140030AE9F /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3DAEE51E5CB8140030AE9F /* HelpViewController.swift */; };
 		4D3DAEE81E5CC1480030AE9F /* ico_help.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D3DAEE71E5CC1480030AE9F /* ico_help.png */; };
 		4D6FC4AE1E5C2EBE00ECD774 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6FC4AD1E5C2EBE00ECD774 /* AppDelegate.swift */; };
@@ -94,6 +105,18 @@
 /* Begin PBXFileReference section */
 		1E0C74FB537DF2FCC0877A8E /* Pods-Roamed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roamed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Roamed/Pods-Roamed.debug.xcconfig"; sourceTree = "<group>"; };
 		3AAE91820C8FDA8CD19B898D /* Pods_Roamed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Roamed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D3B65B11E684A0F00929A59 /* PastViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastViewController.swift; sourceTree = "<group>"; };
+		4D3B65B31E684D0800929A59 /* PastTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastTableViewCell.swift; sourceTree = "<group>"; };
+		4D3B65B41E684D0800929A59 /* PastTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PastTableViewCell.xib; sourceTree = "<group>"; };
+		4D3B65B71E6852DA00929A59 /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
+		4D3B65B91E6859FB00929A59 /* PurchaseDetailResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseDetailResponse.swift; sourceTree = "<group>"; };
+		4D3B65BB1E685A4000929A59 /* TblPurchaseDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TblPurchaseDetail.swift; sourceTree = "<group>"; };
+		4D3B65BD1E6862B300929A59 /* CountryResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryResponse.swift; sourceTree = "<group>"; };
+		4D3B65BF1E68632600929A59 /* TblCountry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TblCountry.swift; sourceTree = "<group>"; };
+		4D3B65C21E68757500929A59 /* UIImage+Decompression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Decompression.swift"; sourceTree = "<group>"; };
+		4D3B65C31E68757500929A59 /* UIView+Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animation.h"; sourceTree = "<group>"; };
+		4D3B65C41E68757500929A59 /* UIView+Animation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Animation.m"; sourceTree = "<group>"; };
+		4D3B65C51E68757500929A59 /* UIView+Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Property.swift"; sourceTree = "<group>"; };
 		4D3DAEE51E5CB8140030AE9F /* HelpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		4D3DAEE71E5CC1480030AE9F /* ico_help.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ico_help.png; sourceTree = "<group>"; };
 		4D6FC4AA1E5C2EBE00ECD774 /* Roamed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roamed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,6 +247,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D3B65C11E68757500929A59 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				4D3B65C21E68757500929A59 /* UIImage+Decompression.swift */,
+				4D3B65C31E68757500929A59 /* UIView+Animation.h */,
+				4D3B65C41E68757500929A59 /* UIView+Animation.m */,
+				4D3B65C51E68757500929A59 /* UIView+Property.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		4D6FC4A11E5C2EBE00ECD774 = {
 			isa = PBXGroup;
 			children = (
@@ -259,6 +293,7 @@
 				4D6FC4E11E5C38D500ECD774 /* libs */,
 				4D6FC5341E5C38D500ECD774 /* Model */,
 				4D6FC5491E5C38D500ECD774 /* Views */,
+				4D3B65C11E68757500929A59 /* Extension */,
 				4D6FC4BC1E5C2EBE00ECD774 /* Info.plist */,
 				4D6FC4B41E5C2EBE00ECD774 /* Roamed.xcdatamodeld */,
 			);
@@ -286,6 +321,8 @@
 				4D6FC5A91E5C873C00ECD774 /* CountryListViewController.swift */,
 				4D6FC5AF1E5C90E400ECD774 /* CallHistoryViewController.swift */,
 				4D3DAEE51E5CB8140030AE9F /* HelpViewController.swift */,
+				4D3B65B11E684A0F00929A59 /* PastViewController.swift */,
+				4D3B65B71E6852DA00929A59 /* TabViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -493,6 +530,8 @@
 				4D6FC5421E5C38D500ECD774 /* LoginResponse.swift */,
 				4D6FC59C1E5C46B200ECD774 /* PurchaseResponse.swift */,
 				4D6FC5B51E5C986700ECD774 /* CallResponse.swift */,
+				4D3B65B91E6859FB00929A59 /* PurchaseDetailResponse.swift */,
+				4D3B65BD1E6862B300929A59 /* CountryResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -517,6 +556,8 @@
 			isa = PBXGroup;
 			children = (
 				4D6FC5481E5C38D500ECD774 /* TblUser.swift */,
+				4D3B65BB1E685A4000929A59 /* TblPurchaseDetail.swift */,
+				4D3B65BF1E68632600929A59 /* TblCountry.swift */,
 			);
 			path = Tables;
 			sourceTree = "<group>";
@@ -549,6 +590,8 @@
 				4D6FC5AC1E5C895900ECD774 /* CountryTableViewCell.xib */,
 				4D6FC5B11E5C91C900ECD774 /* CallHistoryTableViewCell.swift */,
 				4D6FC5B21E5C91C900ECD774 /* CallHistoryTableViewCell.xib */,
+				4D3B65B31E684D0800929A59 /* PastTableViewCell.swift */,
+				4D3B65B41E684D0800929A59 /* PastTableViewCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -648,6 +691,7 @@
 				4D6FC5B41E5C91C900ECD774 /* CallHistoryTableViewCell.xib in Resources */,
 				4D6FC4B31E5C2EBE00ECD774 /* Main.storyboard in Resources */,
 				4D6FC57E1E5C38D500ECD774 /* combobox_down_highlighed@2x.png in Resources */,
+				4D3B65B61E684D0800929A59 /* PastTableViewCell.xib in Resources */,
 				4D6FC4C71E5C38B400ECD774 /* img_back1.png in Resources */,
 				4D6FC5591E5C38D500ECD774 /* country.sqlite3 in Resources */,
 				4D6FC4C81E5C38B400ECD774 /* img_pla1.png in Resources */,
@@ -710,18 +754,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D6FC55D1E5C38D500ECD774 /* SampleModel1.swift in Sources */,
+				4D3B65C81E68757500929A59 /* UIView+Property.swift in Sources */,
 				4D6FC55C1E5C38D500ECD774 /* NetworkUtil.swift in Sources */,
 				4D6FC5911E5C38D500ECD774 /* RoundCornerBorderButton.swift in Sources */,
+				4D3B65C71E68757500929A59 /* UIView+Animation.m in Sources */,
 				4D6FC5701E5C38D500ECD774 /* MGSwipeTableCell.m in Sources */,
+				4D3B65BA1E6859FB00929A59 /* PurchaseDetailResponse.swift in Sources */,
 				4D6FC4B61E5C2EBE00ECD774 /* Roamed.xcdatamodeld in Sources */,
 				4D6FC56F1E5C38D500ECD774 /* MGSwipeButton.m in Sources */,
 				4D6FC5851E5C38D500ECD774 /* TblMakeItin.swift in Sources */,
+				4D3B65BC1E685A4000929A59 /* TblPurchaseDetail.swift in Sources */,
 				4D6FC5921E5C38D500ECD774 /* RoundCornerBorderView.swift in Sources */,
 				4D6FC55B1E5C38D500ECD774 /* GlobalSwift.swift in Sources */,
+				4D3B65BE1E6862B300929A59 /* CountryResponse.swift in Sources */,
 				4D6FC5621E5C38D500ECD774 /* EnvVar.m in Sources */,
 				4D6FC5721E5C38D500ECD774 /* NSString+Common.m in Sources */,
 				4D6FC59D1E5C46B200ECD774 /* PurchaseResponse.swift in Sources */,
 				4D6FC5871E5C38D500ECD774 /* AddressComponent.swift in Sources */,
+				4D3B65B51E684D0800929A59 /* PastTableViewCell.swift in Sources */,
 				4D6FC4AE1E5C2EBE00ECD774 /* AppDelegate.swift in Sources */,
 				4D6FC58B1E5C38D500ECD774 /* LoginResponse.swift in Sources */,
 				4D6FC58D1E5C38D500ECD774 /* RequestModel.swift in Sources */,
@@ -737,6 +787,7 @@
 				4D6FC5741E5C38D500ECD774 /* TLYDelegateProxy.m in Sources */,
 				4D6FC5611E5C38D500ECD774 /* DBManager.m in Sources */,
 				4D6FC57C1E5C38D500ECD774 /* TTTAttributedLabel.m in Sources */,
+				4D3B65C01E68632600929A59 /* TblCountry.swift in Sources */,
 				4D6FC5631E5C38D500ECD774 /* NetworkParser.m in Sources */,
 				4D6FC5561E5C38D500ECD774 /* LoginViewController.swift in Sources */,
 				4D6FC5761E5C38D500ECD774 /* UIViewController+BetterLayoutGuides.m in Sources */,
@@ -751,6 +802,7 @@
 				4D6FC5931E5C38D500ECD774 /* RoundCornerButton.swift in Sources */,
 				4D6FC5AD1E5C895900ECD774 /* CountryTableViewCell.swift in Sources */,
 				4D6FC5841E5C38D500ECD774 /* ActionType.swift in Sources */,
+				4D3B65B81E6852DA00929A59 /* TabViewController.swift in Sources */,
 				4D6FC56D1E5C38D500ECD774 /* GCPlaceholderTextView.m in Sources */,
 				4D6FC58C1E5C38D500ECD774 /* WNASearchTerm.swift in Sources */,
 				4D6FC5731E5C38D500ECD774 /* NSObject+TLYSwizzlingHelpers.m in Sources */,
@@ -758,6 +810,7 @@
 				4D6FC5711E5C38D500ECD774 /* MyPopupDialog.m in Sources */,
 				4D6FC5901E5C38D500ECD774 /* MyDialog.m in Sources */,
 				4D6FC5A11E5C726200ECD774 /* PurchaseTableViewCell.swift in Sources */,
+				4D3B65B21E684A0F00929A59 /* PastViewController.swift in Sources */,
 				4D3DAEE61E5CB8140030AE9F /* HelpViewController.swift in Sources */,
 				4D6FC5781E5C38D500ECD774 /* TLYShyScrollViewController.m in Sources */,
 				4D6FC5A61E5C771A00ECD774 /* SwiftNavViewController.swift in Sources */,
@@ -771,6 +824,7 @@
 				4D6FC5961E5C38D500ECD774 /* WNAActivityIndicator.m in Sources */,
 				4D6FC58F1E5C38D500ECD774 /* CustomTextField.m in Sources */,
 				4D6FC5751E5C38D500ECD774 /* UIScrollView+Helpers.m in Sources */,
+				4D3B65C61E68757500929A59 /* UIImage+Decompression.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -894,15 +948,15 @@
 			baseConfigurationReference = 1E0C74FB537DF2FCC0877A8E /* Pods-Roamed.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Christopher Beal (NHB2R46P79)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SIMPSY LLP (6BQ95S6MAJ)";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Roamed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hgc.Roamed;
+				PRODUCT_BUNDLE_IDENTIFIER = com.simpsy.roamed1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "11b97f66-b7ff-49ef-ad75-7e048e21415d";
-				PROVISIONING_PROFILE_SPECIFIER = "Chris common dev";
+				PROVISIONING_PROFILE = "8e949b11-2a43-439c-8e56-4613b9446fde";
+				PROVISIONING_PROFILE_SPECIFIER = "Roamed1 Adhoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "Roamed/Roamed-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -913,15 +967,15 @@
 			baseConfigurationReference = F28E3DDE339E0F4FA107A46B /* Pods-Roamed.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Christopher Beal (NHB2R46P79)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SIMPSY LLP (6BQ95S6MAJ)";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Roamed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hgc.Roamed;
+				PRODUCT_BUNDLE_IDENTIFIER = com.simpsy.roamed1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "11b97f66-b7ff-49ef-ad75-7e048e21415d";
-				PROVISIONING_PROFILE_SPECIFIER = "Chris common dev";
+				PROVISIONING_PROFILE = "8e949b11-2a43-439c-8e56-4613b9446fde";
+				PROVISIONING_PROFILE_SPECIFIER = "Roamed1 Adhoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "Roamed/Roamed-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};

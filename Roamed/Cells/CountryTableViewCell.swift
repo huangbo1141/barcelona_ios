@@ -26,6 +26,14 @@ class CountryTableViewCell: UITableViewCell {
         
         lblCountry.text = data.countryName
     }
+    func setData(tblCountry:TblCountry){
+        if let name = tblCountry.iso {
+            let image = UIImage.init(named: name.lowercased())
+            imgFlag.image = image;
+        }
+        
+        lblCountry.text = tblCountry.country
+    }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

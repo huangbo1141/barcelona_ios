@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "telephone-7.png",
+      "filename" : "call-30px.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "call-60px.png",
       "scale" : "2x"
     },
     {

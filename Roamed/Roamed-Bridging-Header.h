@@ -29,3 +29,4 @@
 #import "NetworkParser.h"
 #import "MyDialog.h"
 #import "BaseModel.h"
+#import "UIView+Animation.h"

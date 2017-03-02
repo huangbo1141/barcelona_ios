@@ -63,6 +63,7 @@ class GlobalSwift:NSObject{
     
     var loginResponse:LoginResponse?
     var uuid:String?
+    var purchaseResponse:PurchaseResponse?
     
     static func heightForString(font: UIFont, width: CGFloat, string:String?) -> CGFloat {
         if let string = string {

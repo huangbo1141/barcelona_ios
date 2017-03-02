@@ -21,7 +21,7 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
         self.initData()
         // Do any additional setup after loading the view.
     }
-    var countryList:NSMutableArray?
+    var countryList:[TblCountry] = [TblCountry]()
     func initData(){
         if let data = self.data{
             lblCountry.text = data.country
@@ -34,10 +34,38 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
         tableView.register(nib, forCellReuseIdentifier: "cell")
         tableView.delegate = self
         tableView.dataSource = self
-        let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        countryList = delegate.dbManager?.getCountries()
         
         
+        self.loadData()
+    }
+    func loadData(){
+        
+        
+        if let data = self.data{
+            let manager = NetworkUtil.sharedManager
+            let request = RequestLogin()
+            request.setDefaultkeySecret()
+            request.purchase_id = data.id
+            
+            //                    request.divert_phone = "6597668866"
+            CGlobal.showIndicator(self)
+            manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_COUNTRYISO) { (dict, error) in
+                
+                if error == nil {
+                    let response = CountryResponse.init(dictionary: dict)
+                    if let rows = response.countries, rows.count > 0 {
+                        // success
+                        self.countryList = rows
+                        self.tableView.reloadData()
+                    }else{
+                        
+                    }
+                }else{
+                    //CGlobal.alertMessage("Server Error", title: nil)
+                }
+                CGlobal.stopIndicator(self)
+            }
+        }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
         
@@ -45,19 +73,13 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let countryList = countryList {
-            return countryList.count
-        }
-        return 0
+        return countryList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:CountryTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CountryTableViewCell
-        if let countryList = self.countryList{
-            if let data = countryList[indexPath.row] as? WNACountry {
-                cell.setData(data: data)
-            }
-        }
+        
+        cell.setData(tblCountry: countryList[indexPath.row])
         return cell
     }
     let tableHeight:CGFloat = 50.0
@@ -66,13 +88,9 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // did select
-        if let countryList = self.countryList{
-            if let data = countryList[indexPath.row] as? WNACountry {
-                self.selectedData = data
-            }
-        }
+        self.selectedData = countryList[indexPath.row]
     }
-    var selectedData:WNACountry?
+    var selectedData:TblCountry?
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -82,14 +100,14 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
         //
         
         let global = GlobalSwift.sharedManager
-        if let user = global.curUser, let inputData = self.data, let selectedData = self.selectedData{
+        if let user = global.curUser, let inputData = self.data, let iso = self.selectedData?.iso{
             let manager = NetworkUtil.sharedManager
             let request = RequestLogin()
             request.setDefaultkeySecret()
             request.userid = user.userid
             request.phone = user.phoneno
             request.purchase_id = inputData.id
-            request.country_iso = selectedData.webCode.lowercased()
+            request.country_iso = iso.lowercased()
             
             CGlobal.showIndicator(self)
             debugPrint(request)

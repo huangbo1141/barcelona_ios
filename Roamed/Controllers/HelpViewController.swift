@@ -1,4 +1,4 @@
- //
+	 //
  //  ViewController.swift
  //  WikiaJson
  //
@@ -12,6 +12,7 @@
  class HelpViewController: UIViewController {
     var textToShow:String = ""
     var iso:String = "New+Zeland"
+    var country:String = "New Zeland"
     
     
     @IBOutlet weak var webView: UIWebView!
@@ -27,25 +28,29 @@
         }else{
             textToShow = "<style>a{ color:#43ABEA } p{ line-height:1.5; }</style>";
             // Do any additional setup after loading the view, typically from a nib.
-            self.iso = "New+Zeland"
+            //self.iso = "New+Zeland"
             let urlStr:String = "http://prepaid-data-sim-card.wikia.com/api/v1/Search/List?query="+iso+"&minArticleQuality=10&batch=1&namespaces=0%2C14"
             debugPrint(urlStr)
             self.show(urlStr: urlStr)
         }
         
-        
+        webView.scrollView.showsHorizontalScrollIndicator = false;
+        webView.scrollView.showsVerticalScrollIndicator = false;
     }
     func getTextShow()->String?{
         let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = delegate.persistentContainer.viewContext
         do {
             
+//            let request = NSFetchRequest<HelpModel>.init(entityName: "HelpModel")
+//            request.predicate = NSPredicate(format: "iso = '%@'","aaa")
             let request = NSFetchRequest<HelpModel>.init(entityName: "HelpModel")
-            request.predicate = NSPredicate(format: "iso == %@",iso)
+            request.predicate = NSPredicate.init(format: " iso == '" + iso + "'");
             
             let rows = try context.fetch(request)
+//            let rows = try context.fetch(HelpModel.fetchRequest())
             if rows.count>0 {
-                let model:HelpModel = rows[0] 
+                let model:HelpModel = rows[0] as! HelpModel
                 return model.html
             }
         } catch  {
@@ -65,7 +70,7 @@
         let context = delegate.persistentContainer.viewContext
         let user = HelpModel(context:context)
         
-        user.iso = iso
+        user.iso = self.iso
         user.html = text
         
         return delegate.saveContext()
@@ -88,7 +93,7 @@
                             let arrayCountry = arrayDetails[i]["title"] as! String
                             
                             
-                            if arrayCountry == "New Zealand"{
+                            if arrayCountry == self.country{
                                 
                                 let pageId:AnyObject = (arrayDetails[i]["id"] as? NSNumber)!
                                 let url = arrayDetails[i]["url"] as! String

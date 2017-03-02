@@ -16,14 +16,20 @@ class PurchaseDetailViewController: UIViewController {
     @IBOutlet weak var lblCountry: UILabel!
     @IBOutlet weak var imgFlag: UIImageView!
     @IBOutlet weak var txtInputNumber: UITextField!
-    @IBOutlet weak var btnDivert: UIButton!
+//    @IBOutlet weak var btnDivert: UIButton!
+    
+    @IBOutlet weak var lblDivert: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         btnChange.addTarget(self, action: #selector(PurchaseDetailViewController.clickView(sender:)), for: .touchUpInside)
-        btnDivert.addTarget(self, action: #selector(PurchaseDetailViewController.clickView(sender:)), for: .touchUpInside)
+//        btnDivert.addTarget(self, action: #selector(PurchaseDetailViewController.clickView(sender:)), for: .touchUpInside)
         btnChange.tag = 100
-        btnDivert.tag = 101
+//        btnDivert.tag = 101 clickGesture
+        
+        let gesture = UITapGestureRecognizer.init(target: self, action: #selector(PurchaseDetailViewController.clickGesture(gesture:)));
+        lblDivert.
+        lblDivert.addGestureRe(gesture)
         
         if let navc = self.navigationController {
             let button: UIButton = UIButton.init(type: .custom)
@@ -57,21 +63,80 @@ class PurchaseDetailViewController: UIViewController {
             }else{
                 lblDaysLeft.text = "0 Days Left"
             }
+            if let country = data.country {
+                txtInputNumber.placeholder = "Input \(country) Number";
+            }
             
             lblCountry.text = data.country
+            self.getRequiredInfo()
         }
         
+        
+    }
+    func getRequiredInfo(){
+        //PurchaseDetailResponse
+        let global = GlobalSwift.sharedManager
+        if let data = self.inputData ,let user = global.curUser{
+            let manager = NetworkUtil.sharedManager
+            let request = RequestLogin()
+            request.setDefaultkeySecret()
+            request.userid = user.userid
+            request.phone = user.phoneno
+            request.purchase_id = data.id
+            
+            //                    request.divert_phone = "6597668866"
+            CGlobal.showIndicator(self)
+            manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_GET_PURCHASE) { (dict, error) in
+                
+                if error == nil {
+                    let response = PurchaseDetailResponse.init(dictionary: dict)
+                    if let rows = response.present_purchase, rows.count > 0 {
+                        // success
+                        let row:TblPurchaseDetail  = rows[0]
+                        
+                        if let country = user.country,let divert_number = row.divert_number ,divert_number.characters.count > 0 {
+                            
+                            
+                            let title = "Divert your \(country) number to \(divert_number)"
+                            
+                            self.btnDivert.setTitle(title, for: .normal)
+                        }else{
+                            if let message = row.divert_message {
+                                //CGlobal.alertMessage(message, title: nil)
+                                self.btnDivert.setTitle(message, for: .normal)
+                                self.btnDivert.isEnabled = false
+                            }
+                        }
+                    }else{
+                        
+                    }
+                }else{
+                    //CGlobal.alertMessage("Server Error", title: nil)
+                }
+                CGlobal.stopIndicator(self)
+            }
+        }
+        
+        
+        
+
+    }
+    func clickGesture(gesture:UIView){
+        if let sender = gesture.view {
+            self.clickView(sender:sender)
+        }
     }
     func clickView(sender:UIView){
         let tag = sender.tag
         switch tag {
         case 200:
-            if let data = self.inputData,let webcode = data.country_iso{
+            if let data = self.inputData,let country = data.country{
                 let ms = UIStoryboard.init(name: "Main", bundle: nil);
                 DispatchQueue.main.async {
                     let viewcon = ms.instantiateViewController(withIdentifier: "HelpViewController") as! HelpViewController
-                    let iso = webcode.replacingOccurrences(of: " ", with: "+")
+                    let iso = country.replacingOccurrences(of: " ", with: "+")
                     viewcon.iso = iso
+                    viewcon.country =  country
                     if let navc = self.navigationController {
                         navc.pushViewController(viewcon, animated: true)
                     }
@@ -94,46 +159,53 @@ class PurchaseDetailViewController: UIViewController {
             break
         case 101:
             // divert code
-            if let inputData = self.inputData, checkValidate() {
-                let divNum = txtInputNumber.text
-                let global = GlobalSwift.sharedManager
-                if let user = global.curUser{
-                    let manager = NetworkUtil.sharedManager
-                    let request = RequestLogin()
-                    request.setDefaultkeySecret()
-                    request.userid = user.userid
-                    request.phone = user.phoneno
-                    request.purchase_id = inputData.id
-                    request.divert_phone = divNum
-                    
-                    request.divert_phone = "6597668866"
-                    CGlobal.showIndicator(self)
-                    manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_DIVERT) { (dict, error) in
+            if checkValidate() {
+                if let inputData = self.inputData {
+                    let divNum = txtInputNumber.text
+                    let global = GlobalSwift.sharedManager
+                    if let user = global.curUser{
+                        let manager = NetworkUtil.sharedManager
+                        let request = RequestLogin()
+                        request.setDefaultkeySecret()
+                        request.userid = user.userid
+                        request.phone = user.phoneno
+                        request.purchase_id = inputData.id
+                        request.divert_phone = divNum
                         
-                        if error == nil {
-                            let response = LoginResponse.init(dictionary: dict)
-                            if response.isSuccess() {
-                                // success
-                                CGlobal.alertMessage(response.message, title: nil)
-                            }else{
-                                if let message = response.message {
-                                    CGlobal.alertMessage(message, title: nil)
-                                }
-                            }
-                        }else{
-                            CGlobal.alertMessage("Server Error", title: nil)
+                        //                    request.divert_phone = "6597668866"
+                        CGlobal.showIndicator(self)
+                        manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_DIVERT) { (dict, error) in
                             
+                            if error == nil {
+                                let response = LoginResponse.init(dictionary: dict)
+                                if response.isSuccess() {
+                                    // success
+                                    CGlobal.alertMessage(response.message, title: nil)
+                                }else{
+                                    if let message = response.message {
+                                        CGlobal.alertMessage(message, title: nil)
+                                    }
+                                }
+                            }else{
+                                CGlobal.alertMessage("Server Error", title: nil)
+                                
+                            }
+                            CGlobal.stopIndicator(self)
                         }
-                        CGlobal.stopIndicator(self)
                     }
                 }
             }
+            
         default:
             break
         }
     }
     func checkValidate()->Bool{
         guard let text = txtInputNumber.text, !text.isEmpty else {
+            if let text = txtInputNumber.placeholder{
+                CGlobal.alertMessage(text, title: nil)
+            }
+            
             return false
         }
         return true

@@ -31,9 +31,10 @@ class Constants:NSObject{
     static let ACTION_DIVERT = "/api/divert/";
     static let ACTION_CHANGECOUNTRY = "/api/change_country/";
     static let ACTION_CALLLIST = "/api/calls/";
-    static let ACTION_CONQUERED = "/assets/rest/" + PATH_APNS + "/loadconquered1.php";
-    static let ACTION_TOGO_COUNTRY = "/assets/rest/" + PATH_APNS + "/loadtogo_country.php";
+    static let ACTION_COUNTRYISO = "/api/get_country_iso/";
+    static let ACTION_REG_COUNTRY = "/api/register_country/";
     static let ACTION_CONQUERED_COUNTRY = "/assets/rest/" + PATH_APNS + "/loadconquered_country.php";
+    
     
     static let ACTION_UPLOAD = "/assets/rest/" + PATH_APNS + "/fileuploadmm.php";
     static let ACTION_UPLOAD_V = "/assets/rest/" + PATH_APNS + "/fileuploadvv.php";  //fileuploadvv.php

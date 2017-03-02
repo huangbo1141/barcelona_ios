@@ -15,7 +15,8 @@ class LoginResponse:BaseModelSwift{
     var userid:String?
     var verification_code:String?
     var phone:String?
-    
+    var country_iso:String?
+    var country:String?
 
     init(dictionary:[String:Any]?){
         super.init()

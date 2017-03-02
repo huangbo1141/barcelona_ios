@@ -18,10 +18,54 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         tableView.register(nib, forCellReuseIdentifier: "cell")
         tableView.delegate = self
         tableView.dataSource = self
-        getPurchased()
+        
+        DispatchQueue.main.async {
+            let refreshControl:UIRefreshControl = UIRefreshControl.init()
+            self.tableView.refreshControl = refreshControl
+            refreshControl.addTarget(self, action: #selector(HomeViewController.refresh(control:)), for: UIControlEvents.valueChanged)
+            self.getPurchased()
+            self.refreshControl = refreshControl
+        
+            if let navc = self.navigationController {
+                let item:UIBarButtonItem = UIBarButtonItem.init(image: UIImage.init(named: "Home"), style: .plain, target: self, action: #selector(HomeViewController.clickView(sender:)))
+                //            let item1:UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: ., target: <#T##Any?#>, action: <#T##Selector?#>)
+                item.tag = 100
+                self.navigationItem.rightBarButtonItems = [item]
+            }
+            
+            let gesture = UISwipeGestureRecognizer.init(target: self, action: #selector(HomeViewController.swipeRight(gesture:)))
+            gesture.direction = .left
+            self.tableView.addGestureRecognizer(gesture)
+        }
+        
         // Do any additional setup after loading the view.
     }
+    var refreshControl:UIRefreshControl?
+    func swipeRight(gesture:UISwipeGestureRecognizer){
+        if let tabvc  = self.tabBarController {
+            
+            self.view.slideIn(fromRight: 0.5, delegate: nil, bounds: CGRect.zero)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                // your code here
+                tabvc.selectedIndex = 1
+            }
+        }
+    }
     
+    func clickView(sender:UIView){
+        let tag = sender.tag
+        if tag == 100 {
+            let ms = UIStoryboard.init(name: "Main", bundle: nil);
+            DispatchQueue.main.async {
+                let viewcon = ms.instantiateViewController(withIdentifier: "PastViewController");
+                self.navigationController?.pushViewController(viewcon, animated: true)
+            }
+        }
+    }
+    func refresh(control:UIRefreshControl){
+        self.getPurchased()
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -41,13 +85,15 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 //            let loginResp = LoginResponse.init(dictionary: dict)
                 //            debugPrint(loginResp.response)
                 if error == nil {
-                    self.response = PurchaseResponse.init(dictionary: dict)
+                    global.purchaseResponse = PurchaseResponse.init(dictionary: dict)
+                    self.response = global.purchaseResponse
                     self.tableView.reloadData()
                 }else{
                     CGlobal.alertMessage("Username or Password is incorrect", title: nil)
                     
                 }
                 CGlobal.stopIndicator(self)
+                self.refreshControl?.endRefreshing()
             }
         }
         

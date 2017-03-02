@@ -29,7 +29,7 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
     
     
     @IBOutlet weak var txtVerifyCode: CustomTextField!
-    var country:WNACountry?
+    var country:TblCountry?
     
     
     @IBOutlet weak var btnLogin: UIButton!
@@ -61,22 +61,47 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         self.view0.backgroundColor = UIColor.clear
         
         
-        let appdelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate;
-        let pkview = UIPickerView.init()
-        pkview.delegate = self
-        pkview.dataSource = self
-        if let data = appdelegate.dbManager?.getCountries(){
-            for item in data {
-                if let idata = item as? WNACountry {
-                    self.countryData.append(idata)
-                }
-            }
+//        let appdelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate;
+//        
+//        if let data = appdelegate.dbManager?.getCountries(){
+//            for item in data {
+//                if let idata = item as? WNACountry {
+//                    self.countryData.append(idata)
+//                }
+//            }
+//        }
+        DispatchQueue.main.async {
+            self.initCountryData()
         }
-        
-        txtCountry.inputView = pkview;
     }
     
-    var countryData = [WNACountry]()
+    func initCountryData(){
+        let manager = NetworkUtil.sharedManager
+        let request = RequestLogin()
+        request.setDefaultkeySecret()
+        
+        CGlobal.showIndicator(self)
+        manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_REG_COUNTRY) { (dict, error) in
+            
+            if error == nil {
+                let response = CountryResponse.init(dictionary: dict)
+                if let rows = response.countries, rows.count > 0 {
+                    // success
+                    self.countryData = rows
+                    let pkview = UIPickerView.init()
+                    pkview.delegate = self
+                    pkview.dataSource = self
+                    self.txtCountry.inputView = pkview;
+                }else{
+                    
+                }
+            }else{
+                //CGlobal.alertMessage("Server Error", title: nil)
+            }
+            CGlobal.stopIndicator(self)
+        }
+    }
+    var countryData = [TblCountry]()
     func setStep(num:Int){
         let views = [view0,view1];
         guard num>=0, num<views.count else{
@@ -102,8 +127,10 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
             if let code = txtVerifyCode.text, !code.isEmpty,let resp = self.mLoginResponse {
                 // check code
                 if code == resp.verification_code {
-                    CGlobal.alertMessage("Code is Correct", title: nil)
+                    //CGlobal.alertMessage("Code is Correct", title: nil)
                     
+                    resp.country_iso = self.country?.iso
+                    resp.country = self.country?.country
                     let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
                     delegate.goMainWindow(data: resp)
                 }else{
@@ -156,7 +183,7 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         }
         let data = RequestLogin()
         data.setDefaultkeySecret()
-        data.country = cnt.webCode
+        data.country = cnt.iso
         data.phone = phone
         data.name = name
         
@@ -164,6 +191,7 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         return true;
     }
     var mLoginResponse:LoginResponse?
+    var muser:RequestLogin?
     func callApiLogin(user:RequestLogin){
         let manager = NetworkUtil.sharedManager
         
@@ -178,6 +206,7 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
                 let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate;
                 
                 if loginResp.isSuccess() {
+                    self.muser = user
                     self.mLoginResponse = loginResp
                     self.setStep(num: 1)
                     
@@ -208,7 +237,7 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         let data = self.countryData[row]
-        return data.countryName
+        return data.country
     }
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -219,7 +248,7 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let country = self.countryData[row]
-        txtCountry.text = country.countryName
+        txtCountry.text = country.country
         self.country = country
     }
     

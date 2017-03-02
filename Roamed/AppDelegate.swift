@@ -154,6 +154,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         user.phoneno = data.phone
         user.userid = data.userid
+        user.iso = data.country_iso
+        user.country = data.country
         
         return delegate.saveContext()
     }

@@ -18,7 +18,7 @@ class SwiftNavViewController: UINavigationController {
 //        self.navigationBar.shadowImage = UIImage()
 //        
 //        self.navigationBar.backgroundColor = Constants.COLOR_TOOLBAR_BACK
-        self.navigationBar.barTintColor = Constants.COLOR_TOOLBAR_BACK
+        self.navigationBar.barTintColor = CGlobal.color(withHexString: "3799E5", alpha: 1.0)
         self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:Constants.COLOR_TOOLBAR_TEXT];
 //        let titleDict: [String:Any] = [NSForegroundColorAttributeName: Constants.COLOR_TOOLBAR_TEXT]
 //        self.navigationBar.titleTextAttributes = titleDict

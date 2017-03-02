@@ -26,14 +26,16 @@
         <attribute name="minutes_left" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
+        <attribute name="country" attributeType="String" syncable="YES"/>
+        <attribute name="iso" attributeType="String" syncable="YES"/>
         <attribute name="phoneno" attributeType="String" syncable="YES"/>
         <attribute name="userid" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
         <element name="CallModel" positionX="-18" positionY="81" width="128" height="120"/>
+        <element name="HelpModel" positionX="-36" positionY="72" width="128" height="75"/>
         <element name="PastPurchase" positionX="-36" positionY="54" width="128" height="120"/>
         <element name="PresentPurchase" positionX="-54" positionY="9" width="128" height="120"/>
-        <element name="User" positionX="-63" positionY="-18" width="128" height="75"/>
-        <element name="HelpModel" positionX="-36" positionY="72" width="128" height="75"/>
+        <element name="User" positionX="-63" positionY="-18" width="128" height="105"/>
     </elements>
 </model>
