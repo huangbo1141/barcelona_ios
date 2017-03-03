@@ -34,7 +34,7 @@ class PurchaseDetailViewController: UIViewController {
         
         viewDial.addGestureRecognizer(gesture)
         viewDial.tag = 102
-        
+        self.viewDial.isUserInteractionEnabled = false
         if let navc = self.navigationController {
             let button: UIButton = UIButton.init(type: .custom)
             //set image for button
@@ -167,11 +167,15 @@ class PurchaseDetailViewController: UIViewController {
             
             
             // call forwarding
+            
             if let detail = self.purchaseDetail , let number = detail.divert_number , !number.isEmpty{
-                UIApplication.shared.openURL(URL.init(string: UIApplicationOpenSettingsURLString)!)
-                
                 let phonenumber = "tel://" + number
-                UIApplication.shared.openURL(URL.init(string: phonenumber))
+                var url:URL? =  URL.init(string: phonenumber)
+                if let url = url {
+                    UIApplication.shared.openURL(URL.init(string: UIApplicationOpenSettingsURLString)!)
+                    UIApplication.shared.openURL(url)
+                }
+                
                 
             }else{
                 
@@ -190,7 +194,7 @@ class PurchaseDetailViewController: UIViewController {
                         request.userid = user.userid
                         request.phone = user.phoneno
                         request.purchase_id = inputData.id
-                        request.divert_phone = detail.divert_number
+                        request.divert_phone = divNum
                         
                         //                    request.divert_phone = "6597668866"
                         CGlobal.showIndicator(self)
