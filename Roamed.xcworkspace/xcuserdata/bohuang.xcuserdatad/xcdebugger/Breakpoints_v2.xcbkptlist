@@ -25,22 +25,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Roamed/Controllers/PurchaseDetailViewController.swift"
-            timestampString = "509395507.450668"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "59"
-            endingLineNumber = "59"
-            landmarkName = "initData()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Roamed/Controllers/LoginViewController.swift"
             timestampString = "510161154.183095"
             startingColumnNumber = "9223372036854775807"
@@ -58,7 +42,7 @@
                   moduleName = "Roamed"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/bohuang/iCC/Desktop/devel/201703/qinglong70/Roamed/Roamed/Controllers/LoginViewController.swift"
-                  timestampString = "510166948.138291"
+                  timestampString = "510170178.231255"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "214"
@@ -73,7 +57,7 @@
                   moduleName = "Roamed"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/bohuang/iCC/Desktop/devel/201703/qinglong70/Roamed/Roamed/Controllers/LoginViewController.swift"
-                  timestampString = "510166948.14074"
+                  timestampString = "510170178.234481"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "214"
@@ -95,7 +79,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "195"
             endingLineNumber = "195"
-            landmarkName = "checkValidate()"
+            landmarkName = "clickView(sender:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -105,44 +89,44 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Roamed/Controllers/CountryListViewController.swift"
-            timestampString = "510166287.902315"
+            filePath = "Roamed/Controllers/HomeViewController.swift"
+            timestampString = "510170258.564586"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
-            landmarkName = "loadData()"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "getPurchased()"
             landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Roamed.CountryListViewController.loadData () -&gt; ()"
+                  symbolName = "Roamed.HomeViewController.getPurchased () -&gt; ()"
                   moduleName = "Roamed"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bohuang/iCC/Desktop/devel/201703/qinglong70/Roamed/Roamed/Controllers/CountryListViewController.swift"
-                  timestampString = "510166948.18102"
+                  urlString = "file:///Users/bohuang/iCC/Desktop/devel/201703/qinglong70/Roamed/Roamed/Controllers/HomeViewController.swift"
+                  timestampString = "510170258.785039"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "52"
-                  endingLineNumber = "52"
-                  offsetFromSymbolStart = "369">
+                  startingLineNumber = "84"
+                  endingLineNumber = "84"
+                  offsetFromSymbolStart = "605">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Roamed.CountryListViewController.(loadData () -&gt; ()).(closure #1)"
+                  symbolName = "Roamed.HomeViewController.(getPurchased () -&gt; ()).(closure #1)"
                   moduleName = "Roamed"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bohuang/iCC/Desktop/devel/201703/qinglong70/Roamed/Roamed/Controllers/CountryListViewController.swift"
-                  timestampString = "510166948.184216"
+                  urlString = "file:///Users/bohuang/iCC/Desktop/devel/201703/qinglong70/Roamed/Roamed/Controllers/HomeViewController.swift"
+                  timestampString = "510170258.78841"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "54"
-                  endingLineNumber = "54"
-                  offsetFromSymbolStart = "47">
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "53">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -153,14 +137,62 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Roamed/Controllers/CountryListViewController.swift"
-            timestampString = "510166469.830118"
+            filePath = "Roamed/Controllers/HomeViewController.swift"
+            timestampString = "510170273.780111"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
-            landmarkName = "loadData()"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "getPurchased()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Roamed/Controllers/PurchaseDetailViewController.swift"
+            timestampString = "510170543.587949"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
+            landmarkName = "getRequiredInfo()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Roamed.PurchaseDetailViewController.(getRequiredInfo () -&gt; ()).(closure #1)"
+                  moduleName = "Roamed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bohuang/iCC/Desktop/devel/201703/qinglong70/Roamed/Roamed/Controllers/PurchaseDetailViewController.swift"
+                  timestampString = "510170543.795121"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "106"
+                  endingLineNumber = "106"
+                  offsetFromSymbolStart = "2319">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Roamed.PurchaseDetailViewController.(getRequiredInfo () -&gt; ()).(closure #1)"
+                  moduleName = "Roamed"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bohuang/iCC/Desktop/devel/201703/qinglong70/Roamed/Roamed/Controllers/PurchaseDetailViewController.swift"
+                  timestampString = "510170543.798263"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "106"
+                  endingLineNumber = "106"
+                  offsetFromSymbolStart = "2430">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -16,21 +16,24 @@ class PurchaseDetailViewController: UIViewController {
     @IBOutlet weak var lblCountry: UILabel!
     @IBOutlet weak var imgFlag: UIImageView!
     @IBOutlet weak var txtInputNumber: UITextField!
-//    @IBOutlet weak var btnDivert: UIButton!
+    
+    
+    @IBOutlet weak var viewDial: RoundedCornersView!
+    @IBOutlet weak var btnDivert: UIButton!
     
     @IBOutlet weak var lblDivert: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         btnChange.addTarget(self, action: #selector(PurchaseDetailViewController.clickView(sender:)), for: .touchUpInside)
-//        btnDivert.addTarget(self, action: #selector(PurchaseDetailViewController.clickView(sender:)), for: .touchUpInside)
+        btnDivert.addTarget(self, action: #selector(PurchaseDetailViewController.clickView(sender:)), for: .touchUpInside)
         btnChange.tag = 100
-//        btnDivert.tag = 101 clickGesture
+        btnDivert.tag = 101
         
         let gesture = UITapGestureRecognizer.init(target: self, action: #selector(PurchaseDetailViewController.clickGesture(gesture:)));
-        lblDivert.isUserInteractionEnabled = true
-        lblDivert.addGestureRecognizer(gesture)
-        lblDivert.tag = 101
+        
+        viewDial.addGestureRecognizer(gesture)
+        viewDial.tag = 102
         
         if let navc = self.navigationController {
             let button: UIButton = UIButton.init(type: .custom)
@@ -103,13 +106,14 @@ class PurchaseDetailViewController: UIViewController {
                             
                             //self.btnDivert.setTitle(title, for: .normal)
                             self.lblDivert.text = title
+                            self.viewDial.isUserInteractionEnabled = true
                         }else{
                             if let message = row.divert_message {
                                 //CGlobal.alertMessage(message, title: nil)
 //                                self.btnDivert.setTitle(message, for: .normal)
 //                                self.btnDivert.isEnabled = false
                                 self.lblDivert.text = message
-                                self.lblDivert.isUserInteractionEnabled = false
+                                self.viewDial.isUserInteractionEnabled = false
                             }
                         }
                     }else{
@@ -158,7 +162,20 @@ class PurchaseDetailViewController: UIViewController {
                     }
                 }
             }
+        case 102:
+            // open setting
             
+            
+            // call forwarding
+            if let detail = self.purchaseDetail , let number = detail.divert_number , !number.isEmpty{
+                UIApplication.shared.openURL(URL.init(string: UIApplicationOpenSettingsURLString)!)
+                
+                let phonenumber = "tel://" + number
+                UIApplication.shared.openURL(URL.init(string: phonenumber))
+                
+            }else{
+                
+            }
             break
         case 101:
             // divert code
