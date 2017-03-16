@@ -7,15 +7,6 @@
 //
 
 import Foundation
-//
-//  PurchaseResponse.swift
-//  Roamed
-//
-//  Created by BoHuang on 2/21/17.
-//  Copyright © 2017 BoHuang. All rights reserved.
-//
-
-import Foundation
 class PurchaseDetailResponse:BaseModelSwift{
     
     var present_purchase:[TblPurchaseDetail]?

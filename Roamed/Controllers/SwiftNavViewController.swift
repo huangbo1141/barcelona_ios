@@ -23,7 +23,8 @@ class SwiftNavViewController: UINavigationController {
 //        let titleDict: [String:Any] = [NSForegroundColorAttributeName: Constants.COLOR_TOOLBAR_TEXT]
 //        self.navigationBar.titleTextAttributes = titleDict
 //        self.navigationBar.isTranslucent = false
-        
+        self.navigationBar.tintColor = UIColor.white
+        self.title = "Roamed"
         
     }
 

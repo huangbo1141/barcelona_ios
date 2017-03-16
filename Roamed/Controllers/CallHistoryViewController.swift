@@ -14,6 +14,8 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "Roamed"
+        
         let nib = UINib.init(nibName: "CallHistoryTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "cell")
         tableView.delegate = self
@@ -55,6 +57,7 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
     var modelDatas:[CallModel] = [CallModel]()
     var pageIndex:Int = 0
     func loadData(){
+        
         let global = GlobalSwift.sharedManager
         if let user = global.curUser{
             let manager = NetworkUtil.sharedManager

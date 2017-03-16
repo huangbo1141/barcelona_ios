@@ -89,6 +89,12 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // did select
         self.selectedData = countryList[indexPath.row]
+        if let name = self.selectedData?.iso {
+            let image = UIImage.init(named: name.lowercased())
+            imgFlag.image = image
+        }
+        
+        lblCountry.text = selectedData?.country
     }
     var selectedData:TblCountry?
     override func didReceiveMemoryWarning() {
@@ -118,13 +124,24 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     if response.isSuccess() {
                         // success
                         CGlobal.alertMessage(response.message, title: nil)
+                        // pop and refresh
+                        DispatchQueue.main.async {
+                            if let navc = self.navigationController {
+                                if navc.viewControllers.count > 0 , let vc = navc.viewControllers[0] as? HomeViewController{
+                                    //vc.getPurchased()
+                                    navc.popToRootViewController(animated: true)
+                                }
+                                
+                            }
+                        }
+                        
                     }else{
                         if let message = response.message {
                             CGlobal.alertMessage(message, title: nil)
                         }
                     }
                 }else{
-                    CGlobal.alertMessage("Username or Password is incorrect", title: nil)
+//                    CGlobal.alertMessage("Username or Password is incorrect", title: nil)
                     
                 }
                 CGlobal.stopIndicator(self)

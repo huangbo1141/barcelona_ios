@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16B2657" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="15G1004" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CallModel" representedClassName="CallModel" syncable="YES" codeGenerationType="class">
         <attribute name="caller_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="country_iso" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="minutes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sortid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="HelpModel" representedClassName="HelpModel" syncable="YES" codeGenerationType="class">
         <attribute name="html" optional="YES" attributeType="String" syncable="YES"/>
@@ -25,6 +26,15 @@
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="minutes_left" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="PurchaseDetail" representedClassName="PurchaseDetail" syncable="YES" codeGenerationType="class">
+        <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="country_iso" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="divert_message" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="divert_number" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="divert_phone" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="minutes_left" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
         <attribute name="country" attributeType="String" syncable="YES"/>
         <attribute name="iso" attributeType="String" syncable="YES"/>
@@ -32,10 +42,11 @@
         <attribute name="userid" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="CallModel" positionX="-18" positionY="81" width="128" height="120"/>
+        <element name="CallModel" positionX="-18" positionY="81" width="128" height="135"/>
         <element name="HelpModel" positionX="-36" positionY="72" width="128" height="75"/>
         <element name="PastPurchase" positionX="-36" positionY="54" width="128" height="120"/>
         <element name="PresentPurchase" positionX="-54" positionY="9" width="128" height="120"/>
         <element name="User" positionX="-63" positionY="-18" width="128" height="105"/>
+        <element name="PurchaseDetail" positionX="-36" positionY="81" width="128" height="150"/>
     </elements>
 </model>

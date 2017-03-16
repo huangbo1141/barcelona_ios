@@ -30,14 +30,14 @@ class PurchaseTableViewCell: UITableViewCell {
             imgFlag.image = image;
         }
         if let dayleft = data.days_left {
-            lblDaysLeft.text = dayleft + " Days"
+            lblDaysLeft.text = dayleft
         }else{
             lblDaysLeft.text = "0 Days"
         }
         
         lblCountry.text = data.country
         if let min = data.minutes_left {
-            lblMinutes.text = min + " minutes"
+            lblMinutes.text = min
         }else{
             lblMinutes.text = "0 minutes"
         }

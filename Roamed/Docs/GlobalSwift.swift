@@ -79,7 +79,26 @@ class GlobalSwift:NSObject{
             return false
         }
     }
-    
+
+    static func getTimeOffset(tz:TimeZone)->String{
+        var seconds:Int = tz.secondsFromGMT()
+        var sign = ""
+        if seconds < 0 {
+            seconds = -1*seconds
+            sign = "+"
+        }else{
+            sign = "-"
+        }
+        let hour:Int = seconds/3600
+        var timezone = ""
+        if seconds%3600 > 0 {
+            let remain = seconds - hour*3600
+            timezone = "\(sign)hour:30"
+        }else{
+            timezone = "\(sign)hour:00"
+        }
+        return timezone
+    }
     
     
 }

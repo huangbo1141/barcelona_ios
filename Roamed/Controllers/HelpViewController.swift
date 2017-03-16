@@ -9,7 +9,7 @@
  import UIKit
  import CoreData
  
- class HelpViewController: UIViewController {
+ class HelpViewController: UIViewController,UIWebViewDelegate {
     var textToShow:String = ""
     var iso:String = "New+Zeland"
     var country:String = "New Zeland"
@@ -36,6 +36,7 @@
         
         webView.scrollView.showsHorizontalScrollIndicator = false;
         webView.scrollView.showsVerticalScrollIndicator = false;
+        webView.delegate = self
     }
     func getTextShow()->String?{
         let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -63,6 +64,7 @@
             // print(self.textToShow)
             self.webView.loadHTMLString(text, baseURL: nil)
         }
+        
     }
     func saveTexttoShow(text:String)->Bool{
         
@@ -215,7 +217,18 @@
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
+    func webViewDidStartLoad(_ webView: UIWebView) {
+        CGlobal.showIndicator(self)
+    }
+    func webViewDidFinishLoad(_ webView: UIWebView) {
+        CGlobal.stopIndicator(self)
+        var size = self.webView.scrollView.contentSize
+        let rect = self.view.frame
+        size.width = rect.size.width
+        self.webView.scrollView.contentSize = size
+        self.webView.scrollView.frame = CGRect.init(x: 0, y: 0, width: size.width, height: 50000)
+    }
     
  }
  

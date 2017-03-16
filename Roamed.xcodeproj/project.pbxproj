@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0716DA211E78DA4D002FF63E /* PurchaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0716DA201E78DA4C002FF63E /* PurchaseViewController.swift */; };
+		076B38EF1E7A877E00C19E40 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076B38EE1E7A877E00C19E40 /* StoreKit.framework */; };
+		076B38F11E7A8A2000C19E40 /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076B38F01E7A8A2000C19E40 /* ProductViewController.swift */; };
+		076B38F31E7AD7E700C19E40 /* ExtendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076B38F21E7AD7E700C19E40 /* ExtendViewController.swift */; };
+		076B38F51E7AD90000C19E40 /* ColoredLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076B38F41E7AD90000C19E40 /* ColoredLabel.swift */; };
+		076B38F71E7ADFBE00C19E40 /* SetNotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076B38F61E7ADFBE00C19E40 /* SetNotificationViewController.swift */; };
 		0F9BCE9157C6441D8208F23A /* Pods_Roamed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AAE91820C8FDA8CD19B898D /* Pods_Roamed.framework */; };
 		4D3B65B21E684A0F00929A59 /* PastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65B11E684A0F00929A59 /* PastViewController.swift */; };
 		4D3B65B51E684D0800929A59 /* PastTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65B31E684D0800929A59 /* PastTableViewCell.swift */; };
@@ -103,6 +109,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0716DA201E78DA4C002FF63E /* PurchaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseViewController.swift; sourceTree = "<group>"; };
+		072FF22D1E69587800DE1EFA /* Roamed.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Roamed.entitlements; sourceTree = "<group>"; };
+		076B38EE1E7A877E00C19E40 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		076B38F01E7A8A2000C19E40 /* ProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
+		076B38F21E7AD7E700C19E40 /* ExtendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtendViewController.swift; sourceTree = "<group>"; };
+		076B38F41E7AD90000C19E40 /* ColoredLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColoredLabel.swift; sourceTree = "<group>"; };
+		076B38F61E7ADFBE00C19E40 /* SetNotificationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetNotificationViewController.swift; sourceTree = "<group>"; };
 		1E0C74FB537DF2FCC0877A8E /* Pods-Roamed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roamed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Roamed/Pods-Roamed.debug.xcconfig"; sourceTree = "<group>"; };
 		3AAE91820C8FDA8CD19B898D /* Pods_Roamed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Roamed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D3B65B11E684A0F00929A59 /* PastViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastViewController.swift; sourceTree = "<group>"; };
@@ -239,6 +252,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				076B38EF1E7A877E00C19E40 /* StoreKit.framework in Frameworks */,
 				4D6FC59B1E5C43AF00ECD774 /* libsqlite3.0.tbd in Frameworks */,
 				0F9BCE9157C6441D8208F23A /* Pods_Roamed.framework in Frameworks */,
 			);
@@ -279,6 +293,7 @@
 		4D6FC4AC1E5C2EBE00ECD774 /* Roamed */ = {
 			isa = PBXGroup;
 			children = (
+				072FF22D1E69587800DE1EFA /* Roamed.entitlements */,
 				4D6FC5991E5C427400ECD774 /* Roamed-Bridging-Header.h */,
 				4D6FC4C41E5C38B400ECD774 /* Assets */,
 				4D6FC4AD1E5C2EBE00ECD774 /* AppDelegate.swift */,
@@ -323,6 +338,10 @@
 				4D3DAEE51E5CB8140030AE9F /* HelpViewController.swift */,
 				4D3B65B11E684A0F00929A59 /* PastViewController.swift */,
 				4D3B65B71E6852DA00929A59 /* TabViewController.swift */,
+				0716DA201E78DA4C002FF63E /* PurchaseViewController.swift */,
+				076B38F01E7A8A2000C19E40 /* ProductViewController.swift */,
+				076B38F21E7AD7E700C19E40 /* ExtendViewController.swift */,
+				076B38F61E7ADFBE00C19E40 /* SetNotificationViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -577,6 +596,7 @@
 				4D6FC5531E5C38D500ECD774 /* WNAActivityIndicator.h */,
 				4D6FC5541E5C38D500ECD774 /* WNAActivityIndicator.m */,
 				4D6FC5A31E5C769D00ECD774 /* ColoredView.swift */,
+				076B38F41E7AD90000C19E40 /* ColoredLabel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -599,6 +619,7 @@
 		95C00CE6733EEAA24F417645 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				076B38EE1E7A877E00C19E40 /* StoreKit.framework */,
 				4D6FC59A1E5C43AF00ECD774 /* libsqlite3.0.tbd */,
 				3AAE91820C8FDA8CD19B898D /* Pods_Roamed.framework */,
 			);
@@ -650,6 +671,11 @@
 					4D6FC4A91E5C2EBE00ECD774 = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -765,6 +791,7 @@
 				4D6FC5851E5C38D500ECD774 /* TblMakeItin.swift in Sources */,
 				4D3B65BC1E685A4000929A59 /* TblPurchaseDetail.swift in Sources */,
 				4D6FC5921E5C38D500ECD774 /* RoundCornerBorderView.swift in Sources */,
+				0716DA211E78DA4D002FF63E /* PurchaseViewController.swift in Sources */,
 				4D6FC55B1E5C38D500ECD774 /* GlobalSwift.swift in Sources */,
 				4D3B65BE1E6862B300929A59 /* CountryResponse.swift in Sources */,
 				4D6FC5621E5C38D500ECD774 /* EnvVar.m in Sources */,
@@ -790,9 +817,11 @@
 				4D3B65C01E68632600929A59 /* TblCountry.swift in Sources */,
 				4D6FC5631E5C38D500ECD774 /* NetworkParser.m in Sources */,
 				4D6FC5561E5C38D500ECD774 /* LoginViewController.swift in Sources */,
+				076B38F71E7ADFBE00C19E40 /* SetNotificationViewController.swift in Sources */,
 				4D6FC5761E5C38D500ECD774 /* UIViewController+BetterLayoutGuides.m in Sources */,
 				4D6FC5B61E5C986800ECD774 /* CallResponse.swift in Sources */,
 				4D6FC57B1E5C38D500ECD774 /* TLYShyNavBarManager.m in Sources */,
+				076B38F31E7AD7E700C19E40 /* ExtendViewController.swift in Sources */,
 				4D6FC55E1E5C38D500ECD774 /* SampleResponse.swift in Sources */,
 				4D6FC5581E5C38D500ECD774 /* Constants.swift in Sources */,
 				4D6FC5571E5C38D500ECD774 /* BaseModelSwift.swift in Sources */,
@@ -808,6 +837,7 @@
 				4D6FC5731E5C38D500ECD774 /* NSObject+TLYSwizzlingHelpers.m in Sources */,
 				4D6FC5861E5C38D500ECD774 /* TblResponseIncrease.swift in Sources */,
 				4D6FC5711E5C38D500ECD774 /* MyPopupDialog.m in Sources */,
+				076B38F11E7A8A2000C19E40 /* ProductViewController.swift in Sources */,
 				4D6FC5901E5C38D500ECD774 /* MyDialog.m in Sources */,
 				4D6FC5A11E5C726200ECD774 /* PurchaseTableViewCell.swift in Sources */,
 				4D3B65B21E684A0F00929A59 /* PastViewController.swift in Sources */,
@@ -823,6 +853,7 @@
 				4D6FC57A1E5C38D500ECD774 /* TLYShyViewController.m in Sources */,
 				4D6FC5961E5C38D500ECD774 /* WNAActivityIndicator.m in Sources */,
 				4D6FC58F1E5C38D500ECD774 /* CustomTextField.m in Sources */,
+				076B38F51E7AD90000C19E40 /* ColoredLabel.swift in Sources */,
 				4D6FC5751E5C38D500ECD774 /* UIScrollView+Helpers.m in Sources */,
 				4D3B65C61E68757500929A59 /* UIImage+Decompression.swift in Sources */,
 			);
@@ -955,8 +986,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simpsy.roamed1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8e949b11-2a43-439c-8e56-4613b9446fde";
-				PROVISIONING_PROFILE_SPECIFIER = "Roamed1 Adhoc";
+				PROVISIONING_PROFILE = "c4f54586-8379-43fa-acb8-a699a439047c";
+				PROVISIONING_PROFILE_SPECIFIER = "Roamed1 Appstore";
 				SWIFT_OBJC_BRIDGING_HEADER = "Roamed/Roamed-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -974,8 +1005,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simpsy.roamed1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8e949b11-2a43-439c-8e56-4613b9446fde";
-				PROVISIONING_PROFILE_SPECIFIER = "Roamed1 Adhoc";
+				PROVISIONING_PROFILE = "c4f54586-8379-43fa-acb8-a699a439047c";
+				PROVISIONING_PROFILE_SPECIFIER = "Roamed1 Appstore";
 				SWIFT_OBJC_BRIDGING_HEADER = "Roamed/Roamed-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};

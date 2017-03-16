@@ -53,7 +53,7 @@ extern NSString *const kPhotoManagerChangedContentNotificationOthers;
 extern CGFloat GLOBAL_MENUHEIGHT;
 extern CGFloat GLOBAL_MENUWIDTH;
 
-typedef void (^PermissionCallback)(BOOL ret);
+
 
 @interface CGlobal : NSObject
 + (CGlobal *)sharedId;
@@ -126,7 +126,4 @@ typedef void (^PermissionCallback)(BOOL ret);
 + (UIImage *)scaleAndRotateImage:(UIImage *)image;
 + (CGSize)getSizeForAspect:(UIImage*)image Frame:(CGSize)frame;
 + (CGSize)getSizeForAspectFromSize:(CGSize)imageSize Frame:(CGSize)frame;
-+(void)grantedPermissionCamera:(PermissionCallback)callback;
-+(void)grantedPermissionMediaLibrary:(PermissionCallback)callback;
-+(void)grantedPermissionPhotoLibrary:(PermissionCallback)callback;
 @end

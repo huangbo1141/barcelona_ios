@@ -23,6 +23,7 @@
 +(NSMutableDictionary*)getQuestionDict:(id)targetClass;
 +(void)parseResponse:(id)targetClass Dict:(NSDictionary*)dict;
 +(id)getDuplicate:(id)targetClass;
-
++(void)copyValues:(id)targetClass Source:(id)sourceClass;
+    
 +(NSData*)buildJsonData:(id)targetClass;
 @end

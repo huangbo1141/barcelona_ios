@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 class PurchaseResponse:BaseModelSwift{
     
     var present_purchase:[PresentPurchase]?
@@ -22,6 +23,18 @@ class PurchaseResponse:BaseModelSwift{
             if let obj = dict["present_purchase"] as? [String:AnyObject]{
                 present_purchase = [PresentPurchase]()
                 
+                let fetch = NSFetchRequest<PresentPurchase>(entityName: "PresentPurchase")
+                
+                do {
+                    let rows = try context.fetch(fetch)
+                    for row in rows {
+                        context.delete(row)
+                    }
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
+                delegate.saveContext()
                 for (key,value) in obj {
                     if let item = value as? [AnyHashable:Any]{
                         
@@ -29,12 +42,24 @@ class PurchaseResponse:BaseModelSwift{
                         BaseModel.parseResponse(data, dict: item)
                         present_purchase?.append(data);
                     }
-                    
                 }
+                delegate.saveContext()
             }
             if let obj = dict["past_purchase"] as? [String:AnyObject]{
                 past_purchase = [PastPurchase]()
                 
+                let fetch = NSFetchRequest<PastPurchase>(entityName: "PastPurchase")
+                
+                do {
+                    let rows = try context.fetch(fetch)
+                    for row in rows {
+                        context.delete(row)
+                    }
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
+                delegate.saveContext()
                 for (key,value) in obj {
                     if let item = value as? [AnyHashable:Any]{
                         
@@ -42,8 +67,8 @@ class PurchaseResponse:BaseModelSwift{
                         BaseModel.parseResponse(data, dict: item)
                         past_purchase?.append(data);
                     }
-                    
                 }
+                delegate.saveContext()
             }
         }
     }

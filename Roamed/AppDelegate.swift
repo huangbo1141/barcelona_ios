@@ -8,8 +8,9 @@
 
 import UIKit
 import CoreData
-import CoreData
 import IQKeyboardManagerSwift
+import ReachabilitySwift
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -95,12 +96,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         COLOR_RESERVED = CGlobal.color(withHexString: "F26336", alpha: 1.0);
         
         //        let fontManager = FontManager.sharedManager
+        
     }
+    var network_available:Bool = false
     func initServices(application:UIApplication){
         IQKeyboardManager.sharedManager().enable = true
 //        GMSServices.provideAPIKey("AIzaSyAbtRRLo_7Y5w2DfM0lPgQ_E65QpInTKqI")
 //        Twitter.sharedInstance().start(withConsumerKey: "9OIypj02F1jKwacVSyOEbgwNt", consumerSecret: "hkzM07C7cZGAaTsuyVjQCefSwGVb9mE75SGRv2rc8kFGPCc3yW")
-        application.registerForRemoteNotifications()
+//        application.registerForRemoteNotifications()
     }
     func logout(){
         if let env = CGlobal.sharedId().env{
@@ -200,52 +203,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let newToken = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
-        
-        
-        //        var newToken = deviceToken.description
-        //        newToken = newToken.trimmingCharacters(in: CharacterSet.init(charactersIn: "<>"))
-        //        newToken = newToken.replacingOccurrences(of: " ", with: "")
-        debugPrint("My token is " + newToken)
-        let global = GlobalSwift.sharedManager
-        global.uuid = newToken
-        
-        
-        
-        
-        //        NotificationCenter.default.post(name: "xxx", object: nil)
-        
-        
-        
-        self.registerDeviceUUID()
-        
-        
-    }
+//    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+//        let newToken = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
+//        debugPrint("My token is " + newToken)
+//        let global = GlobalSwift.sharedManager
+//        global.uuid = newToken
+//        self.registerDeviceUUID()
+//    }
     
     func registerDeviceUUID(){
         let global = GlobalSwift.sharedManager
-        guard let curUser = global.curUser, let uuid = global.uuid else {
+        guard let user = global.curUser, let uuid = global.uuid else {
             debugPrint("registerUUID no value")
             return
         }
-        let user = TblUser.init()
-        //        user.tu_id = curUser.tu_id
-        //        user.tu_apnid = uuid
+        
+        let request = RequestLogin()
+        request.setDefaultkeySecret()
+        request.userid = user.userid
+        request.phone = user.phoneno
+        request.iso = user.iso
+        request.name = UserDefaults.standard.string(forKey: "name")
+        request.device_token = uuid
         
         let manager = NetworkUtil.sharedManager
-        manager.ontemplateGeneralRequest(data: user,method:.post, url: Constants.ACTION_UPDATEPROFILE) { (dict, error) in
+        manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_SAVETOKEN) { (dict, error) in
+            
             if error == nil {
-                debugPrint("Token saved " + uuid)
+                let temp = LoginResponse.init(dictionary: dict)
+                if let status = temp.status{
+                    if status == "success" {
+                        debugPrint("succ savetoken")
+                    }else{
+                        debugPrint("fail savetoken")
+                    }
+                }
             }else{
-                debugPrint("Fail to SaveToken")
+                debugPrint("fail savetoken")
             }
+            
         }
     }
     
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        debugPrint("fetchComplitionListener")
-    }
+//    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//        debugPrint("fetchComplitionListener")
+//    }
     func test(){
         let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = delegate.persistentContainer.viewContext

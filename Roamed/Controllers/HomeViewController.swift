@@ -7,12 +7,15 @@
 //
 
 import UIKit
-
+import CoreData
+import ReachabilitySwift
 class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = "Roamed"
         
         let nib = UINib.init(nibName: "PurchaseTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "cell")
@@ -23,11 +26,11 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             let refreshControl:UIRefreshControl = UIRefreshControl.init()
             self.tableView.refreshControl = refreshControl
             refreshControl.addTarget(self, action: #selector(HomeViewController.refresh(control:)), for: UIControlEvents.valueChanged)
-            self.getPurchased()
+            
             self.refreshControl = refreshControl
         
             if let navc = self.navigationController {
-                let item:UIBarButtonItem = UIBarButtonItem.init(image: UIImage.init(named: "Home"), style: .plain, target: self, action: #selector(HomeViewController.clickView(sender:)))
+                let item:UIBarButtonItem = UIBarButtonItem.init(image: UIImage.init(named: "history"), style: .plain, target: self, action: #selector(HomeViewController.clickView(sender:)))
                 //            let item1:UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: ., target: <#T##Any?#>, action: <#T##Selector?#>)
                 item.tag = 100
                 self.navigationItem.rightBarButtonItems = [item]
@@ -40,6 +43,10 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         // Do any additional setup after loading the view.
     }
+    override func viewWillAppear(_ animated: Bool) {
+        self.getPurchased()
+    }
+    
     var refreshControl:UIRefreshControl?
     func swipeRight(gesture:UISwipeGestureRecognizer){
         if let tabvc  = self.tabBarController {
@@ -72,30 +79,60 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     var response:PurchaseResponse?
     func getPurchased(){
+        let reach = Reachability()!
         let global = GlobalSwift.sharedManager
-        if let user = global.curUser{
-            let manager = NetworkUtil.sharedManager
-            let request = RequestLogin()
-            request.setDefaultkeySecret()
-            request.userid = user.userid
-            request.phone = user.phoneno
-            
-            CGlobal.showIndicator(self)
-            manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_GET_PURCHASE) { (dict, error) in
-                //            let loginResp = LoginResponse.init(dictionary: dict)
-                //            debugPrint(loginResp.response)
-                if error == nil {
-                    global.purchaseResponse = PurchaseResponse.init(dictionary: dict)
-                    self.response = global.purchaseResponse
-                    self.tableView.reloadData()
-                }else{
-                    CGlobal.alertMessage("Fail to Load", title: nil)
-                    
+        if reach.isReachableViaWiFi {
+            if let user = global.curUser{
+                let manager = NetworkUtil.sharedManager
+                let request = RequestLogin()
+                request.setDefaultkeySecret()
+                request.userid = user.userid
+                request.phone = user.phoneno
+                
+                CGlobal.showIndicator(self)
+                manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_GET_PURCHASE) { (dict, error) in
+                    //            let loginResp = LoginResponse.init(dictionary: dict)
+                    //            debugPrint(loginResp.response)
+                    if error == nil {
+                        global.purchaseResponse = PurchaseResponse.init(dictionary: dict)
+                        self.response = global.purchaseResponse
+                        self.tableView.reloadData()
+                    }else{
+                        CGlobal.alertMessage("Fail to Load", title: nil)
+                        
+                    }
+                    CGlobal.stopIndicator(self)
+                    self.refreshControl?.endRefreshing()
                 }
-                CGlobal.stopIndicator(self)
-                self.refreshControl?.endRefreshing()
             }
+        }else{
+            // load from store
+            let pResp = PurchaseResponse.init()
+            let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = delegate.persistentContainer.viewContext
+            do {
+                
+                let request = NSFetchRequest<PresentPurchase>.init(entityName: "PresentPurchase")
+                
+                let rows = try context.fetch(request)
+                pResp.present_purchase = rows
+            } catch  {
+                debugPrint("Fetch Failed")
+            }
+            do {
+                
+                let request = NSFetchRequest<PastPurchase>.init(entityName: "PastPurchase")
+                let rows = try context.fetch(request)
+                pResp.past_purchase = rows
+            } catch  {
+                debugPrint("Fetch Failed")
+            }
+            global.purchaseResponse = pResp
+            self.response = global.purchaseResponse
+            self.tableView.reloadData()
         }
+        
+        
         
     }
     

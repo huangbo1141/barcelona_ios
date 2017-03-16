@@ -33,16 +33,15 @@ class Constants:NSObject{
     static let ACTION_CALLLIST = "/api/calls/";
     static let ACTION_COUNTRYISO = "/api/get_country_iso/";
     static let ACTION_REG_COUNTRY = "/api/register_country/";
-    static let ACTION_CONQUERED_COUNTRY = "/assets/rest/" + PATH_APNS + "/loadconquered_country.php";
-    
+    static let ACTION_CHECKPURCHASE = "/api/check/";
+    static let ACTION_DOPURCHASE = "/api/purchase/";
+    static let ACTION_EXTEND = "/api/extend/";
+    static let ACTION_SETNOTI = "/api/set_notification/";
+    static let ACTION_SAVETOKEN = "/api/register/";
     
     static let ACTION_UPLOAD = "/assets/rest/" + PATH_APNS + "/fileuploadmm.php";
     static let ACTION_UPLOAD_V = "/assets/rest/" + PATH_APNS + "/fileuploadvv.php";  //fileuploadvv.php
-    
-    static let ACTION_LIKEPIC = "/assets/rest/" + PATH_APNS + "/actionlike.php";
-    static let ACTION_REPORT = "/assets/rest/" + PATH_APNS + "/actionreport.php";
-    static let ACTION_MAKEPOST = "/assets/rest/" + PATH_APNS + "/makepost.php";
-    static let ACTION_MAKEPOST_TRIP = "/assets/rest/" + PATH_APNS + "/makepost_trip.php";
+
     static let ACTION_COMMENT = "/assets/rest/" + PATH_APNS + "/actioncomment.php";
     static let ACTION_USERINFO = "/assets/rest/" + PATH_APNS + "/userinfo.php";
     static let ACTION_UPDATEPROFILE = "/assets/rest/" + PATH_APNS + "/updateprofile.php";

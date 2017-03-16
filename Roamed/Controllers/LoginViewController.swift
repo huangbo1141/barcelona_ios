@@ -128,7 +128,7 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
                 // check code
                 if code == resp.verification_code {
                     //CGlobal.alertMessage("Code is Correct", title: nil)
-                    
+                    UserDefaults.standard.set(self.muser?.name!, forKey: "name")
                     resp.country_iso = self.country?.iso
                     resp.country = self.country?.country
                     let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate

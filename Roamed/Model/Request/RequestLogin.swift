@@ -20,6 +20,13 @@ class RequestLogin:BaseModelSwift{
     var country_iso:String?
     var next:String?
     
+    var iso:String?
+    var days:String?
+    var startdate:String?
+    var timezone:String?
+    var time:String?
+    var device_token:String?
+    
     func setDefaultkeySecret(){
         key = "abc123"
         secret = "123abc"

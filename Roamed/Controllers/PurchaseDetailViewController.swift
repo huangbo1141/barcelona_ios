@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import ReachabilitySwift
+import CoreData
 
 class PurchaseDetailViewController: UIViewController {
-
+    
+    @IBOutlet weak var view1: UIView!
+    @IBOutlet weak var view0: UIView!
     @IBOutlet weak var lblDaysLeft: UILabel!
     var inputData:PresentPurchase?
     @IBOutlet weak var btnChange: UIButton!
@@ -17,24 +21,27 @@ class PurchaseDetailViewController: UIViewController {
     @IBOutlet weak var imgFlag: UIImageView!
     @IBOutlet weak var txtInputNumber: UITextField!
     
+    @IBOutlet weak var lblMinutesLeft: UILabel!
+    @IBOutlet weak var lblStartDate: UILabel!
+    @IBOutlet weak var btnCopy: UIButton!
+    @IBOutlet weak var segControl: UISegmentedControl!
     
-    @IBOutlet weak var viewDial: RoundedCornersView!
     @IBOutlet weak var btnDivert: UIButton!
     
     @IBOutlet weak var lblDivert: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         btnChange.addTarget(self, action: #selector(PurchaseDetailViewController.clickView(sender:)), for: .touchUpInside)
         btnDivert.addTarget(self, action: #selector(PurchaseDetailViewController.clickView(sender:)), for: .touchUpInside)
+        btnCopy.addTarget(self, action: #selector(PurchaseDetailViewController.clickView(sender:)), for: .touchUpInside)
+        
         btnChange.tag = 100
         btnDivert.tag = 101
+        btnCopy.tag = 102
         
         let gesture = UITapGestureRecognizer.init(target: self, action: #selector(PurchaseDetailViewController.clickGesture(gesture:)));
         
-        viewDial.addGestureRecognizer(gesture)
-        viewDial.tag = 102
-        self.viewDial.isUserInteractionEnabled = false
         if let navc = self.navigationController {
             let button: UIButton = UIButton.init(type: .custom)
             //set image for button
@@ -53,9 +60,38 @@ class PurchaseDetailViewController: UIViewController {
             self.navigationItem.rightBarButtonItems = [barButton]
         }
         self.initData()
+        
         // Do any additional setup after loading the view.
     }
-
+    @IBAction func indexChanged(_ sender: Any) {
+        if let sender = sender as? UISegmentedControl {
+            switch sender.selectedSegmentIndex {
+            case 0:
+                view0.isHidden = false
+                view1.isHidden = true
+                break
+            case 1:
+                view0.isHidden = true
+                view1.isHidden = false
+                break
+            case 2:
+                view0.isHidden = true
+                view1.isHidden = true
+                
+                let ms = UIStoryboard.init(name: "Main", bundle: nil)
+                let vc = ms.instantiateViewController(withIdentifier: "ExtendViewController") as! ExtendViewController
+                vc.inputData = self.inputData
+                DispatchQueue.main.async {
+                    self.present(vc, animated: true, completion: nil)
+                }
+                break
+                
+            default:
+                break
+            }
+        }
+    }
+    
     func initData(){
         if let data = self.inputData {
             if let name = data.country_iso {
@@ -63,10 +99,15 @@ class PurchaseDetailViewController: UIViewController {
                 imgFlag.image = image;
             }
             if let dayleft = data.days_left {
-                lblDaysLeft.text = dayleft + " Days Left"
+                lblDaysLeft.text = dayleft + " "
             }else{
-                lblDaysLeft.text = "0 Days Left"
+                lblDaysLeft.text = "0"
             }
+            
+            if let left = data.minutes_left {
+                lblMinutesLeft.text = left
+            }
+            
             if let country = data.country {
                 txtInputNumber.placeholder = "Input \(country) Number";
             }
@@ -80,52 +121,89 @@ class PurchaseDetailViewController: UIViewController {
     func getRequiredInfo(){
         //PurchaseDetailResponse
         let global = GlobalSwift.sharedManager
+        let reach = Reachability()!
+        
         if let data = self.inputData ,let user = global.curUser{
-            let manager = NetworkUtil.sharedManager
-            let request = RequestLogin()
-            request.setDefaultkeySecret()
-            request.userid = user.userid
-            request.phone = user.phoneno
-            request.purchase_id = data.id
-            
-            //                    request.divert_phone = "6597668866"
-            CGlobal.showIndicator(self)
-            manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_GET_PURCHASE) { (dict, error) in
+            if reach.isReachableViaWiFi{
+                let manager = NetworkUtil.sharedManager
+                let request = RequestLogin()
+                request.setDefaultkeySecret()
+                request.userid = user.userid
+                request.phone = user.phoneno
+                request.purchase_id = data.id
                 
-                if error == nil {
-                    let response = PurchaseDetailResponse.init(dictionary: dict)
-                    if let rows = response.present_purchase, rows.count > 0 {
-                        // success
-                        let row:TblPurchaseDetail  = rows[0]
-                        
-                        self.purchaseDetail = row
-                        if let country = user.country,let divert_number = row.divert_number ,divert_number.characters.count > 0 {
-                            
-                            
-                            let title = "Divert your \(country) number to \(divert_number)"
-                            
-                            //self.btnDivert.setTitle(title, for: .normal)
-                            self.lblDivert.text = title
-                            self.viewDial.isUserInteractionEnabled = true
-                        }else{
-                            if let message = row.divert_message {
-                                //CGlobal.alertMessage(message, title: nil)
-//                                self.btnDivert.setTitle(message, for: .normal)
-//                                self.btnDivert.isEnabled = false
-                                self.lblDivert.text = message
-                                self.viewDial.isUserInteractionEnabled = false
-                            }
-                        }
+                //                    request.divert_phone = "6597668866"
+                CGlobal.showIndicator(self)
+                manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_GET_PURCHASE) { (dict, error) in
+                    
+                    if error == nil {
+                        let response = PurchaseDetailResponse.init(dictionary: dict)
+                        self.showResult(response: response, user: user)
                     }else{
-                        
+                        //CGlobal.alertMessage("Server Error", title: nil)
                     }
-                }else{
-                    //CGlobal.alertMessage("Server Error", title: nil)
+                    CGlobal.stopIndicator(self)
                 }
-                CGlobal.stopIndicator(self)
+            }else{
+                if let tblid = data.id {
+                    let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                    let context = delegate.persistentContainer.viewContext
+                    
+                    let fetch = NSFetchRequest<PurchaseDetail>(entityName: "PurchaseDetail")
+                    fetch.predicate = NSPredicate.init(format: " id == '" + tblid + "'");
+                    
+                    do {
+                        let rows = try context.fetch(fetch)
+                        //            let rows = try context.fetch(HelpModel.fetchRequest())
+                        if rows.count>0 {
+                            let response = PurchaseDetailResponse.init()
+                            var temp = [TblPurchaseDetail]()
+                            for i in 0..<rows.count {
+                                let detail = TblPurchaseDetail.init()
+                                debugPrint(rows[i].country_iso)
+                                debugPrint(rows[i].divert_message)
+                                
+                                BaseModel.copyValues(detail, source: rows[i])
+                                temp.append(detail)
+                            }
+                            response.present_purchase = temp
+                            self.showResult(response: response, user: user)
+                        }
+                    } catch {
+                        let nserror = error as NSError
+                        fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                    }
+                    
+                }
             }
+            
         }
-
+        
+        
+        
+    }
+    func showResult(response:PurchaseDetailResponse,user:User){
+        if let rows = response.present_purchase, rows.count > 0 {
+            // success
+            let row:TblPurchaseDetail  = rows[0]
+            
+            self.purchaseDetail = row
+            if let country = user.country,let divert_number = row.divert_number ,divert_number.characters.count > 0 {
+                
+                let title = "Divert your \(country) number to \(divert_number)"
+                
+                //self.btnDivert.setTitle(title, for: .normal)
+                self.lblDivert.text = title
+                self.txtInputNumber.text = row.divert_phone
+            }else{
+                if let message = row.divert_message {
+                    
+                    self.lblDivert.text = message
+                }
+            }
+        }else{
+            
+        }
     }
     var purchaseDetail:TblPurchaseDetail?
     func clickGesture(gesture:UITapGestureRecognizer){
@@ -165,21 +243,21 @@ class PurchaseDetailViewController: UIViewController {
         case 102:
             // open setting
             
-            
+            UIPasteboard.general.string = self.purchaseDetail?.divert_number
             // call forwarding
             
-            if let detail = self.purchaseDetail , let number = detail.divert_number , !number.isEmpty{
-                let phonenumber = "tel://" + number
-                var url:URL? =  URL.init(string: phonenumber)
-                if let url = url {
-                    UIApplication.shared.openURL(URL.init(string: UIApplicationOpenSettingsURLString)!)
-                    UIApplication.shared.openURL(url)
-                }
-                
-                
-            }else{
-                
-            }
+//            if let detail = self.purchaseDetail , let number = detail.divert_number , !number.isEmpty{
+//                let phonenumber = "tel://" + number
+//                var url:URL? =  URL.init(string: phonenumber)
+//                if let url = url {
+//                    UIApplication.shared.openURL(URL.init(string: UIApplicationOpenSettingsURLString)!)
+//                    UIApplication.shared.openURL(url)
+//                }
+//                
+//                
+//            }else{
+//                
+//            }
             break
         case 101:
             // divert code
@@ -239,15 +317,15 @@ class PurchaseDetailViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

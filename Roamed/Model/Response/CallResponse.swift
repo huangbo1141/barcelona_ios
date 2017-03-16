@@ -26,10 +26,17 @@ class CallResponse:BaseModelSwift{
                         
                         let data = CallModel(context:context)
                         BaseModel.parseResponse(data, dict: item)
+                        data.sortid = key
                         calls?.append(data);
                     }
-                    
                 }
+                calls?.sort(by: { (first, second) -> Bool in
+                    if let id1 = Int(first.sortid!),let id2=Int(second.sortid!){
+                        return id1 < id2;
+                    }
+                    return true;
+                })
+                
             }
         }
     }

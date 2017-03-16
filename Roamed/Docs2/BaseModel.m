@@ -65,6 +65,35 @@
             @try {
                 [targetClass setValue:value forKey:name];
             } @catch (NSException *exception) {
+                NSLog(@"error %@", name);
+            }
+            
+        }
+        //NSLog(@"Property %@ attributes: %@", name, name);
+    }
+    free(propertyArray);
+}
++(void)copyValues:(id)targetClass Source:(id)sourceClass{
+    unsigned int numberOfProperties = 0;
+    objc_property_t *propertyArray = class_copyPropertyList([targetClass class], &numberOfProperties);
+    
+    for (NSUInteger i = 0; i < numberOfProperties; i++)
+    {
+        objc_property_t property = propertyArray[i];
+        NSString *name = [[NSString alloc] initWithUTF8String:property_getName(property)];
+        //NSString *attributesString = [[NSString alloc] initWithUTF8String:property_getAttributes(property)];
+        id value;
+        @try {
+            value = [sourceClass valueForKey:name];
+//            value = [sourceClass objectForKey:name];
+        } @catch (NSException *exception) {
+            continue;
+        }
+        
+        if (value!=nil && [value isKindOfClass:[NSString class]] && value != [NSNull null] ) {
+            @try {
+                [targetClass setValue:value forKey:name];
+            } @catch (NSException *exception) {
                 
             }
             
@@ -72,10 +101,7 @@
         //NSLog(@"Property %@ attributes: %@", name, name);
     }
     free(propertyArray);
-    
-    
 }
-
 +(NSData*)buildJsonData:(id)targetClass{
     NSData* jsonData = nil;
     
