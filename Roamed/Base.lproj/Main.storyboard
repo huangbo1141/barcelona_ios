@@ -734,7 +734,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="o0D-It-Vs6" customClass="SwiftNavViewController" customModule="Roamed" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Home" image="Home" id="OI9-lV-BC3">
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="10"/>
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="DTD-ry-kio">

@@ -15,27 +15,27 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     
     @IBOutlet weak var lblLabel0: UILabel!
     @IBOutlet weak var txtDateFrom: UITextField!
-    @IBOutlet weak var txtDays: UITextField!
+//    @IBOutlet weak var txtDays: UITextField!
     @IBOutlet weak var txtCountry: UITextField!
     @IBOutlet weak var lblPrice: UILabel!
     @IBOutlet weak var lblPrice2: UILabel!
     
-    @IBOutlet weak var btnPurchase: RoundCornerButton!
+//    @IBOutlet weak var btnPurchase: RoundCornerButton!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        btnPurchase.addTarget(self, action: #selector(PurchaseViewController.clickView(sender:)), for: .touchUpInside)
-        btnPurchase.tag = 100
+//        btnPurchase.addTarget(self, action: #selector(PurchaseViewController.clickView(sender:)), for: .touchUpInside)
+//        btnPurchase.tag = 100
         let date = Date.init()
         let datePicker = UIDatePicker.init()
         datePicker.datePickerMode = .date
         datePicker.date = date
         txtDateFrom.inputView = datePicker
         datePicker.addTarget(self, action: #selector(PurchaseViewController.handleDatePicker(sender:)), for: .valueChanged)
-        txtDays.isHidden = true
+//        txtDays.isHidden = true
         
         let pickerview = UIPickerView.init()
         pickerview.delegate = self
@@ -70,6 +70,7 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                     self.countryList = rows
                     if let picker = self.txtCountry.inputView as? UIPickerView{
                         picker.reloadAllComponents()
+                        self.inappInit()
                     }
                 }else{
                     
