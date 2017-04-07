@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import IQKeyboardManagerSwift
 import ReachabilitySwift
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -80,6 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }else {
                 let loginResp = LoginResponse.init(dictionary: dict)
                 self.goMainWindow(data: loginResp)
+                
                 NotificationCenter.default.post(name: Notification.Name(Constants.GLOBALNOTIFICATION_RECEIVE_USERINFO_SUCC), object: nil)
             }
         });
@@ -101,9 +103,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var network_available:Bool = false
     func initServices(application:UIApplication){
         IQKeyboardManager.sharedManager().enable = true
-//        GMSServices.provideAPIKey("AIzaSyAbtRRLo_7Y5w2DfM0lPgQ_E65QpInTKqI")
-//        Twitter.sharedInstance().start(withConsumerKey: "9OIypj02F1jKwacVSyOEbgwNt", consumerSecret: "hkzM07C7cZGAaTsuyVjQCefSwGVb9mE75SGRv2rc8kFGPCc3yW")
-//        application.registerForRemoteNotifications()
+        if #available(iOS 10, *) {
+            UNUserNotificationCenter.current().requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
+            application.registerForRemoteNotifications()
+        }
+            // iOS 9 support
+        else if #available(iOS 9, *) {
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+            // iOS 8 support
+        else if #available(iOS 8, *) {
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+            // iOS 7 support
+        else {
+            application.registerForRemoteNotifications(matching: [.badge, .sound, .alert])
+        }
+    }
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let newToken = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
+        debugPrint("My token is " + newToken)
+        let global = GlobalSwift.sharedManager
+        global.uuid = newToken
+        self.registerDeviceUUID()
+    }
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+        debugPrint("didReceiveRemoteNotification")
+        self.processMessage(userInfo: userInfo)
+    }
+    func processMessage(userInfo: [AnyHashable : Any]){
+        if let data = userInfo["data"] as? [String:AnyObject] {
+            if let rdata = data["rdata"] as? [String:AnyObject] {
+                if let title = rdata["ttc_subject"] as? String{
+                    if let message = rdata["ttc_message"] as? String {
+                        CGlobal.alertMessage(message, title: title)
+                    }
+                }
+            }
+        }
     }
     func logout(){
         if let env = CGlobal.sharedId().env{
@@ -132,6 +171,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             
             if (self.saveLoginInfo(data: data)){
+                let global = GlobalSwift.sharedManager
+                
                 env.lastLogin = Int((data.userid)!)!
                 
                 switch -4 {
@@ -173,6 +214,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let user:User = rows[0] as! User
                 let global = GlobalSwift.sharedManager
                 global.curUser = user
+                self.registerDeviceUUID()
                 let ms = UIStoryboard.init(name: "Main", bundle: nil);
                 DispatchQueue.main.async {
                     let viewcon = ms.instantiateViewController(withIdentifier: "CTabBar");
@@ -203,14 +245,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     
-//    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//        let newToken = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
-//        debugPrint("My token is " + newToken)
-//        let global = GlobalSwift.sharedManager
-//        global.uuid = newToken
-//        self.registerDeviceUUID()
-//    }
-    
     func registerDeviceUUID(){
         let global = GlobalSwift.sharedManager
         guard let user = global.curUser, let uuid = global.uuid else {
@@ -223,6 +257,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         request.userid = user.userid
         request.phone = user.phoneno
         request.iso = user.iso
+        request.country = user.iso
         request.name = UserDefaults.standard.string(forKey: "name")
         request.device_token = uuid
         

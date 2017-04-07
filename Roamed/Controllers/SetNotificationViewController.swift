@@ -43,7 +43,7 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
             pkview.delegate = self
             pkview.dataSource = self
             self.txtTimezone.inputView = pkview
-            
+
         }
         // Do any additional setup after loading the view.
     }
@@ -103,6 +103,9 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
         format.dateFormat = "HH:mm:ss"
         txtTime.text = format.string(from: sender.date)
     }
+    func handlePicker(sender:UIPickerView){
+        
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -122,6 +125,10 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         self.index = row
         return self.list_val[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.index = row
+        txtTimezone.text = self.list_val[row]
     }
     
     /*

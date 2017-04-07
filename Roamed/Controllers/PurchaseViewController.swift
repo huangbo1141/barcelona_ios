@@ -13,6 +13,8 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
 
     
     
+    @IBOutlet weak var constraint_ProductHeight: NSLayoutConstraint!
+    @IBOutlet weak var stackProduct: UIStackView!
     @IBOutlet weak var lblLabel0: UILabel!
     @IBOutlet weak var txtDateFrom: UITextField!
 //    @IBOutlet weak var txtDays: UITextField!
@@ -42,10 +44,13 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
         pickerview.dataSource = self
         txtCountry.inputView = pickerview
         
-        DispatchQueue.main.async {
-            self.loadCountry()
-        }
+        
         self.title = "Roamed"
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.inappInit()
+        self.loadCountry()
     }
     func handleDatePicker(sender:UIDatePicker){
         let dateFormatter = DateFormatter()
@@ -55,6 +60,9 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     
     var countryList:[TblCountry] = [TblCountry]()
     func loadCountry(){
+        if countryList.count > 0 {
+            return
+        }
         let manager = NetworkUtil.sharedManager
         let request = RequestLogin()
         request.setDefaultkeySecret()
@@ -70,7 +78,6 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                     self.countryList = rows
                     if let picker = self.txtCountry.inputView as? UIPickerView{
                         picker.reloadAllComponents()
-                        self.inappInit()
                     }
                 }else{
                     
@@ -97,6 +104,7 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                     request.userid = user.userid
                     request.phone = user.phoneno
                     request.iso = self.country?.iso
+//                    request.iso = "hk"
                     request.days = days[index]
                     if let picker = txtDateFrom.inputView as? UIDatePicker {
                         let date = picker.date
@@ -118,6 +126,10 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                                     self.requestTerm = request
                                     let product = self.iapProducts[index]
                                     self.purchaseMyProduct(product: product)
+                                    
+                                    // assume purchase success
+//                                    self.purchase1();
+//                                    self.goToNotificationSetController()
                                     
                                 }else{
                                     if let message = temp.message {
@@ -171,47 +183,31 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     }
     */
 
-    @IBOutlet weak var lblDay1: UILabel!
-    @IBOutlet weak var lblPrice1: UILabel!
-    @IBOutlet weak var btnPurchase1: UIButton!
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         if (response.products.count > 0) {
             iapProducts = response.products
             
             // 1st IAP Product (Consumable) ------------------------------------
-            let lbldays:[UILabel] = [lblDay1]
-            let lblprices:[UILabel] = [lblPrice1]
-            let btnPurchases:[UIButton] = [btnPurchase1]
             
+            var height = CGFloat(40)*CGFloat(self.iapProducts.count);
+            height = max(height, CGFloat(40))
+            constraint_ProductHeight.constant = height
+            stackProduct.setNeedsUpdateConstraints();
+            stackProduct.layoutIfNeeded()
             for i in 0..<self.iapProducts.count {
                 
-                let firstProduct = self.iapProducts[i]
-                // Get its price from iTunes Connect
-                let numberFormatter = NumberFormatter()
-                numberFormatter.formatterBehavior = .behavior10_4
-                numberFormatter.numberStyle = .currency
-                numberFormatter.locale = firstProduct.priceLocale
-                let price1Str = numberFormatter.string(from: firstProduct.price)
-                
-                // Show its description
-                
-                //let title = firstProduct.localizedDescription + "\nfor just \(price1Str!)"
-                lbldays[i].text = firstProduct.localizedDescription
-                lblprices[i].text = price1Str
-                // ------------------------------------------------
-                
-                let btn = btnPurchases[i]
-                btn.addTarget(self, action: #selector(PurchaseViewController.clickView(sender:)), for: .touchUpInside)
-                btn.tag = 400 + i
+                if let view:PurchaseItemView = Bundle.main.loadNibNamed("PurchaseItemView", owner: self, options: nil)?[0] as? PurchaseItemView{
+                    view.setData(firstProduct: self.iapProducts[i], i: i, vc: self)
+                    stackProduct.addArrangedSubview(view)
+                }
                 
             }
             
         }
+        isLoadingPurchase = false;
     }
-    
-    let PRODUCT_ID_DAY1 = "com.simpsy.roamed.day1"
-    let PRODUCT_ID_DAY2 = "com.simpsy.roamed.day2"
+    let PRODUCT_ID_DAY = "com.simpsy.roamed.day"
     
     var productID = ""
     var productsRequest = SKProductsRequest()
@@ -224,14 +220,20 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     }
     func fetchAvailableProducts()  {
         
-        // Put here your IAP Products ID's
-        let productIdentifiers = NSSet(objects:
-            PRODUCT_ID_DAY1
-        )
+        if self.iapProducts.count <= 0 , isLoadingPurchase == false {
+            // Put here your IAP Products ID's
+            var arrays:[String] = [String]()
+            for i in 0..<100{
+                arrays.append(PRODUCT_ID_DAY + "\(i)")
+            }
+            let productIdentifiers = NSSet(array: arrays)
+            
+            isLoadingPurchase = true;
+            self.productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers as! Set<String>)
+            self.productsRequest.delegate = self
+            self.productsRequest.start()
+        }
         
-        productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers as! Set<String>)
-        productsRequest.delegate = self
-        productsRequest.start()
     }
     @IBAction func restorePurchaseButt(_ sender: Any) {
 //        SKPaymentQueue.default().add(self)
@@ -246,7 +248,9 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
 //                    message: "You've successfully restored your purchase!",
 //                    delegate: nil, cancelButtonTitle: "OK").show()
 //    }
-    func canMakePurchases() -> Bool {  return SKPaymentQueue.canMakePayments()  }
+    func canMakePurchases() -> Bool {
+        return SKPaymentQueue.canMakePayments()
+    }
     func purchaseMyProduct(product: SKProduct) {
         if self.canMakePurchases() {
             let payment = SKPayment(product: product)
@@ -264,43 +268,24 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     }
     
     var isLoading:Bool = false
+    var isLoadingPurchase:Bool = false
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         for transaction:AnyObject in transactions {
             if let trans = transaction as? SKPaymentTransaction {
+                debugPrint(trans.transactionState)
                 switch trans.transactionState {
                     
                 case .purchased:
                     SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
                     
                     // The Consumable product (10 coins) has been purchased -> gain 10 extra coins!
-                    if productID == PRODUCT_ID_DAY1 {
-                        
-                        if let request = self.requestTerm{
-                            CGlobal.showIndicator(self)
-                            let manager = NetworkUtil.sharedManager
-                            manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_DOPURCHASE) { (dict, error) in
-                                if error == nil {
-                                    let temp = LoginResponse.init(dictionary: dict)
-                                    if let status = temp.status {
-                                        if status == "success" {
-                                            CGlobal.alertMessage("You've successfully bought 1 Day!", title: "Purchase")
-                                        }else{
-                                            // fail
-                                            if let message = temp.message {
-                                                CGlobal.alertMessage(message, title: nil)
-                                            }
-                                        }
-                                    }else{
-                                        CGlobal.alertMessage("Failed to Load", title: nil)
-                                    }
-                                }else{
-                                    CGlobal.alertMessage("Failed to Load", title: nil)
-                                }
-                                CGlobal.stopIndicator(self)
-                                self.isLoading = false
-                            }
+                    if productID.hasPrefix(PRODUCT_ID_DAY) {
+                        let index = productID.index(productID.startIndex, offsetBy: PRODUCT_ID_DAY.characters.count)
+                        let numday_str = productID.substring(from: index)
+                        if let numday = Int(numday_str){
+                            self.requestTerm?.days = numday_str;
+                            self.purchase1()
                         }
-                        // The Non-Consumable product (Premium) has been purchased!
                     }
 //                    else if productID == PREMIUM_PRODUCT_ID {
 //                        
@@ -325,7 +310,45 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                     SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
                     break
                     
-                default: break
+                default:
+                    break
                 }}}
+    }
+    func goToNotificationSetController(){
+        let ms = UIStoryboard.init(name: "Main", bundle: nil);
+        DispatchQueue.main.async {
+            let viewcon = ms.instantiateViewController(withIdentifier: "SetNotificationViewController");
+            self.navigationController?.pushViewController(viewcon, animated: true)
+        }
+        
+        
+    }
+    func purchase1(){
+        if let request = self.requestTerm{
+            CGlobal.showIndicator(self)
+            let manager = NetworkUtil.sharedManager
+            manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_DOPURCHASE) { (dict, error) in
+                if error == nil {
+                    let temp = LoginResponse.init(dictionary: dict)
+                    if let status = temp.status {
+                        if status == "success" {
+                            CGlobal.alertMessage("You've successfully bought 1 Day!", title: "Purchase")
+                            self.goToNotificationSetController();
+                        }else{
+                            // fail
+                            if let message = temp.message {
+                                CGlobal.alertMessage(message, title: nil)
+                            }
+                        }
+                    }else{
+                        CGlobal.alertMessage("Failed to Load", title: nil)
+                    }
+                }else{
+                    CGlobal.alertMessage("Failed to Load", title: nil)
+                }
+                CGlobal.stopIndicator(self)
+                self.isLoading = false
+            }
+        }
     }
 }

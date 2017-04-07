@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0716DA211E78DA4D002FF63E /* PurchaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0716DA201E78DA4C002FF63E /* PurchaseViewController.swift */; };
+		073D80751E8BB216004B065F /* PurchaseItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 073D80741E8BB216004B065F /* PurchaseItemView.xib */; };
+		073D80771E8BB231004B065F /* PurchaseItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D80761E8BB231004B065F /* PurchaseItemView.swift */; };
 		076B38EF1E7A877E00C19E40 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076B38EE1E7A877E00C19E40 /* StoreKit.framework */; };
 		076B38F11E7A8A2000C19E40 /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076B38F01E7A8A2000C19E40 /* ProductViewController.swift */; };
 		076B38F31E7AD7E700C19E40 /* ExtendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076B38F21E7AD7E700C19E40 /* ExtendViewController.swift */; };
@@ -111,6 +113,8 @@
 /* Begin PBXFileReference section */
 		0716DA201E78DA4C002FF63E /* PurchaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseViewController.swift; sourceTree = "<group>"; };
 		072FF22D1E69587800DE1EFA /* Roamed.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Roamed.entitlements; sourceTree = "<group>"; };
+		073D80741E8BB216004B065F /* PurchaseItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PurchaseItemView.xib; sourceTree = "<group>"; };
+		073D80761E8BB231004B065F /* PurchaseItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseItemView.swift; sourceTree = "<group>"; };
 		076B38EE1E7A877E00C19E40 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		076B38F01E7A8A2000C19E40 /* ProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
 		076B38F21E7AD7E700C19E40 /* ExtendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtendViewController.swift; sourceTree = "<group>"; };
@@ -612,6 +616,8 @@
 				4D6FC5B21E5C91C900ECD774 /* CallHistoryTableViewCell.xib */,
 				4D3B65B31E684D0800929A59 /* PastTableViewCell.swift */,
 				4D3B65B41E684D0800929A59 /* PastTableViewCell.xib */,
+				073D80741E8BB216004B065F /* PurchaseItemView.xib */,
+				073D80761E8BB231004B065F /* PurchaseItemView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -673,7 +679,7 @@
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -716,6 +722,7 @@
 				4D6FC4C31E5C38A600ECD774 /* Main2.storyboard in Resources */,
 				4D6FC5B41E5C91C900ECD774 /* CallHistoryTableViewCell.xib in Resources */,
 				4D6FC4B31E5C2EBE00ECD774 /* Main.storyboard in Resources */,
+				073D80751E8BB216004B065F /* PurchaseItemView.xib in Resources */,
 				4D6FC57E1E5C38D500ECD774 /* combobox_down_highlighed@2x.png in Resources */,
 				4D3B65B61E684D0800929A59 /* PastTableViewCell.xib in Resources */,
 				4D6FC4C71E5C38B400ECD774 /* img_back1.png in Resources */,
@@ -831,6 +838,7 @@
 				4D6FC5931E5C38D500ECD774 /* RoundCornerButton.swift in Sources */,
 				4D6FC5AD1E5C895900ECD774 /* CountryTableViewCell.swift in Sources */,
 				4D6FC5841E5C38D500ECD774 /* ActionType.swift in Sources */,
+				073D80771E8BB231004B065F /* PurchaseItemView.swift in Sources */,
 				4D3B65B81E6852DA00929A59 /* TabViewController.swift in Sources */,
 				4D6FC56D1E5C38D500ECD774 /* GCPlaceholderTextView.m in Sources */,
 				4D6FC58C1E5C38D500ECD774 /* WNASearchTerm.swift in Sources */,
@@ -979,15 +987,16 @@
 			baseConfigurationReference = 1E0C74FB537DF2FCC0877A8E /* Pods-Roamed.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: SIMPSY LLP (6BQ95S6MAJ)";
+				CODE_SIGN_ENTITLEMENTS = Roamed/Roamed.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tan Long (T2935VR5G8)";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Roamed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simpsy.roamed1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c4f54586-8379-43fa-acb8-a699a439047c";
-				PROVISIONING_PROFILE_SPECIFIER = "Roamed1 Appstore";
+				PROVISIONING_PROFILE = "9bf96dfa-29ba-48a3-aa64-acaed03ac1a8";
+				PROVISIONING_PROFILE_SPECIFIER = "Roamed Dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "Roamed/Roamed-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -998,15 +1007,16 @@
 			baseConfigurationReference = F28E3DDE339E0F4FA107A46B /* Pods-Roamed.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: SIMPSY LLP (6BQ95S6MAJ)";
+				CODE_SIGN_ENTITLEMENTS = Roamed/Roamed.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tan Long (T2935VR5G8)";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Roamed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simpsy.roamed1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c4f54586-8379-43fa-acb8-a699a439047c";
-				PROVISIONING_PROFILE_SPECIFIER = "Roamed1 Appstore";
+				PROVISIONING_PROFILE = "9bf96dfa-29ba-48a3-aa64-acaed03ac1a8";
+				PROVISIONING_PROFILE_SPECIFIER = "Roamed Dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "Roamed/Roamed-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
