@@ -67,7 +67,14 @@
             } @catch (NSException *exception) {
                 NSLog(@"error %@", name);
             }
-            
+        }else if(value!=nil && [value isKindOfClass:[NSNumber class]] && value != [NSNull null]){
+            @try {
+                NSNumber* number = (NSNumber*)value;
+                NSString* ppp = [NSString stringWithFormat:@"%.1f",number.doubleValue];
+                [targetClass setValue:ppp forKey:name];
+            } @catch (NSException *exception) {
+                NSLog(@"error %@", name);
+            }
         }
         //NSLog(@"Property %@ attributes: %@", name, name);
     }

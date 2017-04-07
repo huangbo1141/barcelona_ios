@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SocketIO
 protocol PropertyNames {
     func propertyNames() -> [String]
     func propertyNamesFull() -> [String]
@@ -33,7 +32,7 @@ extension PropertyNames
     }
 }
 
-class BaseModelSwift:NSObject, PropertyNames,SocketData{
+class BaseModelSwift:NSObject, PropertyNames{
     var response:Int = 0;
     var mystring = ""
     
