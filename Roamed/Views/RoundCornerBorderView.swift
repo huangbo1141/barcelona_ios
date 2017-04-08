@@ -36,7 +36,7 @@ class RoundCornerBorderView: UIView {
                 self.backgroundColor = UIColor.white
             case 2:
                 self.backgroundColor = CGlobal.color(withHexString: "ffffff", alpha: 1.0)
-                
+                self.layer.borderColor = CGlobal.color(withHexString: "000000", alpha: 1.0).cgColor
             case 1:
                 self.layer.borderColor = COLOR_PRIMARY.cgColor;
                 self.backgroundColor = UIColor.clear

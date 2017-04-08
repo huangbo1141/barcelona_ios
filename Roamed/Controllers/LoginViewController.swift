@@ -28,7 +28,7 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
     @IBOutlet weak var btnVerify: RoundCornerBorderButton!
     
     
-    @IBOutlet weak var txtVerifyCode: CustomTextField!
+    @IBOutlet weak var txtVerifyCode: UITextField!
     var country:TblCountry?
     
     
@@ -197,8 +197,8 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         let manager = NetworkUtil.sharedManager
         
         CGlobal.showIndicator(self)
-        //user.country = "sg"
-        //user.phone = "92997764"
+        user.country = "sg"
+        user.phone = "92997764"
         manager.ontemplateGeneralRequest(data: user,method:.get, url: Constants.ACTION_LOGIN) { (dict, error) in
             //            let loginResp = LoginResponse.init(dictionary: dict)
             //            debugPrint(loginResp.response)

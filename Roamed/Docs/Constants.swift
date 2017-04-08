@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import StoreKit
 private let _sharedManager = Constants()
 
 class Constants:NSObject{
@@ -21,6 +21,8 @@ class Constants:NSObject{
     //
     static let PRIMARY_COLOR = UIColor.init(colorLiteralRed: 21.0/255.0, green: 129.0/255.0, blue: 198.0/255.0, alpha: 1.0)
 //    https://roamed.co/api/register/?key=abc123&secret=123abc&phone=92997764&country=sg&name=test
+    
+    static let PRODUCT_ID_DAY = "com.simpsy.roamed.day"
     
     static let PATH_APNS = "apnsv2";
     static let APISERVICE_IP_URL = "http://ip-api.com/json";
@@ -154,6 +156,7 @@ class Constants:NSObject{
     
     static let STORYTYPE_TRIP = "t";
     
+    static var iapProducts = [SKProduct]()
 //    static var PRE_EXPLORE_PAGE:[BaseModelSwift] {
 //        get {
 //            let data1 = BaseModelSwift.init()

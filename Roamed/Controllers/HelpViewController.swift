@@ -24,6 +24,7 @@
         
         
         if let html = self.getTextShow() {
+            CGlobal.showIndicator(self)
             self.renderText(text: html)
         }else{
             textToShow = "<style>a{ color:#43ABEA } p{ line-height:1.5; }</style>";
@@ -227,7 +228,8 @@
         let rect = self.view.frame
         size.width = rect.size.width
         self.webView.scrollView.contentSize = size
-        self.webView.scrollView.frame = CGRect.init(x: 0, y: 0, width: size.width, height: 50000)
+        CGlobal.stopIndicator(self)
+//        self.webView.scrollView.frame = CGRect.init(x: 0, y: 0, width: size.width, height: 50000)
     }
     
  }

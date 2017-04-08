@@ -18,6 +18,7 @@ class TblPurchaseDetail:BaseModelSwift{
     var divert_number:String?
     var divert_message:String?
     var divert_phone:String?
+    var start_date:String?
     
     init(dictionary:[String:Any]?){
         super.init()

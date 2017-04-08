@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StoreKit
 
 private let _sharedManager = GlobalSwift()
 
@@ -93,12 +94,23 @@ class GlobalSwift:NSObject{
         var timezone = ""
         if seconds%3600 > 0 {
             let remain = seconds - hour*3600
-            timezone = "\(sign)hour:30"
+            timezone = "\(sign)\(hour):30"
         }else{
-            timezone = "\(sign)hour:00"
+            timezone = "\(sign)\(hour):00"
         }
         return timezone
     }
-    
+    static func getNumberDay(product:SKProduct)->Int{
+        let productID = product.productIdentifier
+        var numday1:Int = 0
+        if productID.hasPrefix(Constants.PRODUCT_ID_DAY) {
+            let index = productID.index(productID.startIndex, offsetBy: Constants.PRODUCT_ID_DAY.characters.count)
+            let numday_str = productID.substring(from: index)
+            if let day1 = Int(numday_str){
+                numday1 = day1
+            }
+        }
+        return numday1;
+    }
     
 }

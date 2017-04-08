@@ -20,6 +20,9 @@ class ColoredLabel: UILabel {
     @IBInspectable var backMode: Int = -1 {
         didSet {
             switch backMode {
+            case 1:
+                self.font = UIFont.systemFont(ofSize: 13)
+                break
             case 0:
                 self.textColor = CGlobal.color(withHexString: "3799E5", alpha: 1.0)
                 break

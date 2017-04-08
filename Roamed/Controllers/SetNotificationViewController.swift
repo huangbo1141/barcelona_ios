@@ -34,9 +34,32 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
             self.txtTime.inputView = picker
             picker.addTarget(self, action: #selector(SetNotificationViewController.handleDate(sender:)), for: .valueChanged)
             
+            var temp:[TblCountry] = [TblCountry]()
+            
+            
             for (key,value) in self.timeZoneAbbreviations {
-                self.list_abb.append(key)
-                self.list_val.append(value)
+                let country = TblCountry()
+                country.iso = key
+                country.country = value
+                temp.append(country)
+//                self.list_abb.append(key)
+//                self.list_val.append(value)
+            }
+            temp.sort(by: { (first, second) -> Bool in
+                if let c1 = first.country,let c2 = second.country {
+                    if c1.compare(c2) == .orderedAscending {
+                        return true
+                    }
+                }
+                return false
+            })
+            
+            for i in 0..<temp.count {
+                let country = temp[i]
+                if let key = country.iso, let value = country.country {
+                    self.list_abb.append(key)
+                    self.list_val.append(value)
+                }
             }
             
             let pkview = UIPickerView.init()

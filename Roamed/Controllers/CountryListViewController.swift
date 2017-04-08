@@ -56,6 +56,14 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     if let rows = response.countries, rows.count > 0 {
                         // success
                         self.countryList = rows
+                        self.countryList.sort(by: { (first, second) -> Bool in
+                            if let c1 = first.country, let c2 = second.country {
+                                if(c1.compare(c2) == .orderedAscending){
+                                    return true;
+                                }
+                            }
+                            return false
+                        })
                         self.tableView.reloadData()
                     }else{
                         

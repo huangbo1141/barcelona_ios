@@ -30,11 +30,11 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
             lblCountry.text = data.country
             
         }
-        self.title = "Roamed"
-    }
-    override func viewWillAppear(_ animated: Bool) {
         self.inappInit()
+        self.title = "Roamed"
+        debugPrint("viewDidload")
     }
+    
     var requestTerm:RequestLogin?
     func clickView(sender:UIView){
         let tag = sender.tag
@@ -101,32 +101,40 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
      }
      */
     
-    @IBOutlet weak var lblDay1: UILabel!
-    @IBOutlet weak var lblPrice1: UILabel!
-    @IBOutlet weak var btnPurchase1: UIButton!
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         if (response.products.count > 0) {
+            debugPrint("enter 1")
             iapProducts = response.products
+            
+            iapProducts.sort(by: { (first, second) -> Bool in
+                let fir = GlobalSwift.getNumberDay(product: first)
+                let sec = GlobalSwift.getNumberDay(product: second)
+                return fir < sec
+            });
             
             // 1st IAP Product (Consumable) ------------------------------------
             
             var height = CGFloat(40)*CGFloat(self.iapProducts.count);
             height = max(height, CGFloat(40))
+            debugPrint("enter 2",constraint_ProductHeight)
             constraint_ProductHeight.constant = height
+            
             stackProduct.setNeedsUpdateConstraints();
             stackProduct.layoutIfNeeded()
+            
+            debugPrint("enter 3",constraint_ProductHeight)
             for i in 0..<self.iapProducts.count {
-                
                 if let view:PurchaseItemView = Bundle.main.loadNibNamed("PurchaseItemView", owner: self, options: nil)?[0] as? PurchaseItemView{
                     view.setData(firstProduct: self.iapProducts[i], i: i, vc: self)
                     stackProduct.addArrangedSubview(view)
                 }
-                
             }
+            isLoadingPurchase = false;
+            
             
         }
-        isLoadingPurchase = false;
+        
     }
     
     let PRODUCT_ID_DAY = "com.simpsy.roamed.day"
@@ -138,7 +146,22 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
         // Check your In-App Purchases
         
         // Fetch IAP Products available
-        fetchAvailableProducts()
+        self.iapProducts = Constants.iapProducts
+        var height = CGFloat(40)*CGFloat(self.iapProducts.count);
+        height = max(height, CGFloat(40))
+        debugPrint("enter 2",constraint_ProductHeight)
+        constraint_ProductHeight.constant = height
+        
+        stackProduct.setNeedsUpdateConstraints();
+        stackProduct.layoutIfNeeded()
+        
+        debugPrint("enter 3",constraint_ProductHeight)
+        for i in 0..<self.iapProducts.count {
+            if let view:PurchaseItemView = Bundle.main.loadNibNamed("PurchaseItemView", owner: self, options: nil)?[0] as? PurchaseItemView{
+                view.setData(firstProduct: self.iapProducts[i], i: i, vc: self)
+                stackProduct.addArrangedSubview(view)
+            }
+        }
     }
     func fetchAvailableProducts()  {
         
@@ -153,7 +176,9 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
             isLoadingPurchase = true;
             self.productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers as! Set<String>)
             self.productsRequest.delegate = self
+            
             self.productsRequest.start()
+            debugPrint("fetchAvailableProducts")
         }
         
     }

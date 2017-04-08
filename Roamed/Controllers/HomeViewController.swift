@@ -9,7 +9,8 @@
 import UIKit
 import CoreData
 import ReachabilitySwift
-class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+import StoreKit
+class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,SKProductsRequestDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
@@ -30,9 +31,19 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             self.refreshControl = refreshControl
         
             if let navc = self.navigationController {
-                let item:UIBarButtonItem = UIBarButtonItem.init(image: UIImage.init(named: "history"), style: .plain, target: self, action: #selector(HomeViewController.clickView(sender:)))
+//                let item:UIBarButtonItem = UIBarButtonItem.init(image: UIImage.init(named: "history"), style: .plain, target: self, action: #selector(HomeViewController.clickView(sender:)))
                 //            let item1:UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: ., target: <#T##Any?#>, action: <#T##Selector?#>)
-                item.tag = 100
+                let btn = UIButton.init(type: .custom)
+                btn.frame = CGRect.init(x: 0, y: 0, width: 20, height: 20)
+                btn.addTarget(self, action: #selector(HomeViewController.clickView(sender:)), for: .touchUpInside)
+                //btn.showsTouchWhenHighlighted = true
+                
+                let image = UIImage.init(named: "history")
+                btn.setImage(image, for: .normal)
+                
+                let item:UIBarButtonItem = UIBarButtonItem.init(customView: btn)
+                btn.tag = 100
+//                item.tag = 100
                 self.navigationItem.rightBarButtonItems = [item]
             }
             
@@ -41,6 +52,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             self.tableView.addGestureRecognizer(gesture)
         }
         
+        self.inappInit()
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -179,5 +191,44 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
      // Pass the selected object to the new view controller.
      }
      */
-    
+    var productsRequest = SKProductsRequest()
+    func inappInit(){
+        // Check your In-App Purchases
+        
+        // Fetch IAP Products available
+        fetchAvailableProducts()
+        debugPrint("inappInit")
+    }
+    func fetchAvailableProducts()  {
+        
+        if Constants.iapProducts.count <= 0 {
+            // Put here your IAP Products ID's
+            var arrays:[String] = [String]()
+            for i in 0..<100{
+                arrays.append(Constants.PRODUCT_ID_DAY + "\(i)")
+            }
+            let productIdentifiers = NSSet(array: arrays)
+            
+            self.productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers as! Set<String>)
+            self.productsRequest.delegate = self
+            
+            self.productsRequest.start()
+            debugPrint("fetchAvailableProducts")
+        }
+        
+    }
+    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+        if (response.products.count > 0) {
+            debugPrint("enter 1")
+            Constants.iapProducts = response.products
+            
+            Constants.iapProducts.sort(by: { (first, second) -> Bool in
+                let fir = GlobalSwift.getNumberDay(product: first)
+                let sec = GlobalSwift.getNumberDay(product: second)
+                return fir < sec
+            });
+            
+        }
+        
+    }
 }

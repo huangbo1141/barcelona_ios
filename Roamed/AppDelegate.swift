@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //defaultMainWindow()
         let global = CGlobal.sharedId();
-        switch -1 {
+        switch -2 {
         case 1:
             
             
@@ -38,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             break;
         case 2:
+            self.defaultLogin()
             break
         default:
             

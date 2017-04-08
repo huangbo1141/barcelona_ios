@@ -41,13 +41,13 @@ class PurchaseItemView: UIView {
         btn.tag = 400 + i
         
         let productID = firstProduct.productIdentifier
-        if productID.hasPrefix(PRODUCT_ID_DAY) {
-            let index = productID.index(productID.startIndex, offsetBy: PRODUCT_ID_DAY.characters.count)
+        if productID.hasPrefix(Constants.PRODUCT_ID_DAY) {
+            let index = productID.index(productID.startIndex, offsetBy: Constants.PRODUCT_ID_DAY.characters.count)
             let numday_str = productID.substring(from: index)
             if let numday = Int(numday_str){
                 lblDay.text = "Buy \(numday)Day"
             }
         }
     }
-    let PRODUCT_ID_DAY = "com.simpsy.roamed.day"
+    
 }

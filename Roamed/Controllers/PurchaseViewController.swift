@@ -45,9 +45,25 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
         txtCountry.inputView = pickerview
         
         
-        self.title = "Roamed"
+//        self.title = "Roamed"
+        
+        DispatchQueue.main.async {
+            
+            var gesture = UISwipeGestureRecognizer.init(target: self, action: #selector(CallHistoryViewController.swipeLeft(gesture:)))
+            gesture.direction = .right
+            self.view.addGestureRecognizer(gesture)
+        }
     }
-    
+    func swipeLeft(gesture:UISwipeGestureRecognizer){
+        if let tabvc  = self.tabBarController {
+            self.view.slideIn(fromLeft: 0.5, delegate: nil, bounds: CGRect.zero)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                // your code here
+                tabvc.selectedIndex = 1
+            }
+        }
+    }
     override func viewWillAppear(_ animated: Bool) {
         self.inappInit()
         self.loadCountry()
@@ -93,6 +109,11 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     func clickView(sender:UIView){
         let tag = sender.tag
         if  tag >= 400 {
+            
+            
+            self.goToNotificationSetController()
+            return;
+            
             let index = tag - 400
             let days:[String] = ["1"]
             if self.isLoading == false {
@@ -187,6 +208,21 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         if (response.products.count > 0) {
             iapProducts = response.products
+            iapProducts.sort(by: { (first, second) -> Bool in
+                let fir = GlobalSwift.getNumberDay(product: first)
+                let sec = GlobalSwift.getNumberDay(product: second)
+                return fir < sec
+            });
+            
+            iapProducts = iapProducts.filter({ (product) -> Bool in
+                let num = GlobalSwift.getNumberDay(product: product)
+                if num == 3 {
+                    return false
+                }
+                return true
+            })
+            
+            
             
             // 1st IAP Product (Consumable) ------------------------------------
             

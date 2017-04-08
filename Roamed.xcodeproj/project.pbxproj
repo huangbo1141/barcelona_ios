@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0716DA211E78DA4D002FF63E /* PurchaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0716DA201E78DA4C002FF63E /* PurchaseViewController.swift */; };
+		0739085F1E991CED008A9F45 /* temp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0739085E1E991CEC008A9F45 /* temp.xib */; };
 		073D80751E8BB216004B065F /* PurchaseItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 073D80741E8BB216004B065F /* PurchaseItemView.xib */; };
 		073D80771E8BB231004B065F /* PurchaseItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D80761E8BB231004B065F /* PurchaseItemView.swift */; };
 		076B38EF1E7A877E00C19E40 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076B38EE1E7A877E00C19E40 /* StoreKit.framework */; };
@@ -113,6 +114,7 @@
 /* Begin PBXFileReference section */
 		0716DA201E78DA4C002FF63E /* PurchaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseViewController.swift; sourceTree = "<group>"; };
 		072FF22D1E69587800DE1EFA /* Roamed.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Roamed.entitlements; sourceTree = "<group>"; };
+		0739085E1E991CEC008A9F45 /* temp.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = temp.xib; sourceTree = "<group>"; };
 		073D80741E8BB216004B065F /* PurchaseItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PurchaseItemView.xib; sourceTree = "<group>"; };
 		073D80761E8BB231004B065F /* PurchaseItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseItemView.swift; sourceTree = "<group>"; };
 		076B38EE1E7A877E00C19E40 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -601,6 +603,7 @@
 				4D6FC5541E5C38D500ECD774 /* WNAActivityIndicator.m */,
 				4D6FC5A31E5C769D00ECD774 /* ColoredView.swift */,
 				076B38F41E7AD90000C19E40 /* ColoredLabel.swift */,
+				0739085E1E991CEC008A9F45 /* temp.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -717,6 +720,7 @@
 				4D6FC5771E5C38D500ECD774 /* Info.plist in Resources */,
 				4D6FC57F1E5C38D500ECD774 /* combobox_up@2x.png in Resources */,
 				4D6FC5801E5C38D500ECD774 /* combobox_up_highlighed@2x.png in Resources */,
+				0739085F1E991CED008A9F45 /* temp.xib in Resources */,
 				4D6FC4B81E5C2EBE00ECD774 /* Assets.xcassets in Resources */,
 				4D6FC5A21E5C726200ECD774 /* PurchaseTableViewCell.xib in Resources */,
 				4D6FC4C31E5C38A600ECD774 /* Main2.storyboard in Resources */,

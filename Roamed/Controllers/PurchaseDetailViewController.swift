@@ -12,6 +12,7 @@ import CoreData
 
 class PurchaseDetailViewController: UIViewController {
     
+    @IBOutlet weak var lblSetting: UILabel!
     @IBOutlet weak var view1: UIView!
     @IBOutlet weak var view0: UIView!
     @IBOutlet weak var lblDaysLeft: UILabel!
@@ -45,13 +46,13 @@ class PurchaseDetailViewController: UIViewController {
         if let navc = self.navigationController {
             let button: UIButton = UIButton.init(type: .custom)
             //set image for button
-            button.setImage(UIImage.init(named: "ico_help.png"), for: .normal)
+            button.setImage(UIImage.init(named: "simcard"), for: .normal)
             
             //add function for button
             button.addTarget(self, action: #selector(PurchaseDetailViewController.clickView(sender:)), for: .touchUpInside)
             
             //set frame
-            button.frame = CGRect.init(x: 0, y: 0, width: 53, height: 31)
+            button.frame = CGRect.init(x: 0, y: 0, width: 20, height: 20)
             button.tag = 200
             
             let barButton = UIBarButtonItem(customView: button)
@@ -82,7 +83,11 @@ class PurchaseDetailViewController: UIViewController {
                 let vc = ms.instantiateViewController(withIdentifier: "ExtendViewController") as! ExtendViewController
                 vc.inputData = self.inputData
                 DispatchQueue.main.async {
-                    self.present(vc, animated: true, completion: nil)
+                    self.navigationController?.pushViewController(vc, animated: true);
+//                    self.present(vc, animated: true, completion: nil)
+                    self.segControl.selectedSegmentIndex = 1
+                    self.view0.isHidden = true
+                    self.view1.isHidden = false
                 }
                 break
                 
@@ -188,6 +193,9 @@ class PurchaseDetailViewController: UIViewController {
             let row:TblPurchaseDetail  = rows[0]
             
             self.purchaseDetail = row
+            lblStartDate.text = row.start_date
+            lblDaysLeft.text = row.days_left
+            lblMinutesLeft.text = row.minutes_left
             if let country = user.country,let divert_number = row.divert_number ,divert_number.characters.count > 0 {
                 
                 let title = "Divert your \(country) number to \(divert_number)"
@@ -195,11 +203,17 @@ class PurchaseDetailViewController: UIViewController {
                 //self.btnDivert.setTitle(title, for: .normal)
                 self.lblDivert.text = title
                 self.txtInputNumber.text = row.divert_phone
+                btnCopy.isHidden = false
+                lblSetting.isHidden = false
             }else{
                 if let message = row.divert_message {
                     
                     self.lblDivert.text = message
                 }
+                
+                // hide the message part
+                btnCopy.isHidden = true
+                lblSetting.isHidden = true
             }
         }else{
             

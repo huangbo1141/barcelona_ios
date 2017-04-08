@@ -14,7 +14,7 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Roamed"
+//        self.title = "Roamed"
         
         let nib = UINib.init(nibName: "CallHistoryTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "cell")
@@ -28,8 +28,12 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
             self.refreshControl = refreshControl
             self.loadData()
             
-            let gesture = UISwipeGestureRecognizer.init(target: self, action: #selector(CallHistoryViewController.swipeLeft(gesture:)))
+            var gesture = UISwipeGestureRecognizer.init(target: self, action: #selector(CallHistoryViewController.swipeLeft(gesture:)))
             gesture.direction = .right
+            self.tableView.addGestureRecognizer(gesture)
+            
+            gesture = UISwipeGestureRecognizer.init(target: self, action: #selector(CallHistoryViewController.swipeRight(gesture:)))
+            gesture.direction = .left
             self.tableView.addGestureRecognizer(gesture)
         }
         
@@ -46,6 +50,17 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
             }
         }
     }
+    func swipeRight(gesture:UISwipeGestureRecognizer){
+        if let tabvc  = self.tabBarController {
+            self.tableView.slideIn(fromRight: 0.5, delegate: nil, bounds: CGRect.zero)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                // your code here
+                tabvc.selectedIndex = 2
+            }
+        }
+    }
+    
     func refresh(control:UIRefreshControl){
         self.loadData()
         
