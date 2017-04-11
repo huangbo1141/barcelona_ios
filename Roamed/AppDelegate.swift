@@ -25,6 +25,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //defaultMainWindow()
         let global = CGlobal.sharedId();
+        
+        // check the launchOptions
+        
+        
         switch -2 {
         case 1:
             
@@ -46,6 +50,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if env.lastLogin > 0 {
                     //let requestLogin = self.getRequestInfoLogin()
                     //self.doLogin(requestLogin: requestLogin)
+                    if(checkOption(option:launchOptions)){
+                        return true;
+                    }
                     self.defaultMainWindow()
                     return true;
                 }else{
@@ -67,6 +74,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             break;
         }
         return true
+    }
+    func checkOption(option:[UIApplicationLaunchOptionsKey: Any]?)->Bool{
+        if let userInfo = option?[UIApplicationLaunchOptionsKey.remoteNotification] as? [AnyHashable:Any] {
+            if let data = userInfo["data"] as? [String:String]{
+                let id = data["id"]
+                let ms = UIStoryboard.init(name: "Main", bundle: nil);
+                
+                let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
+                viewcon.purchase_id = id
+                
+                let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                let context = delegate.persistentContainer.viewContext
+                do {
+                    let rows = try context.fetch(User.fetchRequest())
+                    if rows.count>0 {
+                        let user:User = rows[0] as! User
+                        let global = GlobalSwift.sharedManager
+                        global.curUser = user
+                        self.registerDeviceUUID()
+
+                        let tabbar = ms.instantiateViewController(withIdentifier: "CTabBar") ;
+                        let navc = UINavigationController.init()
+                        navc.viewControllers = [tabbar,viewcon];
+                        navc.navigationBar.isHidden = true
+                        self.window?.rootViewController = navc
+                        return true;
+                    }
+                } catch  {
+                    debugPrint("Fetch Failed")
+                }
+            }
+        }
+        return false
     }
     func getRequestInfoLogin()->RequestLogin{
         let ret = RequestLogin()
@@ -133,6 +173,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         debugPrint("didReceiveRemoteNotification")
         self.processMessage(userInfo: userInfo)
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if let data = userInfo["data"] as? [String:String]{
+            let id = data["id"]
+            if let vc = window?.rootViewController{
+                var parentViewController:UIViewController = vc
+                while (parentViewController.presentedViewController != nil){
+                    parentViewController = parentViewController.presentedViewController!;
+                }
+                
+                let curViewController = parentViewController
+                let ms = UIStoryboard.init(name: "Main", bundle: nil);
+                DispatchQueue.main.async {
+                    let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
+                    viewcon.purchase_id = id
+                    if let navc = curViewController.navigationController {
+                        navc.pushViewController(viewcon, animated: true)
+                    }
+                }
+            }
+            
+        }
     }
     func processMessage(userInfo: [AnyHashable : Any]){
         if let data = userInfo["data"] as? [String:AnyObject] {
@@ -219,7 +282,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let ms = UIStoryboard.init(name: "Main", bundle: nil);
                 DispatchQueue.main.async {
                     let viewcon = ms.instantiateViewController(withIdentifier: "CTabBar");
-                    self.window?.rootViewController = viewcon
+                    let navc = UINavigationController.init()
+                    navc.viewControllers = [viewcon];
+                    navc.navigationBar.isHidden = true
+                    self.window?.rootViewController = navc
                 }
             }
         } catch  {

@@ -21,6 +21,8 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
         tableView.delegate = self
         tableView.dataSource = self
         
+        
+        
         DispatchQueue.main.async {
             let refreshControl:UIRefreshControl = UIRefreshControl.init()
             self.tableView.refreshControl = refreshControl
@@ -154,6 +156,8 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:CallHistoryTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CallHistoryTableViewCell
         cell.setData(data: modelDatas[indexPath.row])
+        
+        cell.selectionStyle = .none
         return cell
     }
     let tableHeight:CGFloat = 50.0

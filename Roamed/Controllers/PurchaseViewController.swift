@@ -111,8 +111,8 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
         if  tag >= 400 {
             
             
-            self.goToNotificationSetController()
-            return;
+//            self.goToNotificationSetController(purchase_id: "1")
+//            return;
             
             let index = tag - 400
             let days:[String] = ["1"]
@@ -125,6 +125,7 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                     request.userid = user.userid
                     request.phone = user.phoneno
                     request.iso = self.country?.iso
+                    request.country = self.country?.country
 //                    request.iso = "hk"
                     request.days = days[index]
                     if let picker = txtDateFrom.inputView as? UIDatePicker {
@@ -146,11 +147,22 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                                 if status == "success" {
                                     self.requestTerm = request
                                     let product = self.iapProducts[index]
-                                    self.purchaseMyProduct(product: product)
+                                    switch(-1){
+                                    case 1:
+                                        // assume purchase success
+                                        self.purchase1();
+                                        break
+                                    case 2:
+                                        self.goToNotificationSetController(purchase_id: "purchaseid")
+                                    default:
+                                        // default behaviour
+                                        self.purchaseMyProduct(product: product)
+                                        break
+                                        
+                                    }
                                     
-                                    // assume purchase success
-//                                    self.purchase1();
-//                                    self.goToNotificationSetController()
+                                    
+                                    
                                     
                                 }else{
                                     if let message = temp.message {
@@ -191,6 +203,24 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
         let country = self.countryList[row]
         txtCountry.text = country.country
         self.country = country
+        
+        let request = RequestLogin()
+        request.setDefaultkeySecret()
+        request.iso = country.iso;
+        
+        let manager = NetworkUtil.sharedManager
+        manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_GETPRICE) { (dict, error) in
+            if error == nil {
+                if let min = dict?["minutes"] as? Int{
+                    self.lblPrice.text = "\(min)"
+                }
+            }else{
+                
+//                CGlobal.alertMessage("Failed to Load", title: nil)
+            }
+//            CGlobal.stopIndicator(self)
+//            self.isLoading = false
+        }
     }
     
     
@@ -350,11 +380,13 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                     break
                 }}}
     }
-    func goToNotificationSetController(){
+    func goToNotificationSetController(purchase_id:String?){
         let ms = UIStoryboard.init(name: "Main", bundle: nil);
         DispatchQueue.main.async {
-            let viewcon = ms.instantiateViewController(withIdentifier: "SetNotificationViewController");
-            self.navigationController?.pushViewController(viewcon, animated: true)
+            if let viewcon = ms.instantiateViewController(withIdentifier: "SetNotificationViewController") as? SetNotificationViewController {
+                viewcon.purchase_id = purchase_id
+                self.navigationController?.pushViewController(viewcon, animated: true)
+            }
         }
         
         
@@ -368,8 +400,11 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                     let temp = LoginResponse.init(dictionary: dict)
                     if let status = temp.status {
                         if status == "success" {
-                            CGlobal.alertMessage("You've successfully bought 1 Day!", title: "Purchase")
-                            self.goToNotificationSetController();
+                            CGlobal.alertMessage("You've successfully bought Day!", title: "Purchase")
+                            if let navc = self.navigationController as? SwiftNavViewController {
+                                navc.downloadHelp(request1: request)
+                            }
+                            self.goToNotificationSetController(purchase_id: temp.purchase_id)
                         }else{
                             // fail
                             if let message = temp.message {

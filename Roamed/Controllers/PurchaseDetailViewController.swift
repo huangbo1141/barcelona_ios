@@ -17,6 +17,9 @@ class PurchaseDetailViewController: UIViewController {
     @IBOutlet weak var view0: UIView!
     @IBOutlet weak var lblDaysLeft: UILabel!
     var inputData:PresentPurchase?
+    
+    var purchase_id:String?
+    
     @IBOutlet weak var btnChange: UIButton!
     @IBOutlet weak var lblCountry: UILabel!
     @IBOutlet weak var imgFlag: UIImageView!
@@ -84,7 +87,7 @@ class PurchaseDetailViewController: UIViewController {
                 vc.inputData = self.inputData
                 DispatchQueue.main.async {
                     self.navigationController?.pushViewController(vc, animated: true);
-//                    self.present(vc, animated: true, completion: nil)
+                    //                    self.present(vc, animated: true, completion: nil)
                     self.segControl.selectedSegmentIndex = 1
                     self.view0.isHidden = true
                     self.view1.isHidden = false
@@ -99,28 +102,16 @@ class PurchaseDetailViewController: UIViewController {
     
     func initData(){
         if let data = self.inputData {
-            if let name = data.country_iso {
-                let image = UIImage.init(named: name)
-                imgFlag.image = image;
-            }
-            if let dayleft = data.days_left {
-                lblDaysLeft.text = dayleft + " "
-            }else{
-                lblDaysLeft.text = "0"
-            }
             
-            if let left = data.minutes_left {
-                lblMinutesLeft.text = left
-            }
             
-            if let country = data.country {
-                txtInputNumber.placeholder = "Input \(country) Number";
-            }
-            
-            lblCountry.text = data.country
-            self.getRequiredInfo()
+            self.purchase_id = data.id
+            //            if let navc = self.navigationController as? SwiftNavViewController {
+            //                let req = RequestLogin.init()
+            //                req.country = data.country
+            //                navc.downloadHelp(request1: req);
+            //            }
         }
-        
+        self.getRequiredInfo()
         
     }
     func getRequiredInfo(){
@@ -128,14 +119,14 @@ class PurchaseDetailViewController: UIViewController {
         let global = GlobalSwift.sharedManager
         let reach = Reachability()!
         
-        if let data = self.inputData ,let user = global.curUser{
+        if let dataid = self.purchase_id ,let user = global.curUser{
             if reach.isReachableViaWiFi{
                 let manager = NetworkUtil.sharedManager
                 let request = RequestLogin()
                 request.setDefaultkeySecret()
                 request.userid = user.userid
                 request.phone = user.phoneno
-                request.purchase_id = data.id
+                request.purchase_id = dataid
                 
                 //                    request.divert_phone = "6597668866"
                 CGlobal.showIndicator(self)
@@ -150,7 +141,7 @@ class PurchaseDetailViewController: UIViewController {
                     CGlobal.stopIndicator(self)
                 }
             }else{
-                if let tblid = data.id {
+                if let tblid = self.purchase_id {
                     let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
                     let context = delegate.persistentContainer.viewContext
                     
@@ -181,10 +172,7 @@ class PurchaseDetailViewController: UIViewController {
                     
                 }
             }
-            
         }
-        
-        
         
     }
     func showResult(response:PurchaseDetailResponse,user:User){
@@ -193,6 +181,19 @@ class PurchaseDetailViewController: UIViewController {
             let row:TblPurchaseDetail  = rows[0]
             
             self.purchaseDetail = row
+            
+            let data:TblPurchaseDetail = row;
+            if let name = data.country_iso {
+                let image = UIImage.init(named: name)
+                imgFlag.image = image;
+            }
+            
+            if let country = data.country {
+                txtInputNumber.placeholder = "Input \(country) Number";
+            }
+            
+            lblCountry.text = data.country
+            
             lblStartDate.text = row.start_date
             lblDaysLeft.text = row.days_left
             lblMinutesLeft.text = row.minutes_left
@@ -260,18 +261,18 @@ class PurchaseDetailViewController: UIViewController {
             UIPasteboard.general.string = self.purchaseDetail?.divert_number
             // call forwarding
             
-//            if let detail = self.purchaseDetail , let number = detail.divert_number , !number.isEmpty{
-//                let phonenumber = "tel://" + number
-//                var url:URL? =  URL.init(string: phonenumber)
-//                if let url = url {
-//                    UIApplication.shared.openURL(URL.init(string: UIApplicationOpenSettingsURLString)!)
-//                    UIApplication.shared.openURL(url)
-//                }
-//                
-//                
-//            }else{
-//                
-//            }
+            //            if let detail = self.purchaseDetail , let number = detail.divert_number , !number.isEmpty{
+            //                let phonenumber = "tel://" + number
+            //                var url:URL? =  URL.init(string: phonenumber)
+            //                if let url = url {
+            //                    UIApplication.shared.openURL(URL.init(string: UIApplicationOpenSettingsURLString)!)
+            //                    UIApplication.shared.openURL(url)
+            //                }
+            //
+            //
+            //            }else{
+            //
+            //            }
             break
         case 101:
             // divert code

@@ -16,7 +16,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Roamed"
+        
         
         let nib = UINib.init(nibName: "PurchaseTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "cell")
@@ -100,6 +100,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 request.setDefaultkeySecret()
                 request.userid = user.userid
                 request.phone = user.phoneno
+                request.current_purchase = "yes"
                 
                 CGlobal.showIndicator(self)
                 manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_GET_PURCHASE) { (dict, error) in

@@ -31,7 +31,7 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
             
         }
         self.inappInit()
-        self.title = "Roamed"
+        
         debugPrint("viewDidload")
     }
     
@@ -276,7 +276,7 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
                     let temp = LoginResponse.init(dictionary: dict)
                     if let status = temp.status {
                         if status == "success" {
-                            CGlobal.alertMessage("You've successfully bought 1 Day!", title: "Purchase")
+                            CGlobal.alertMessage("You've successfully extend Day!", title: "Purchase")
                         }else{
                             // fail
                             if let message = temp.message {

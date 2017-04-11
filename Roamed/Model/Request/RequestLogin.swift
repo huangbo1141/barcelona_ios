@@ -19,6 +19,7 @@ class RequestLogin:BaseModelSwift{
     var divert_phone:String?
     var country_iso:String?
     var next:String?
+    var current_purchase:String?
     
     var iso:String?
     var days:String?

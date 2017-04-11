@@ -40,11 +40,12 @@ class Constants:NSObject{
     static let ACTION_EXTEND = "/api/extend/";
     static let ACTION_SETNOTI = "/api/set_notification/";
     static let ACTION_SAVETOKEN = "/api/register/";
+    static let ACTION_GETPRICE = "/api/get_price/";
     
     static let ACTION_UPLOAD = "/assets/rest/" + PATH_APNS + "/fileuploadmm.php";
     static let ACTION_UPLOAD_V = "/assets/rest/" + PATH_APNS + "/fileuploadvv.php";  //fileuploadvv.php
 
-    static let ACTION_COMMENT = "/assets/rest/" + PATH_APNS + "/actioncomment.php";
+    
     static let ACTION_USERINFO = "/assets/rest/" + PATH_APNS + "/userinfo.php";
     static let ACTION_UPDATEPROFILE = "/assets/rest/" + PATH_APNS + "/updateprofile.php";
     static let ACTION_LOADNOTI = "/assets/rest/" + PATH_APNS + "/load_noti.php";

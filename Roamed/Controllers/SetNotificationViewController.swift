@@ -10,7 +10,8 @@ import UIKit
 
 class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource {
 
-    var inputData:PresentPurchase?
+//    var inputData:PresentPurchase?
+    var purchase_id:String?
     @IBOutlet weak var txtTime: UITextField!
     @IBOutlet weak var txtTimezone: UITextField!
     @IBOutlet weak var btnSet: RoundCornerButton!
@@ -18,7 +19,7 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
     
     lazy var timeZoneAbbreviations:[String:String] = TimeZone.abbreviationDictionary
     
-    var list_abb:[String] = [String]()
+//    var list_abb:[String] = [String]()
     var list_val:[String] = [String]()
     
     override func viewDidLoad() {
@@ -57,7 +58,7 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
             for i in 0..<temp.count {
                 let country = temp[i]
                 if let key = country.iso, let value = country.country {
-                    self.list_abb.append(key)
+//                    self.list_abb.append(key)
                     self.list_val.append(value)
                 }
             }
@@ -66,7 +67,26 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
             pkview.delegate = self
             pkview.dataSource = self
             self.txtTimezone.inputView = pkview
-
+            
+            let ident = TimeZone.current.identifier
+            if let index = self.list_val.index(of: ident){
+                let val = self.list_val[index]
+                self.txtTimezone.text = val
+                self.index = index
+            }else{
+                self.list_val.append(ident)
+                self.list_val.sort(by: { (c1, c2) -> Bool in
+                    if c1.compare(c2) == .orderedAscending {
+                        return true
+                    }
+                    return false
+                })
+                if let index = self.list_val.index(of: ident){
+                    let val = self.list_val[index]
+                    self.txtTimezone.text = val
+                    self.index = index
+                }
+            }
         }
         // Do any additional setup after loading the view.
     }
@@ -76,15 +96,16 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
         case 100:
             let global = GlobalSwift.sharedManager
             if let user = global.curUser,let index = self.index{
-                let abb = list_abb[index]
-                let timezone = TimeZone.init(abbreviation: abb)
+//                let abb = list_abb[index]
+//                let timezone = TimeZone.init(abbreviation: abb)
+                let timezone = TimeZone.init(identifier: list_val[index])
                 
                 let manager = NetworkUtil.sharedManager
                 let request = RequestLogin()
                 request.setDefaultkeySecret()
                 request.userid = user.userid
                 request.phone = user.phoneno
-                request.purchase_id = self.inputData?.id
+                request.purchase_id = self.purchase_id
                 request.timezone = GlobalSwift.getTimeOffset(tz: timezone!)
                 if let datepicker = txtTime.inputView as? UIDatePicker{
                     let formatter = DateFormatter.init()
@@ -102,6 +123,13 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
                             if status == "success" {
                                 if let message = temp.message {
                                     CGlobal.alertMessage(message, title: nil)
+                                    // go to detail
+                                    let ms = UIStoryboard.init(name: "Main", bundle: nil);
+                                    DispatchQueue.main.async {
+                                        let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
+                                        viewcon.purchase_id = self.purchase_id
+                                        self.navigationController?.pushViewController(viewcon, animated: true)
+                                    }
                                 }
                                 
                             }else{
@@ -123,7 +151,7 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
     }
     func handleDate(sender:UIDatePicker){
         let format = DateFormatter()
-        format.dateFormat = "HH:mm:ss"
+        format.dateFormat = "HH:mm"
         txtTime.text = format.string(from: sender.date)
     }
     func handlePicker(sender:UIPickerView){
