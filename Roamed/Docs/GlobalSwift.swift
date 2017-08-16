@@ -21,7 +21,7 @@ class GlobalSwift:NSObject{
         
     }
     // http://45.33.95.201/adminuser    http://139.162.42.92/adminuser
-    static let g_baseUrl = "https://roamed.co";
+    static let g_baseUrl = "http://roamed.co";
     
 
     static let g_baseUrl2 = "https://stream-hk.travpholer.com/adminuser";

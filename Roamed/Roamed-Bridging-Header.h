@@ -30,3 +30,5 @@
 #import "MyDialog.h"
 #import "BaseModel.h"
 #import "UIView+Animation.h"
+#import "RTLabel.h"
+

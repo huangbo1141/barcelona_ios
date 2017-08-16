@@ -18,11 +18,12 @@ class Constants:NSObject{
         
     }
     
+    static var purchase_mode = 1
     //
     static let PRIMARY_COLOR = UIColor.init(colorLiteralRed: 21.0/255.0, green: 129.0/255.0, blue: 198.0/255.0, alpha: 1.0)
 //    https://roamed.co/api/register/?key=abc123&secret=123abc&phone=92997764&country=sg&name=test
     
-    static let PRODUCT_ID_DAY = "com.simpsy.roamed.day"
+    static let PRODUCT_ID_DAY = "com.simpsy.roamed.daya"
     
     static let PATH_APNS = "apnsv2";
     static let APISERVICE_IP_URL = "http://ip-api.com/json";
@@ -41,6 +42,7 @@ class Constants:NSObject{
     static let ACTION_SETNOTI = "/api/set_notification/";
     static let ACTION_SAVETOKEN = "/api/register/";
     static let ACTION_GETPRICE = "/api/get_price/";
+
     
     static let ACTION_UPLOAD = "/assets/rest/" + PATH_APNS + "/fileuploadmm.php";
     static let ACTION_UPLOAD_V = "/assets/rest/" + PATH_APNS + "/fileuploadvv.php";  //fileuploadvv.php

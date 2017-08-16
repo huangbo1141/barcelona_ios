@@ -12,6 +12,7 @@ import StoreKit
 class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPaymentTransactionObserver {
     
     var inputData:PresentPurchase?
+    var tblPurchaseDetail:TblPurchaseDetail?
     @IBOutlet weak var lblCountry: ColoredLabel!
     @IBOutlet weak var constraint_ProductHeight: NSLayoutConstraint!
     @IBOutlet weak var stackProduct: UIStackView!
@@ -28,11 +29,18 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
         super.viewDidLoad()
         if let data = self.inputData {
             lblCountry.text = data.country
-            
+        }else if let data = self.tblPurchaseDetail {
+            lblCountry.text = data.country
         }
+        
+        loaded = false
         self.inappInit()
         
         debugPrint("viewDidload")
+        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        Constants.purchase_mode = 2
     }
     
     var requestTerm:RequestLogin?
@@ -57,22 +65,18 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
                             request.userid = user.userid
                             request.phone = user.phoneno
                             request.iso = self.inputData?.country_iso
+                            if request.iso == nil {
+                                request.iso = self.tblPurchaseDetail?.country_iso
+                            }
                             request.days = numday_str
                             request.purchase_id = self.inputData?.id
+                            if request.purchase_id == nil {
+                                request.purchase_id = self.tblPurchaseDetail?.id
+                            }
                             
                             self.requestTerm = request
                             self.purchaseMyProduct(product: product)
                             
-                            // assume purchase success
-//                            let productID = PRODUCT_ID_DAY + "1";
-//                            if productID.hasPrefix(PRODUCT_ID_DAY) {
-//                                let index = productID.index(productID.startIndex, offsetBy: PRODUCT_ID_DAY.characters.count)
-//                                let numday_str = productID.substring(from: index)
-//                                if let numday = Int(numday_str){
-//                                    self.requestTerm?.days = numday_str;
-//                                    self.purchase1()
-//                                }
-//                            }
                             
                         }
                     }
@@ -101,9 +105,13 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
      }
      */
     
+    var loaded = false
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         if (response.products.count > 0) {
+            if loaded {
+                return
+            }
             debugPrint("enter 1")
             iapProducts = response.products
             
@@ -115,54 +123,43 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
             
             // 1st IAP Product (Consumable) ------------------------------------
             
-            var height = CGFloat(40)*CGFloat(self.iapProducts.count);
-            height = max(height, CGFloat(40))
-            debugPrint("enter 2",constraint_ProductHeight)
-            constraint_ProductHeight.constant = height
-            
-            stackProduct.setNeedsUpdateConstraints();
-            stackProduct.layoutIfNeeded()
-            
-            debugPrint("enter 3",constraint_ProductHeight)
-            for i in 0..<self.iapProducts.count {
-                if let view:PurchaseItemView = Bundle.main.loadNibNamed("PurchaseItemView", owner: self, options: nil)?[0] as? PurchaseItemView{
-                    view.setData(firstProduct: self.iapProducts[i], i: i, vc: self)
-                    stackProduct.addArrangedSubview(view)
+            var height = CGFloat(50)*CGFloat(self.iapProducts.count);
+            height = max(height, CGFloat(50))
+            if let cons = self.constraint_ProductHeight {
+                debugPrint("enter 2",cons)
+                cons.constant = height
+                
+                stackProduct.setNeedsUpdateConstraints();
+                stackProduct.layoutIfNeeded()
+                
+                debugPrint("enter 3",cons)
+                for i in 0..<self.iapProducts.count {
+                    if let view:PurchaseItemView = Bundle.main.loadNibNamed("PurchaseItemView", owner: self, options: nil)?[0] as? PurchaseItemView{
+                        view.setData(firstProduct: self.iapProducts[i], i: i, vc: self,mode: 2)
+                        stackProduct.addArrangedSubview(view)
+                        
+                        if i == self.iapProducts.count - 1 {
+                            view.viewLineBottom.isHidden = false
+                        }else{
+                            view.viewLineBottom.isHidden = true
+                        }
+                    }
                 }
+                isLoadingPurchase = false;
+                loaded = true
             }
-            isLoadingPurchase = false;
+            
             
             
         }
         
     }
     
-    let PRODUCT_ID_DAY = "com.simpsy.roamed.day"
+    let PRODUCT_ID_DAY = "com.simpsy.roamed.daya"
     
     var productID = ""
     var productsRequest = SKProductsRequest()
     var iapProducts = [SKProduct]()
-    func inappInit(){
-        // Check your In-App Purchases
-        
-        // Fetch IAP Products available
-        self.iapProducts = Constants.iapProducts
-        var height = CGFloat(40)*CGFloat(self.iapProducts.count);
-        height = max(height, CGFloat(40))
-        debugPrint("enter 2",constraint_ProductHeight)
-        constraint_ProductHeight.constant = height
-        
-        stackProduct.setNeedsUpdateConstraints();
-        stackProduct.layoutIfNeeded()
-        
-        debugPrint("enter 3",constraint_ProductHeight)
-        for i in 0..<self.iapProducts.count {
-            if let view:PurchaseItemView = Bundle.main.loadNibNamed("PurchaseItemView", owner: self, options: nil)?[0] as? PurchaseItemView{
-                view.setData(firstProduct: self.iapProducts[i], i: i, vc: self)
-                stackProduct.addArrangedSubview(view)
-            }
-        }
-    }
     func fetchAvailableProducts()  {
         
         if self.iapProducts.count <= 0 , isLoadingPurchase == false {
@@ -176,12 +173,37 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
             isLoadingPurchase = true;
             self.productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers as! Set<String>)
             self.productsRequest.delegate = self
-            
             self.productsRequest.start()
-            debugPrint("fetchAvailableProducts")
         }
         
     }
+    func inappInit(){
+        // Check your In-App Purchases
+        
+        // Fetch IAP Products available
+        self.fetchAvailableProducts()
+        
+        let request = RequestLogin()
+        request.setDefaultkeySecret()
+        request.iso = self.inputData?.country_iso
+        if request.iso == nil {
+            request.iso = self.tblPurchaseDetail?.country_iso
+        }
+        let manager = NetworkUtil.sharedManager
+        manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_GETPRICE) { (dict, error) in
+            if error == nil {
+                if let min = dict?["minutes"] as? Int{
+                    self.lblPrice.text = "\(min)"
+                }
+            }else{
+                
+                //                CGlobal.alertMessage("Failed to Load", title: nil)
+            }
+            //            CGlobal.stopIndicator(self)
+            //            self.isLoading = false
+        }
+    }
+    
     @IBAction func restorePurchaseButt(_ sender: Any) {
         //        SKPaymentQueue.default().add(self)
         //        SKPaymentQueue.default().restoreCompletedTransactions()
@@ -197,6 +219,7 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
     //    }
     func canMakePurchases() -> Bool {  return SKPaymentQueue.canMakePayments()  }
     func purchaseMyProduct(product: SKProduct) {
+        debugPrint("purchase purchase--")
         if self.canMakePurchases() {
             let payment = SKPayment(product: product)
             SKPaymentQueue.default().add(self)
@@ -204,7 +227,6 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
             
             print("PRODUCT TO PURCHASE: \(product.productIdentifier)")
             self.productID = product.productIdentifier
-            
             
             // IAP Purchases dsabled on the Device
         } else {
@@ -216,6 +238,10 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
     var isLoadingPurchase:Bool = false
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        debugPrint("paymentQueue")
+        if Constants.purchase_mode != 2 {
+            return
+        }
         for transaction:AnyObject in transactions {
             if let trans = transaction as? SKPaymentTransaction {
                 switch trans.transactionState {
@@ -258,15 +284,6 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
                 default: break
                 }}}
     }
-    func goToNotificationSetController(){
-        let ms = UIStoryboard.init(name: "Main", bundle: nil);
-        DispatchQueue.main.async {
-            let viewcon = ms.instantiateViewController(withIdentifier: "SetNotificationViewController");
-            self.navigationController?.pushViewController(viewcon, animated: true)
-        }
-        
-        
-    }
     func purchase1(){
         if let request = self.requestTerm{
             CGlobal.showIndicator(self)
@@ -277,6 +294,19 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
                     if let status = temp.status {
                         if status == "success" {
                             CGlobal.alertMessage("You've successfully extend Day!", title: "Purchase")
+                            
+                            
+                            // after success change data
+                            if let vcs = self.navigationController?.viewControllers {
+                                for i in 0..<vcs.count {
+                                    if vcs[i] is PurchaseDetailViewController {
+                                        self.navigationController?.popToViewController(vcs[i], animated: false);
+                                        return
+                                    }
+                                }
+                                self.navigationController?.popToRootViewController(animated: true);
+                            }
+                            
                         }else{
                             // fail
                             if let message = temp.message {

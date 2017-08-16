@@ -109,6 +109,13 @@
 		4D6FC5B31E5C91C900ECD774 /* CallHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6FC5B11E5C91C900ECD774 /* CallHistoryTableViewCell.swift */; };
 		4D6FC5B41E5C91C900ECD774 /* CallHistoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D6FC5B21E5C91C900ECD774 /* CallHistoryTableViewCell.xib */; };
 		4D6FC5B61E5C986800ECD774 /* CallResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6FC5B51E5C986700ECD774 /* CallResponse.swift */; };
+		F901EB5A1EEB06A700331C0B /* ico_down.png in Resources */ = {isa = PBXBuildFile; fileRef = F901EB591EEB06A700331C0B /* ico_down.png */; };
+		F99C43F81F03FB8700CE32D0 /* RTLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F99C43F71F03FB8700CE32D0 /* RTLabel.m */; };
+		F9D575571ECCA5E8007D6615 /* logo1.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D575561ECCA5E8007D6615 /* logo1.png */; };
+		F9FE28201F2B2AD0005C8125 /* intro_1.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FE281C1F2B2AD0005C8125 /* intro_1.png */; };
+		F9FE28211F2B2AD0005C8125 /* intro_2.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FE281D1F2B2AD0005C8125 /* intro_2.png */; };
+		F9FE28221F2B2AD0005C8125 /* intro_3.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FE281E1F2B2AD0005C8125 /* intro_3.png */; };
+		F9FE28231F2B2AD0005C8125 /* intro_4.png in Resources */ = {isa = PBXBuildFile; fileRef = F9FE281F1F2B2AD0005C8125 /* intro_4.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -251,6 +258,14 @@
 		4D6FC5B21E5C91C900ECD774 /* CallHistoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CallHistoryTableViewCell.xib; sourceTree = "<group>"; };
 		4D6FC5B51E5C986700ECD774 /* CallResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallResponse.swift; sourceTree = "<group>"; };
 		F28E3DDE339E0F4FA107A46B /* Pods-Roamed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roamed.release.xcconfig"; path = "Pods/Target Support Files/Pods-Roamed/Pods-Roamed.release.xcconfig"; sourceTree = "<group>"; };
+		F901EB591EEB06A700331C0B /* ico_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ico_down.png; sourceTree = "<group>"; };
+		F99C43F61F03FB8700CE32D0 /* RTLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTLabel.h; sourceTree = "<group>"; };
+		F99C43F71F03FB8700CE32D0 /* RTLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTLabel.m; sourceTree = "<group>"; };
+		F9D575561ECCA5E8007D6615 /* logo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo1.png; sourceTree = "<group>"; };
+		F9FE281C1F2B2AD0005C8125 /* intro_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = intro_1.png; sourceTree = "<group>"; };
+		F9FE281D1F2B2AD0005C8125 /* intro_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = intro_2.png; sourceTree = "<group>"; };
+		F9FE281E1F2B2AD0005C8125 /* intro_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = intro_3.png; sourceTree = "<group>"; };
+		F9FE281F1F2B2AD0005C8125 /* intro_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = intro_4.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -307,6 +322,7 @@
 				4D6FC4C21E5C38A600ECD774 /* Main2.storyboard */,
 				4D6FC4B71E5C2EBE00ECD774 /* Assets.xcassets */,
 				4D6FC4B91E5C2EBE00ECD774 /* LaunchScreen.storyboard */,
+				F9FE281B1F2B2AD0005C8125 /* intro_pic */,
 				4D6FC4C91E5C38D500ECD774 /* Controllers */,
 				4D6FC59E1E5C724C00ECD774 /* Cells */,
 				4D6FC4CC1E5C38D500ECD774 /* Docs */,
@@ -324,7 +340,9 @@
 		4D6FC4C41E5C38B400ECD774 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				F901EB591EEB06A700331C0B /* ico_down.png */,
 				4D3DAEE71E5CC1480030AE9F /* ico_help.png */,
+				F9D575561ECCA5E8007D6615 /* logo1.png */,
 				4D6FC4C51E5C38B400ECD774 /* img_back1.png */,
 				4D6FC4C61E5C38B400ECD774 /* img_pla1.png */,
 			);
@@ -388,6 +406,8 @@
 		4D6FC4E11E5C38D500ECD774 /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				F99C43F61F03FB8700CE32D0 /* RTLabel.h */,
+				F99C43F71F03FB8700CE32D0 /* RTLabel.m */,
 				4D6FC5011E5C38D500ECD774 /* GCPlaceholderView */,
 				4D6FC5041E5C38D500ECD774 /* MGSwipeTableCell */,
 				4D6FC50A1E5C38D500ECD774 /* MyDialog */,
@@ -644,6 +664,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		F9FE281B1F2B2AD0005C8125 /* intro_pic */ = {
+			isa = PBXGroup;
+			children = (
+				F9FE281C1F2B2AD0005C8125 /* intro_1.png */,
+				F9FE281D1F2B2AD0005C8125 /* intro_2.png */,
+				F9FE281E1F2B2AD0005C8125 /* intro_3.png */,
+				F9FE281F1F2B2AD0005C8125 /* intro_4.png */,
+			);
+			path = intro_pic;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -679,6 +710,7 @@
 				TargetAttributes = {
 					4D6FC4A91E5C2EBE00ECD774 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 6BQ95S6MAJ;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -716,16 +748,20 @@
 			files = (
 				4D6FC5AE1E5C895900ECD774 /* CountryTableViewCell.xib in Resources */,
 				4D6FC56E1E5C38D500ECD774 /* Info.plist in Resources */,
+				F9FE28201F2B2AD0005C8125 /* intro_1.png in Resources */,
+				F901EB5A1EEB06A700331C0B /* ico_down.png in Resources */,
 				4D3DAEE81E5CC1480030AE9F /* ico_help.png in Resources */,
 				4D6FC5821E5C38D500ECD774 /* ComboDropTableViewCell.xib in Resources */,
 				4D6FC57D1E5C38D500ECD774 /* combobox_down@2x.png in Resources */,
 				4D6FC4BB1E5C2EBE00ECD774 /* LaunchScreen.storyboard in Resources */,
+				F9FE28221F2B2AD0005C8125 /* intro_3.png in Resources */,
 				4D6FC5771E5C38D500ECD774 /* Info.plist in Resources */,
 				4D6FC57F1E5C38D500ECD774 /* combobox_up@2x.png in Resources */,
 				4D6FC5801E5C38D500ECD774 /* combobox_up_highlighed@2x.png in Resources */,
 				0739085F1E991CED008A9F45 /* temp.xib in Resources */,
 				4D6FC4B81E5C2EBE00ECD774 /* Assets.xcassets in Resources */,
 				4D6FC5A21E5C726200ECD774 /* PurchaseTableViewCell.xib in Resources */,
+				F9FE28211F2B2AD0005C8125 /* intro_2.png in Resources */,
 				4D6FC4C31E5C38A600ECD774 /* Main2.storyboard in Resources */,
 				4D6FC5B41E5C91C900ECD774 /* CallHistoryTableViewCell.xib in Resources */,
 				4D6FC4B31E5C2EBE00ECD774 /* Main.storyboard in Resources */,
@@ -734,7 +770,9 @@
 				4D3B65B61E684D0800929A59 /* PastTableViewCell.xib in Resources */,
 				4D6FC4C71E5C38B400ECD774 /* img_back1.png in Resources */,
 				4D6FC5591E5C38D500ECD774 /* country.sqlite3 in Resources */,
+				F9D575571ECCA5E8007D6615 /* logo1.png in Resources */,
 				4D6FC4C81E5C38B400ECD774 /* img_pla1.png in Resources */,
+				F9FE28231F2B2AD0005C8125 /* intro_4.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -826,6 +864,7 @@
 				4D6FC5811E5C38D500ECD774 /* ComboDropTableViewCell.m in Sources */,
 				4D6FC55F1E5C38D500ECD774 /* BaseModel.m in Sources */,
 				4D6FC5741E5C38D500ECD774 /* TLYDelegateProxy.m in Sources */,
+				F99C43F81F03FB8700CE32D0 /* RTLabel.m in Sources */,
 				4D6FC5611E5C38D500ECD774 /* DBManager.m in Sources */,
 				4D6FC57C1E5C38D500ECD774 /* TTTAttributedLabel.m in Sources */,
 				4D3B65C01E68632600929A59 /* TblCountry.swift in Sources */,
@@ -996,7 +1035,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Roamed/Roamed.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Tan Long (T2935VR5G8)";
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tan Long (T2935VR5G8)";
+				DEVELOPMENT_TEAM = 6BQ95S6MAJ;
 				INFOPLIST_FILE = Roamed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1016,7 +1056,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Roamed/Roamed.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Tan Long (T2935VR5G8)";
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tan Long (T2935VR5G8)";
+				DEVELOPMENT_TEAM = 6BQ95S6MAJ;
 				INFOPLIST_FILE = Roamed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

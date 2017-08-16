@@ -10,6 +10,7 @@ import UIKit
 
 class TabViewController: UITabBarController {
 
+    var push_id:String?
     override func viewDidLoad() {
         super.viewDidLoad()
 

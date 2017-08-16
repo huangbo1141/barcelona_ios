@@ -11,6 +11,7 @@ import CoreData
 
 class SwiftNavViewController: UINavigationController {
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -19,8 +20,10 @@ class SwiftNavViewController: UINavigationController {
 //        self.navigationBar.shadowImage = UIImage()
 //        
 //        self.navigationBar.backgroundColor = Constants.COLOR_TOOLBAR_BACK
+        
+        let font:UIFont = UIFont.boldSystemFont(ofSize: 16)
         self.navigationBar.barTintColor = CGlobal.color(withHexString: "3799E5", alpha: 1.0)
-        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:Constants.COLOR_TOOLBAR_TEXT];
+        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:Constants.COLOR_TOOLBAR_TEXT,NSFontAttributeName:font];
 //        let titleDict: [String:Any] = [NSForegroundColorAttributeName: Constants.COLOR_TOOLBAR_TEXT]
 //        self.navigationBar.titleTextAttributes = titleDict
 //        self.navigationBar.isTranslucent = false
@@ -43,6 +46,7 @@ class SwiftNavViewController: UINavigationController {
             request.country = country
             if let html = self.getTextShow(iso:iso) {
                 // saved
+                debugPrint("saved")
             }else{
                 // not saved
                 
@@ -62,7 +66,7 @@ class SwiftNavViewController: UINavigationController {
             //            let request = NSFetchRequest<HelpModel>.init(entityName: "HelpModel")
             //            request.predicate = NSPredicate(format: "iso = '%@'","aaa")
             let request = NSFetchRequest<HelpModel>.init(entityName: "HelpModel")
-            request.predicate = NSPredicate.init(format: " iso == '" + iso + "'");
+            request.predicate = NSPredicate.init(format: " iso == '" + iso.lowercased() + "'");
             
             let rows = try context.fetch(request)
             //            let rows = try context.fetch(HelpModel.fetchRequest())
@@ -81,7 +85,7 @@ class SwiftNavViewController: UINavigationController {
         let context = delegate.persistentContainer.viewContext
         let user = HelpModel(context:context)
         
-        user.iso = iso
+        user.iso = iso.lowercased()
         user.html = text
         
         return delegate.saveContext()
@@ -104,10 +108,14 @@ class SwiftNavViewController: UINavigationController {
                         let countArray = arrayDetails.count
                         
                         for i in 0..<countArray{
-                            let arrayCountry = arrayDetails[i]["title"] as! String
+                            var arrayCountry = arrayDetails[i]["title"] as! String
+                            arrayCountry = arrayCountry.lowercased()
+                            let t2 = request.country?.lowercased()
+                            debugPrint(arrayCountry)
+                            debugPrint(t2)
                             
                             
-                            if arrayCountry == request.country{
+                            if arrayCountry == t2{
                                 
                                 let pageId:AnyObject = (arrayDetails[i]["id"] as? NSNumber)!
                                 let url = arrayDetails[i]["url"] as! String

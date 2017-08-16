@@ -14,6 +14,8 @@ class PurchaseItemView: UIView {
     @IBOutlet weak var btn: UIButton!
     @IBOutlet weak var lblPrice: UILabel!
     @IBOutlet weak var lblDay: UILabel!
+    
+    @IBOutlet weak var viewLineBottom: UIView!
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
@@ -21,8 +23,9 @@ class PurchaseItemView: UIView {
         // Drawing code
     }
     */
+    var numStr:String?
 
-    func setData(firstProduct:SKProduct,i:Int,vc:UIViewController){
+    func setData(firstProduct:SKProduct,i:Int,vc:UIViewController,mode:Int){
         // Get its price from iTunes Connect
         let numberFormatter = NumberFormatter()
         numberFormatter.formatterBehavior = .behavior10_4
@@ -36,8 +39,12 @@ class PurchaseItemView: UIView {
 //        lblDay.text = firstProduct.localizedDescription
         lblPrice.text = price1Str
         // ------------------------------------------------
+        if mode == 1 {
+            btn.addTarget(vc, action: #selector(PurchaseViewController.clickView(sender:)), for: .touchUpInside)
+        }else{
+            btn.addTarget(vc, action: #selector(ExtendViewController.clickView(sender:)), for: .touchUpInside)
+        }
         
-        btn.addTarget(vc, action: #selector(PurchaseViewController.clickView(sender:)), for: .touchUpInside)
         btn.tag = 400 + i
         
         let productID = firstProduct.productIdentifier
@@ -45,8 +52,14 @@ class PurchaseItemView: UIView {
             let index = productID.index(productID.startIndex, offsetBy: Constants.PRODUCT_ID_DAY.characters.count)
             let numday_str = productID.substring(from: index)
             if let numday = Int(numday_str){
-                lblDay.text = "Buy \(numday)Day"
+                if numday>1 {
+                    lblDay.text = "Buy \(numday)Days"
+                }else{
+                    lblDay.text = "Buy \(numday)Day"
+                }
+                self.numStr = numday_str
             }
+            
         }
     }
     

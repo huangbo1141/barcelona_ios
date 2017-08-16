@@ -17,7 +17,6 @@ class PurchaseDetailViewController: UIViewController {
     @IBOutlet weak var view0: UIView!
     @IBOutlet weak var lblDaysLeft: UILabel!
     var inputData:PresentPurchase?
-    
     var purchase_id:String?
     
     @IBOutlet weak var btnChange: UIButton!
@@ -33,6 +32,8 @@ class PurchaseDetailViewController: UIViewController {
     @IBOutlet weak var btnDivert: UIButton!
     
     @IBOutlet weak var lblDivert: UILabel!
+    
+    var mode:Int = 0;
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,10 +63,25 @@ class PurchaseDetailViewController: UIViewController {
             
             
             self.navigationItem.rightBarButtonItems = [barButton]
+            
+            let barButton2 = UIBarButtonItem.init(title: "Back", style: .plain, target: self, action: #selector(PurchaseDetailViewController.clickView(sender:)))
+            self.navigationItem.leftBarButtonItems = [barButton2];
+            barButton2.tag = 999
         }
-        self.initData()
+        
+        view0.isHidden = false
+        view1.isHidden = true
+        
+        if self.mode == 100 {
+            self.segControl.selectedSegmentIndex = 1;
+            view0.isHidden = true
+            view1.isHidden = false
+        }
         
         // Do any additional setup after loading the view.
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.initData()
     }
     @IBAction func indexChanged(_ sender: Any) {
         if let sender = sender as? UISegmentedControl {
@@ -85,7 +101,9 @@ class PurchaseDetailViewController: UIViewController {
                 let ms = UIStoryboard.init(name: "Main", bundle: nil)
                 let vc = ms.instantiateViewController(withIdentifier: "ExtendViewController") as! ExtendViewController
                 vc.inputData = self.inputData
+                vc.tblPurchaseDetail = self.purchaseDetail
                 DispatchQueue.main.async {
+//                    CGlobal.alertMessage("extend", title: "extend")
                     self.navigationController?.pushViewController(vc, animated: true);
                     //                    self.present(vc, animated: true, completion: nil)
                     self.segControl.selectedSegmentIndex = 1
@@ -102,16 +120,15 @@ class PurchaseDetailViewController: UIViewController {
     
     func initData(){
         if let data = self.inputData {
-            
-            
             self.purchase_id = data.id
-            //            if let navc = self.navigationController as? SwiftNavViewController {
-            //                let req = RequestLogin.init()
-            //                req.country = data.country
-            //                navc.downloadHelp(request1: req);
-            //            }
         }
-        self.getRequiredInfo()
+        if self.purchase_id != nil {
+//            let myInt:Int = (self.purchase_id as! NSString).integerValue
+            let dd:Float = Float(self.purchase_id!)!
+            self.purchase_id = String.init(format: "%.0f", dd)
+            self.getRequiredInfo()
+        }
+        
         
     }
     func getRequiredInfo(){
@@ -120,7 +137,7 @@ class PurchaseDetailViewController: UIViewController {
         let reach = Reachability()!
         
         if let dataid = self.purchase_id ,let user = global.curUser{
-            if reach.isReachableViaWiFi{
+            if reach.isReachableViaWiFi || reach.reachableOnWWAN {
                 let manager = NetworkUtil.sharedManager
                 let request = RequestLogin()
                 request.setDefaultkeySecret()
@@ -134,6 +151,7 @@ class PurchaseDetailViewController: UIViewController {
                     
                     if error == nil {
                         let response = PurchaseDetailResponse.init(dictionary: dict)
+                        
                         self.showResult(response: response, user: user)
                     }else{
                         //CGlobal.alertMessage("Server Error", title: nil)
@@ -141,7 +159,7 @@ class PurchaseDetailViewController: UIViewController {
                     CGlobal.stopIndicator(self)
                 }
             }else{
-                if let tblid = self.purchase_id {
+                if let tblid = self.inputData?.id {
                     let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
                     let context = delegate.persistentContainer.viewContext
                     
@@ -156,8 +174,8 @@ class PurchaseDetailViewController: UIViewController {
                             var temp = [TblPurchaseDetail]()
                             for i in 0..<rows.count {
                                 let detail = TblPurchaseDetail.init()
-                                debugPrint(rows[i].country_iso)
-                                debugPrint(rows[i].divert_message)
+//                                debugPrint(rows[i].country_iso)
+//                                debugPrint(rows[i].divert_message)
                                 
                                 BaseModel.copyValues(detail, source: rows[i])
                                 temp.append(detail)
@@ -175,6 +193,7 @@ class PurchaseDetailViewController: UIViewController {
         }
         
     }
+    var fetchedData:TblPurchaseDetail?
     func showResult(response:PurchaseDetailResponse,user:User){
         if let rows = response.present_purchase, rows.count > 0 {
             // success
@@ -183,6 +202,7 @@ class PurchaseDetailViewController: UIViewController {
             self.purchaseDetail = row
             
             let data:TblPurchaseDetail = row;
+            self.fetchedData = data
             if let name = data.country_iso {
                 let image = UIImage.init(named: name)
                 imgFlag.image = image;
@@ -197,9 +217,9 @@ class PurchaseDetailViewController: UIViewController {
             lblStartDate.text = row.start_date
             lblDaysLeft.text = row.days_left
             lblMinutesLeft.text = row.minutes_left
-            if let country = user.country,let divert_number = row.divert_number ,divert_number.characters.count > 0 {
+            if let country = user.country,let divert_number = row.divert_number ,divert_number.characters.count > 0, let message = row.divert_message {
                 
-                let title = "Divert your \(country) number to \(divert_number)"
+                let title = "\(message) to \(divert_number)"
                 
                 //self.btnDivert.setTitle(title, for: .normal)
                 self.lblDivert.text = title
@@ -216,6 +236,11 @@ class PurchaseDetailViewController: UIViewController {
                 btnCopy.isHidden = true
                 lblSetting.isHidden = true
             }
+            if self.mode == 100 {
+                self.view0.isHidden = true
+                self.view1.isHidden = false
+            }
+            
         }else{
             
         }
@@ -229,8 +254,23 @@ class PurchaseDetailViewController: UIViewController {
     func clickView(sender:UIView){
         let tag = sender.tag
         switch tag {
+        case 999:
+            self.navigationController?.popToRootViewController(animated: true)
+            break;
+            
         case 200:
             if let data = self.inputData,let country = data.country{
+                let ms = UIStoryboard.init(name: "Main", bundle: nil);
+                DispatchQueue.main.async {
+                    let viewcon = ms.instantiateViewController(withIdentifier: "HelpViewController") as! HelpViewController
+                    let iso = country.replacingOccurrences(of: " ", with: "+")
+                    viewcon.iso = iso
+                    viewcon.country =  country
+                    if let navc = self.navigationController {
+                        navc.pushViewController(viewcon, animated: true)
+                    }
+                }
+            }else if let data = self.fetchedData, let country = data.country {
                 let ms = UIStoryboard.init(name: "Main", bundle: nil);
                 DispatchQueue.main.async {
                     let viewcon = ms.instantiateViewController(withIdentifier: "HelpViewController") as! HelpViewController
@@ -254,11 +294,22 @@ class PurchaseDetailViewController: UIViewController {
                         navc.pushViewController(viewcon, animated: true)
                     }
                 }
+            }else if let data = self.fetchedData, let country = data.country {
+                let ms = UIStoryboard.init(name: "Main", bundle: nil);
+                DispatchQueue.main.async {
+                    let viewcon = ms.instantiateViewController(withIdentifier: "CountryListViewController") as! CountryListViewController
+                    viewcon.tblPurchaseDetail = data
+                    if let navc = self.navigationController {
+                        navc.pushViewController(viewcon, animated: true)
+                    }
+                }
             }
         case 102:
             // open setting
             
             UIPasteboard.general.string = self.purchaseDetail?.divert_number
+            
+            CGlobal.alertMessage("Number have been copy", title: nil)
             // call forwarding
             
             //            if let detail = self.purchaseDetail , let number = detail.divert_number , !number.isEmpty{
@@ -277,7 +328,7 @@ class PurchaseDetailViewController: UIViewController {
         case 101:
             // divert code
             if checkValidate() {
-                if let inputData = self.inputData, let detail = self.purchaseDetail {
+                if let detail = self.purchaseDetail {
                     let divNum = txtInputNumber.text
                     let global = GlobalSwift.sharedManager
                     if let user = global.curUser{
@@ -286,7 +337,7 @@ class PurchaseDetailViewController: UIViewController {
                         request.setDefaultkeySecret()
                         request.userid = user.userid
                         request.phone = user.phoneno
-                        request.purchase_id = inputData.id
+                        request.purchase_id = self.purchase_id;
                         request.divert_phone = divNum
                         
                         //                    request.divert_phone = "6597668866"

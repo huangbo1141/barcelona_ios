@@ -10,13 +10,13 @@ import UIKit
 
 class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource {
 
-//    var inputData:PresentPurchase?
-    var purchase_id:String?
+    var inputData:PresentPurchase?
+//    var purchase_id:String?
     @IBOutlet weak var txtTime: UITextField!
     @IBOutlet weak var txtTimezone: UITextField!
     @IBOutlet weak var btnSet: RoundCornerButton!
 
-    
+    var pkView:UIPickerView?
     lazy var timeZoneAbbreviations:[String:String] = TimeZone.abbreviationDictionary
     
 //    var list_abb:[String] = [String]()
@@ -25,7 +25,13 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        
         DispatchQueue.main.async {
+            let button = UIBarButtonItem.init(title: "Skip", style: .plain, target: self, action: #selector(SetNotificationViewController.clickView(sender:)))
+            self.navigationItem.rightBarButtonItem = button
+            button.tag = 200
+            
             self.btnSet.addTarget(self, action: #selector(SetNotificationViewController.clickView(sender:)), for: .touchUpInside)
             self.btnSet.tag = 100
             
@@ -33,6 +39,7 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
             picker.date = Date.init()
             picker.datePickerMode = .time
             self.txtTime.inputView = picker
+            
             picker.addTarget(self, action: #selector(SetNotificationViewController.handleDate(sender:)), for: .valueChanged)
             
             var temp:[TblCountry] = [TblCountry]()
@@ -63,16 +70,23 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
                 }
             }
             
+            self.list_val = self.uniqueElementsFrom(array: self.list_val)
+            
             let pkview = UIPickerView.init()
             pkview.delegate = self
             pkview.dataSource = self
             self.txtTimezone.inputView = pkview
-            
+            self.pkView = pkview
             let ident = TimeZone.current.identifier
             if let index = self.list_val.index(of: ident){
                 let val = self.list_val[index]
                 self.txtTimezone.text = val
                 self.index = index
+                
+                pkview.selectRow(index, inComponent: 0, animated: false)
+                
+//                self.index = row
+//                txtTimezone.text = self.list_val[row]
             }else{
                 self.list_val.append(ident)
                 self.list_val.sort(by: { (c1, c2) -> Bool in
@@ -90,6 +104,17 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
         }
         // Do any additional setup after loading the view.
     }
+    func uniqueElementsFrom(array: [String]) -> [String] {
+        var set = Set<String>()
+        let result = array.filter {
+            guard !set.contains($0) else {
+                return false
+            }
+            set.insert($0)
+            return true
+        }
+        return result
+    }
     func clickView(sender:UIView){
         let tag = sender.tag
         switch tag {
@@ -105,8 +130,8 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
                 request.setDefaultkeySecret()
                 request.userid = user.userid
                 request.phone = user.phoneno
-                request.purchase_id = self.purchase_id
-                request.timezone = GlobalSwift.getTimeOffset(tz: timezone!)
+                request.purchase_id = self.inputData?.id
+                request.timezone = SetNotificationViewController.getTimeOffset(tz: timezone!)
                 if let datepicker = txtTime.inputView as? UIDatePicker{
                     let formatter = DateFormatter.init()
                     formatter.dateFormat = "HH:mm:ss"
@@ -127,7 +152,9 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
                                     let ms = UIStoryboard.init(name: "Main", bundle: nil);
                                     DispatchQueue.main.async {
                                         let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
-                                        viewcon.purchase_id = self.purchase_id
+                                        viewcon.inputData = self.inputData
+                                        viewcon.mode = 100;
+                                        
                                         self.navigationController?.pushViewController(viewcon, animated: true)
                                     }
                                 }
@@ -145,14 +172,52 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
                 }
             }
             break
+        case 200:
+            let ms = UIStoryboard.init(name: "Main", bundle: nil);
+            DispatchQueue.main.async {
+                let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
+                viewcon.inputData = self.inputData
+                viewcon.mode = 100;
+                self.navigationController?.pushViewController(viewcon, animated: true)
+            }
+            break
         default:
             break
         }
     }
+    static func getTimeOffset(tz:TimeZone)->String{
+        var seconds:Int = tz.secondsFromGMT()
+        var sign = ""
+        if seconds < 0 {
+            seconds = -1*seconds
+            sign = "-"
+        }else{
+            sign = "+"
+        }
+        let hour:Int = seconds/3600
+        var timezone = ""
+        if seconds%3600 > 0 {
+            let remain = seconds - hour*3600
+            timezone = "\(sign)\(hour):30"
+        }else{
+            timezone = "\(sign)\(hour):00"
+        }
+        return timezone
+    }
     func handleDate(sender:UIDatePicker){
-        let format = DateFormatter()
-        format.dateFormat = "HH:mm"
-        txtTime.text = format.string(from: sender.date)
+        
+        
+        let formatString: NSString = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: NSLocale.current)! as NSString
+        let hasAMPM = formatString.contains("a")
+        if  hasAMPM {
+            let format = DateFormatter()
+            format.dateFormat = "hh:mm a"
+            txtTime.text = format.string(from: sender.date)
+        }else{
+            let format = DateFormatter()
+            format.dateFormat = "HH:mm"
+            txtTime.text = format.string(from: sender.date)
+        }
     }
     func handlePicker(sender:UIPickerView){
         
@@ -174,12 +239,32 @@ class SetNotificationViewController: UIViewController,UIPickerViewDelegate,UIPic
     
     var index:Int?
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        self.index = row
+//        if pickerView.isHidden {
+//            debugPrint("ishidden")
+//        }else{
+//            debugPrint("ishidden not")
+//        }
+//        if pickerView.superview == nil {
+//            debugPrint("superview nil")
+//        }else{
+//            debugPrint("superview nil not")
+//        }
         return self.list_val[row]
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         self.index = row
         txtTimezone.text = self.list_val[row]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let text = self.txtTimezone.text {
+            if text.characters.count > 0 {
+                if let found = self.list_val.index(of: text),let pkview = self.pkView{
+                    pkview.selectRow(found, inComponent: 0, animated: false)
+                }
+                
+            }
+        }
     }
     
     /*

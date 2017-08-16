@@ -34,15 +34,35 @@ class PurchaseResponse:BaseModelSwift{
                     let nserror = error as NSError
                     fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
                 }
-                delegate.saveContext()
+                var values:[String:Any] = [String:Any]()
+                var ids = [NSNumber]()
                 for (key,value) in obj {
                     if let item = value as? [AnyHashable:Any]{
                         
                         let data = PresentPurchase(context:context)
                         BaseModel.parseResponse(data, dict: item)
-                        present_purchase?.append(data);
+//                        present_purchase?.append(data);
+                        data.ordern = Double(key)!
+                        values[key] = data
+                        ids.append(NSNumber.init(value: Int(key)!))
                     }
                 }
+                 ids.sort(by: { (n1, n2) -> Bool in
+                    let a = n1.intValue
+                    let b = n2.intValue
+                    if a<b {
+                        return true
+                    }
+                    return false
+                })
+                for i in 0..<ids.count {
+                    let key = String(ids[i].intValue)
+                    if let value = values[key] as? PresentPurchase{
+                        present_purchase?.append(value);
+                    }
+                    
+                }
+                
                 delegate.saveContext()
             }
             if let obj = dict["past_purchase"] as? [String:AnyObject]{
@@ -59,7 +79,7 @@ class PurchaseResponse:BaseModelSwift{
                     let nserror = error as NSError
                     fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
                 }
-                delegate.saveContext()
+                
                 for (key,value) in obj {
                     if let item = value as? [AnyHashable:Any]{
                         

@@ -14,6 +14,7 @@ class IntroViewController: UIViewController,UIScrollViewDelegate {
     @IBOutlet weak var view0: UIView!
     @IBOutlet weak var view1: UIView!
     @IBOutlet weak var view2: UIView!
+    @IBOutlet weak var view3: UIView!
     
     @IBOutlet weak var pageControl: UIPageControl!
     
@@ -25,12 +26,43 @@ class IntroViewController: UIViewController,UIScrollViewDelegate {
     @IBOutlet weak var btnSkip: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         btnSkip.addTarget(self, action: #selector(IntroViewController.clickView(sender:)), for: .touchUpInside)
         btnSkip.tag = 200
         
         self.initCons()
+        self.initText()
         // Do any additional setup after loading the view.
+    }
+    func initText(){
+        let scRect = UIScreen.main.bounds
+        
+        let toppadding:CGFloat = 100 + 128 + 20;
+        let strs = ["<b>In-app purchase</b> days package for your trip. Each day come with minutes based on the country destination.",
+                    "<b>Forward</b> your local phone to a number given by us, before departing",
+                    "<b>Purchase</b> and switch to an overseas prepaid number. See our in-app guide in getting one.",
+                    "<b>Insert</b> your overseas prepaid number and enjoy Roamed."];
+        let views = [view0,view1,view2,view3]
+        
+        for i in 0..<4 {
+            let label0 = RTLabel.init(frame: CGRect.init(x: 10, y: 10, width: 240, height: 100))
+            label0.text = strs[i]
+            views[i]?.addSubview(label0)
+//            let size0 = label0.optimumSize;
+            label0.center = CGPoint.init(x: scRect.size.width/2, y: toppadding + 50)
+            label0.paragraphReplacement = ""
+            label0.textAlignment = RTTextAlignmentLeft
+            
+            let label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: 100, height: 30))
+            label.text = "Step \(i+1)"
+            views[i]?.addSubview(label)
+            label.center = CGPoint.init(x: scRect.size.width/2, y: 50)
+            label.font = UIFont.boldSystemFont(ofSize: 15)
+            label.textAlignment = .center
+        }
+        
+        
+//        label0.textAlignment = RTTextAlignmentCenter
     }
     
     func initCons(){

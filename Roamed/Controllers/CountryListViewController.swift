@@ -11,6 +11,8 @@ import UIKit
 class CountryListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
 
     var data:PresentPurchase?
+    var tblPurchaseDetail:TblPurchaseDetail?
+    var purchase_id:String?
     
     @IBOutlet weak var btnAction: UIButton!
     @IBOutlet weak var lblCountry: UILabel!
@@ -29,6 +31,14 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 let image = UIImage.init(named: name.lowercased())
                 imgFlag.image = image;
             }
+            self.purchase_id = data.id
+        }else if let data = self.tblPurchaseDetail{
+            lblCountry.text = data.country
+            if let name = data.country_iso {
+                let image = UIImage.init(named: name.lowercased())
+                imgFlag.image = image;
+            }
+            self.purchase_id = data.id
         }
         let nib = UINib.init(nibName: "CountryTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "cell")
@@ -41,38 +51,42 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
     func loadData(){
         
         
-        if let data = self.data{
-            let manager = NetworkUtil.sharedManager
+        if let id = self.purchase_id{
+            
             let request = RequestLogin()
             request.setDefaultkeySecret()
-            request.purchase_id = data.id
+            request.purchase_id = id
             
-            //                    request.divert_phone = "6597668866"
-            CGlobal.showIndicator(self)
-            manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_COUNTRYISO) { (dict, error) in
-                
-                if error == nil {
-                    let response = CountryResponse.init(dictionary: dict)
-                    if let rows = response.countries, rows.count > 0 {
-                        // success
-                        self.countryList = rows
-                        self.countryList.sort(by: { (first, second) -> Bool in
-                            if let c1 = first.country, let c2 = second.country {
-                                if(c1.compare(c2) == .orderedAscending){
-                                    return true;
-                                }
+            self.loadData_proc1(request: request)
+        }
+    }
+    func loadData_proc1(request:RequestLogin){
+        //                    request.divert_phone = "6597668866"
+        let manager = NetworkUtil.sharedManager
+        CGlobal.showIndicator(self)
+        manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_COUNTRYISO) { (dict, error) in
+            
+            if error == nil {
+                let response = CountryResponse.init(dictionary: dict)
+                if let rows = response.countries, rows.count > 0 {
+                    // success
+                    self.countryList = rows
+                    self.countryList.sort(by: { (first, second) -> Bool in
+                        if let c1 = first.country, let c2 = second.country {
+                            if(c1.compare(c2) == .orderedAscending){
+                                return true;
                             }
-                            return false
-                        })
-                        self.tableView.reloadData()
-                    }else{
-                        
-                    }
+                        }
+                        return false
+                    })
+                    self.tableView.reloadData()
                 }else{
-                    //CGlobal.alertMessage("Server Error", title: nil)
+                    
                 }
-                CGlobal.stopIndicator(self)
+            }else{
+                //CGlobal.alertMessage("Server Error", title: nil)
             }
+            CGlobal.stopIndicator(self)
         }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -114,13 +128,13 @@ class CountryListViewController: UIViewController,UITableViewDelegate,UITableVie
         //
         
         let global = GlobalSwift.sharedManager
-        if let user = global.curUser, let inputData = self.data, let iso = self.selectedData?.iso{
+        if let user = global.curUser, let purchase_id = self.purchase_id, let iso = self.selectedData?.iso{
             let manager = NetworkUtil.sharedManager
             let request = RequestLogin()
             request.setDefaultkeySecret()
             request.userid = user.userid
             request.phone = user.phoneno
-            request.purchase_id = inputData.id
+            request.purchase_id = purchase_id
             request.country_iso = iso.lowercased()
             
             CGlobal.showIndicator(self)
