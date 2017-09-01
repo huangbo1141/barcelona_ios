@@ -64,6 +64,7 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
     }
     
     func refresh(control:UIRefreshControl){
+        self.pageIndex = 0;
         self.loadData()
         
     }
@@ -83,6 +84,7 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
             request.userid = user.userid
             request.phone = user.phoneno
             request.next = String(pageIndex)
+            request.timezone = SetNotificationViewController.getTimeOffset(tz: TimeZone.current)
             
             self.isLoading = true
             CGlobal.showIndicator(self)
@@ -92,6 +94,9 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
                 if error == nil {
                     let temp = CallResponse.init(dictionary: dict)
                     if let calls = temp.calls {
+                        if(self.pageIndex == 0){
+                            self.modelDatas.removeAll();
+                        }
                         self.modelDatas.append(contentsOf: calls)
                         self.tableView.reloadData()
                         self.pageIndex = self.pageIndex + 1
@@ -99,7 +104,7 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
                     
                     
                 }else{
-                    CGlobal.alertMessage("Failed to Load", title: nil)
+//                    CGlobal.alertMessage("Failed to Load", title: nil)
                     
                 }
                 CGlobal.stopIndicator(self)
@@ -121,6 +126,7 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
                 arrowUp = arrowUp + 1
                 debugPrint(" we are at the top")
                 if arrowUp >= 1 {
+                    
                     arrowUp = 0
                     
                 }
@@ -134,6 +140,7 @@ class CallHistoryViewController: UIViewController,UITableViewDataSource,UITableV
                     arrowDown = arrowDown + 1
                     if arrowDown >= 1 {
                         arrowDown = 0
+                        
                         self.loadData()
                     }
                 }

@@ -11,15 +11,19 @@ import CoreData
 import IQKeyboardManagerSwift
 import ReachabilitySwift
 import UserNotifications
+import Alamofire
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var dbManager:DBManager?
+    var afManager:SessionManager!
+    var fromNotBackground:Bool = false
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        fromNotBackground = true;
         initData(application: application)
         initServices(application: application)
         
@@ -27,7 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let global = CGlobal.sharedId();
         
         // check the launchOptions
-        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            // your code here
+            self.fromNotBackground = false
+        }
         
         switch -2 {
         case 1:
@@ -48,9 +55,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             if let env = global?.env {
                 if env.lastLogin > 0 {
-                    //let requestLogin = self.getRequestInfoLogin()
-                    //self.doLogin(requestLogin: requestLogin)
-                    if(checkOption(option:launchOptions)){
+                    
+//                    CGlobal.alertMessage("didFinishLaunchingWithOptions", title: "didFinishLaunchingWithOptions")
+                    if self.checkOption(option: launchOptions){
+//                        CGlobal.alertMessage("checkOption true", title: "checkOption true")
                         return true;
                     }
                     self.defaultMainWindow()
@@ -76,13 +84,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     func checkOption(option:[UIApplicationLaunchOptionsKey: Any]?)->Bool{
+        
         if let userInfo = option?[UIApplicationLaunchOptionsKey.remoteNotification] as? [AnyHashable:Any] {
             if let data = userInfo["data"] as? [String:String]{
                 let id = data["id"]
                 let ms = UIStoryboard.init(name: "Main", bundle: nil);
-                
-                let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
-                viewcon.purchase_id = id
+//
+//                let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
+//                viewcon.purchase_id = id
                 
                 let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
                 let context = delegate.persistentContainer.viewContext
@@ -94,12 +103,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         global.curUser = user
                         self.registerDeviceUUID()
 
-                        let tabbar = ms.instantiateViewController(withIdentifier: "CTabBar") ;
-                        let navc = UINavigationController.init()
-                        navc.viewControllers = [tabbar,viewcon];
-                        navc.navigationBar.isHidden = true
-                        self.window?.rootViewController = navc
-                        return true;
+                        if let tabbar = ms.instantiateViewController(withIdentifier: "CTabBar") as? TabViewController{
+                            if id != "0" {
+                                tabbar.push_id = id
+                            }
+                            
+                            DispatchQueue.main.async {
+                                self.window?.rootViewController = tabbar
+                            }
+                            
+                            
+//                            CGlobal.alertMessage("checkOption", title: "checkOption")
+                            
+                            return true;
+                        };
+                        
                     }
                 } catch  {
                     debugPrint("Fetch Failed")
@@ -138,6 +156,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         COLOR_SECONDARY_THIRD = CGlobal.color(withHexString: "044154", alpha: 1.0);
         COLOR_RESERVED = CGlobal.color(withHexString: "F26336", alpha: 1.0);
         
+        self.fromNotBackground = true
         //        let fontManager = FontManager.sharedManager
         
     }
@@ -170,15 +189,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         global.uuid = newToken
         self.registerDeviceUUID()
     }
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-        debugPrint("didReceiveRemoteNotification")
-        self.processMessage(userInfo: userInfo)
-    }
+//    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+//        debugPrint("didReceiveRemoteNotification")
+//        CGlobal.alertMessage("ss3", title: "ss4")
+////        self.processMessage(userInfo: userInfo)
+//    }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//        CGlobal.alertMessage("ss1", title: "ss2")
+//        let state = application.applicationState;
+//        switch state {
+//        case .inactive:
+//            debugPrint("inactive")
+//            CGlobal.alertMessage("inactive", title: "inactive")
+//        case .active:
+//            debugPrint("active")
+//            CGlobal.alertMessage("active", title: "active")
+//        case .background:
+//            debugPrint("background")
+//            CGlobal.alertMessage("background", title: "background")
+//        default:
+//            debugPrint("default")
+//            CGlobal.alertMessage("default", title: "default")
+//            break;
+//        }
+//        
+//        return;
+        
+//        if self.fromNotBackground {
+//            // when from not in background
+//            [self.checkOption(option: userInfo)];
+////            CGlobal.alertMessage("fromNotBackground", title: "fromNotBackground")
+//            
+//            return;
+//        } else {
+////            CGlobal.alertMessage("regular", title: "regular")
+//            
+//        }
+
         if let data = userInfo["data"] as? [String:String]{
             let id = data["id"]
-            if let vc = window?.rootViewController{
+            //            debugPrint(id)
+            if let vc = UIApplication.shared.keyWindow?.rootViewController{
                 var parentViewController:UIViewController = vc
                 while (parentViewController.presentedViewController != nil){
                     parentViewController = parentViewController.presentedViewController!;
@@ -186,16 +238,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 let curViewController = parentViewController
                 let ms = UIStoryboard.init(name: "Main", bundle: nil);
-                DispatchQueue.main.async {
-                    let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
-                    viewcon.purchase_id = id
-                    if let navc = curViewController.navigationController {
-                        navc.pushViewController(viewcon, animated: true)
+                //                debugPrint(curViewController)
+                
+                if curViewController is UINavigationController {
+                    debugPrint("UINavigationController")
+//                    CGlobal.alertMessage("UINavigationController", title: "UINavigationController")
+                }else if curViewController is HomeViewController {
+                    debugPrint("HomeViewController")
+                    CGlobal.alertMessage("HomeViewController", title: "HomeViewController")
+                }else if let tabvc  = curViewController as? TabViewController {
+                    if id == "0" {
+                        tabvc.selectedIndex = 0
+                        let snavc = tabvc.viewControllers?[0] as! SwiftNavViewController
+                        snavc.popToRootViewController(animated: true)
+//                        CGlobal.alertMessage("Index0", title: "Index0")
+                    }else{
+                        let snavc = tabvc.viewControllers?[0] as! SwiftNavViewController
+                        let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
+                        viewcon.purchase_id = id
+                        snavc.pushViewController(viewcon, animated: true)
+                        
+                        tabvc.selectedIndex = 0
+//                        CGlobal.alertMessage("correct", title: "correct")
                     }
                 }
             }
-            
         }
+        
     }
     func processMessage(userInfo: [AnyHashable : Any]){
         if let data = userInfo["data"] as? [String:AnyObject] {
@@ -282,10 +351,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let ms = UIStoryboard.init(name: "Main", bundle: nil);
                 DispatchQueue.main.async {
                     let viewcon = ms.instantiateViewController(withIdentifier: "CTabBar");
-                    let navc = UINavigationController.init()
-                    navc.viewControllers = [viewcon];
-                    navc.navigationBar.isHidden = true
-                    self.window?.rootViewController = navc
+                    self.window?.rootViewController = viewcon
                 }
             }
         } catch  {
@@ -328,11 +394,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         request.name = UserDefaults.standard.string(forKey: "name")
         request.device_token = uuid
         
-        let manager = NetworkUtil.sharedManager
-        manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_SAVETOKEN) { (dict, error) in
+        let config = URLSessionConfiguration.default
+        config.allowsCellularAccess = true
+        self.afManager = Alamofire.SessionManager(configuration:config)
+        
+        //        let afSessionMngr = Alamofire.SessionManager.default;
+        //        afSessionMngr.set
+        var serverurl = GlobalSwift.g_baseUrl;
+        serverurl = serverurl + Constants.ACTION_SAVETOKEN;
+        let questionDict = BaseModelSwift.getQuestionDict(targetClass: request)
+
+//        let p = SetNotificationViewController.getTimeOffset(tz: TimeZone.current)
+//        debugPrint(p)
+        
+        self.afManager.request(serverurl, method: .get, parameters: questionDict, encoding: URLEncoding.default, headers: nil).responseJSON { (response:DataResponse) in
             
-            if error == nil {
-                let temp = LoginResponse.init(dictionary: dict)
+            switch(response.result) {
+            case .success(_):
+                guard let data = response.result.value as? [String:Any] else{
+                    debugPrint("fail savetoken")
+                    return;
+                }
+                let temp = LoginResponse.init(dictionary: data)
                 if let status = temp.status{
                     if status == "success" {
                         debugPrint("succ savetoken")
@@ -340,11 +423,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         debugPrint("fail savetoken")
                     }
                 }
-            }else{
+                break
+                
+            case .failure(_):
                 debugPrint("fail savetoken")
+                
+                break
+                
             }
-            
         }
+        
+//        let manager = NetworkUtil.sharedManager
+//        manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_SAVETOKEN) { (dict, error) in
+//            
+//            if error == nil {
+//                let temp = LoginResponse.init(dictionary: dict)
+//                if let status = temp.status{
+//                    if status == "success" {
+//                        debugPrint("succ savetoken")
+//                    }else{
+//                        debugPrint("fail savetoken")
+//                    }
+//                }
+//            }else{
+//                debugPrint("fail savetoken")
+//            }
+//            
+//        }
     }
     
 //    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {

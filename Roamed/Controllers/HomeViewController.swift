@@ -1,4 +1,4 @@
-//
+	//
 //  HomeViewController.swift
 //  Roamed
 //
@@ -16,7 +16,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+//        self.title = "Roamed"
         
         let nib = UINib.init(nibName: "PurchaseTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "cell")
@@ -50,13 +50,31 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             let gesture = UISwipeGestureRecognizer.init(target: self, action: #selector(HomeViewController.swipeRight(gesture:)))
             gesture.direction = .left
             self.tableView.addGestureRecognizer(gesture)
+            
+            if let tabvc = self.tabBarController as? TabViewController {
+                if let pushid = tabvc.push_id {
+                    let ms = UIStoryboard.init(name: "Main", bundle: nil);
+                    let viewcon:PurchaseDetailViewController = ms.instantiateViewController(withIdentifier: "PurchaseDetailViewController") as! PurchaseDetailViewController;
+                    viewcon.purchase_id = pushid
+                    DispatchQueue.main.async {
+                        if let navc = self.navigationController {
+                            navc.pushViewController(viewcon, animated: true)
+                            tabvc.push_id = nil
+                        }
+                    }
+                }
+            }
         }
         
         self.inappInit()
+        
+        
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
         self.getPurchased()
+        
+        
     }
     
     var refreshControl:UIRefreshControl?
@@ -93,7 +111,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func getPurchased(){
         let reach = Reachability()!
         let global = GlobalSwift.sharedManager
-        if reach.isReachableViaWiFi {
+        if reach.isReachableViaWiFi || reach.reachableOnWWAN {
             if let user = global.curUser{
                 let manager = NetworkUtil.sharedManager
                 let request = RequestLogin()
@@ -111,8 +129,17 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                         self.response = global.purchaseResponse
                         self.tableView.reloadData()
                     }else{
-                        CGlobal.alertMessage("Fail to Load", title: nil)
-                        
+//                        if request.userid == nil {
+//                            CGlobal.alertMessage("Fail to Load user id nil", title: nil)
+//                            
+//                        }else{
+//                            CGlobal.alertMessage("Fail to Load " + request.userid!, title: nil)
+//                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                            // your code here
+                            self.getPurchased();
+                            return;
+                        }
                     }
                     CGlobal.stopIndicator(self)
                     self.refreshControl?.endRefreshing()
@@ -166,6 +193,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         if let response = self.response, let present = response.present_purchase {
             cell.setData(data: present[indexPath.row])
         }
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     let tableHeight:CGFloat = 50.0

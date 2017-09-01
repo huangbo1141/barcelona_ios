@@ -53,6 +53,9 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
             gesture.direction = .right
             self.view.addGestureRecognizer(gesture)
         }
+        
+        self.inappInit()
+        self.loadCountry()
     }
     func swipeLeft(gesture:UISwipeGestureRecognizer){
         if let tabvc  = self.tabBarController {
@@ -65,8 +68,7 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
         }
     }
     override func viewWillAppear(_ animated: Bool) {
-        self.inappInit()
-        self.loadCountry()
+        Constants.purchase_mode = 1
     }
     func handleDatePicker(sender:UIDatePicker){
         let dateFormatter = DateFormatter()
@@ -91,7 +93,17 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                 let response = CountryResponse.init(dictionary: dict)
                 if let rows = response.countries, rows.count > 0 {
                     // success
+                    
                     self.countryList = rows
+                    self.countryList.sort(by: { (first, second) -> Bool in
+                        let str1 = first.country
+                        let str2 = second.country
+                        
+                        if(str1?.compare(str2!) == .orderedAscending ){
+                            return true
+                        }
+                        return false
+                    })
                     if let picker = self.txtCountry.inputView as? UIPickerView{
                         picker.reloadAllComponents()
                     }
@@ -104,8 +116,29 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
             CGlobal.stopIndicator(self)
         }
     }
+    
+    static func getTimeOffset(tz:TimeZone)->String{
+        var seconds:Int = tz.secondsFromGMT()
+        var sign = ""
+        if seconds < 0 {
+            seconds = -1*seconds
+            sign = "-"
+        }else{
+            sign = "+"
+        }
+        let hour:Int = seconds/3600
+        var timezone = ""
+        if seconds%3600 > 0 {
+            let remain = seconds - hour*3600
+            timezone = "\(sign)\(hour):30"
+        }else{
+            timezone = "\(sign)\(hour):00"
+        }
+        return timezone
+    }
 
     var requestTerm:RequestLogin?
+    var days = ""
     func clickView(sender:UIView){
         let tag = sender.tag
         if  tag >= 400 {
@@ -115,7 +148,8 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
 //            return;
             
             let index = tag - 400
-            let days:[String] = ["1"]
+            //self.iapProducts.count
+            
             if self.isLoading == false {
                 let global = GlobalSwift.sharedManager
                 if let user = global.curUser{
@@ -127,7 +161,9 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                     request.iso = self.country?.iso
                     request.country = self.country?.country
 //                    request.iso = "hk"
-                    request.days = days[index]
+                    
+                    request.days = self.productDays[index]
+                    self.days = self.productDays[index]
                     if let picker = txtDateFrom.inputView as? UIDatePicker {
                         let date = picker.date
                         let dateFormatter = DateFormatter()
@@ -135,7 +171,7 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                         request.startdate  = dateFormatter.string(from: date)
                     }
                     
-                    request.timezone = GlobalSwift.getTimeOffset(tz: TimeZone.current)
+                    request.timezone = PurchaseViewController.getTimeOffset(tz: TimeZone.current)
                     
                     CGlobal.showIndicator(self)
                     manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_CHECKPURCHASE) { (dict, error) in
@@ -147,19 +183,7 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                                 if status == "success" {
                                     self.requestTerm = request
                                     let product = self.iapProducts[index]
-                                    switch(-1){
-                                    case 1:
-                                        // assume purchase success
-                                        self.purchase1();
-                                        break
-                                    case 2:
-                                        self.goToNotificationSetController(purchase_id: "purchaseid")
-                                    default:
-                                        // default behaviour
-                                        self.purchaseMyProduct(product: product)
-                                        break
-                                        
-                                    }
+                                    self.purchaseMyProduct(product: product)
                                     
                                     
                                     
@@ -216,10 +240,10 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                 }
             }else{
                 
-//                CGlobal.alertMessage("Failed to Load", title: nil)
+                //                CGlobal.alertMessage("Failed to Load", title: nil)
             }
-//            CGlobal.stopIndicator(self)
-//            self.isLoading = false
+            //            CGlobal.stopIndicator(self)
+            //            self.isLoading = false
         }
     }
     
@@ -256,24 +280,38 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
             
             // 1st IAP Product (Consumable) ------------------------------------
             
-            var height = CGFloat(40)*CGFloat(self.iapProducts.count);
-            height = max(height, CGFloat(40))
+            var height = CGFloat(50)*CGFloat(self.iapProducts.count);
+            height = max(height, CGFloat(50))
             constraint_ProductHeight.constant = height
             stackProduct.setNeedsUpdateConstraints();
             stackProduct.layoutIfNeeded()
+            self.productDays = [String]()
+            
             for i in 0..<self.iapProducts.count {
                 
                 if let view:PurchaseItemView = Bundle.main.loadNibNamed("PurchaseItemView", owner: self, options: nil)?[0] as? PurchaseItemView{
-                    view.setData(firstProduct: self.iapProducts[i], i: i, vc: self)
-                    stackProduct.addArrangedSubview(view)
+                    view.setData(firstProduct: self.iapProducts[i], i: i, vc: self, mode: 1)
+                    if let numStr = view.numStr{
+                        stackProduct.addArrangedSubview(view)
+                        
+                        productDays.append(view.numStr!)
+                        
+                        if i == self.iapProducts.count - 1 {
+                            view.viewLineBottom.isHidden = false
+                        }else{
+                            view.viewLineBottom.isHidden = true
+                        }
+                    }
+                    
                 }
-                
             }
+            
             
         }
         isLoadingPurchase = false;
     }
-    let PRODUCT_ID_DAY = "com.simpsy.roamed.day"
+    var views:[PurchaseItemView] = [PurchaseItemView] ()
+    var productDays = [String]()
     
     var productID = ""
     var productsRequest = SKProductsRequest()
@@ -289,8 +327,9 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
         if self.iapProducts.count <= 0 , isLoadingPurchase == false {
             // Put here your IAP Products ID's
             var arrays:[String] = [String]()
-            for i in 0..<100{
-                arrays.append(PRODUCT_ID_DAY + "\(i)")
+            for i in 7..<100{
+                
+                arrays.append(Constants.PRODUCT_ID_DAY + "\(i)")
             }
             let productIdentifiers = NSSet(array: arrays)
             
@@ -326,7 +365,7 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
             print("PRODUCT TO PURCHASE: \(product.productIdentifier)")
             self.productID = product.productIdentifier
             
-            
+            debugPrint("purchase purchase--")
             // IAP Purchases dsabled on the Device
         } else {
             CGlobal.alertMessage("Purchases are disabled in your device!", title: nil)
@@ -336,6 +375,10 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     var isLoading:Bool = false
     var isLoadingPurchase:Bool = false
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        debugPrint("paymentQueue")
+        if Constants.purchase_mode != 1 {
+            return
+        }
         for transaction:AnyObject in transactions {
             if let trans = transaction as? SKPaymentTransaction {
                 debugPrint(trans.transactionState)
@@ -345,27 +388,14 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                     SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
                     
                     // The Consumable product (10 coins) has been purchased -> gain 10 extra coins!
-                    if productID.hasPrefix(PRODUCT_ID_DAY) {
-                        let index = productID.index(productID.startIndex, offsetBy: PRODUCT_ID_DAY.characters.count)
+                    if productID.hasPrefix(Constants.PRODUCT_ID_DAY) {
+                        let index = productID.index(productID.startIndex, offsetBy: Constants.PRODUCT_ID_DAY.characters.count)
                         let numday_str = productID.substring(from: index)
                         if let numday = Int(numday_str){
                             self.requestTerm?.days = numday_str;
                             self.purchase1()
                         }
                     }
-//                    else if productID == PREMIUM_PRODUCT_ID {
-//                        
-//                        // Save your purchase locally (needed only for Non-Consumable IAP)
-//                        nonConsumablePurchaseMade = true
-//                        UserDefaults.standard.set(nonConsumablePurchaseMade, forKey: "nonConsumablePurchaseMade")
-//                        
-//                        premiumLabel.text = "Premium version PURCHASED!"
-//                        
-//                        UIAlertView(title: "IAP Tutorial",
-//                                    message: "You've successfully unlocked the Premium version!",
-//                                    delegate: nil,
-//                                    cancelButtonTitle: "OK").show()
-//                    }
                     
                     break
                     
@@ -380,31 +410,52 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                     break
                 }}}
     }
-    func goToNotificationSetController(purchase_id:String?){
+    func goToNotificationSetController(data:PresentPurchase?){
         let ms = UIStoryboard.init(name: "Main", bundle: nil);
         DispatchQueue.main.async {
             if let viewcon = ms.instantiateViewController(withIdentifier: "SetNotificationViewController") as? SetNotificationViewController {
-                viewcon.purchase_id = purchase_id
+                viewcon.inputData = data
                 self.navigationController?.pushViewController(viewcon, animated: true)
             }
         }
-        
-        
+        //PresentPurchase
     }
     func purchase1(){
         if let request = self.requestTerm{
             CGlobal.showIndicator(self)
             let manager = NetworkUtil.sharedManager
+            
             manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_DOPURCHASE) { (dict, error) in
                 if error == nil {
                     let temp = LoginResponse.init(dictionary: dict)
+                    
+                    
                     if let status = temp.status {
                         if status == "success" {
-                            CGlobal.alertMessage("You've successfully bought Day!", title: "Purchase")
+                            CGlobal.alertMessage("You've successfully bought \(self.days) Days!", title: "Purchase")
                             if let navc = self.navigationController as? SwiftNavViewController {
                                 navc.downloadHelp(request1: request)
                             }
-                            self.goToNotificationSetController(purchase_id: temp.purchase_id)
+                            
+                            let delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                            let context = delegate.persistentContainer.viewContext
+                            if let obj = dict as? [String:AnyObject]{
+                                let data = PresentPurchase(context:context)
+                                BaseModel.parseResponse(data, dict: obj)
+                                
+                                delegate.saveContext()
+                                debugPrint(data.country_iso)
+                                self.goToNotificationSetController(data: data)
+                            }
+                            
+                            // download help page
+                            if let navc = self.navigationController as? SwiftNavViewController {
+                                let request:RequestLogin =  RequestLogin()
+                                request.country = self.country?.country
+                                
+                                navc.downloadHelp(request1: request)
+                            }
+                            
                         }else{
                             // fail
                             if let message = temp.message {

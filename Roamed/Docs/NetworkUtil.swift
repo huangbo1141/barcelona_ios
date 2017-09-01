@@ -14,7 +14,13 @@ private let _networkUtil = NetworkUtil()
 typealias NetworkCompletionBlock = ([String:Any]?,NSError?) -> Void
 
 class NetworkUtil{
+    
+    var manager:DBManager?
+    
     class var sharedManager:NetworkUtil {
+        
+        
+        
         return _networkUtil;
     }
     
@@ -50,12 +56,19 @@ class NetworkUtil{
         self.generalNetwork(serverurl: serverurl, questionDict: questionDict,method:method, completionBlock: completionBlock)
     }
     
+    var afSessionMngr:SessionManager?
+    
     func generalNetwork(serverurl:String,questionDict:[String:Any],method:HTTPMethod, completionBlock: NetworkCompletionBlock?){
         
 //        let url = NSURL(string: serverurl);
+        let config = URLSessionConfiguration.default
+        config.allowsCellularAccess = true
+        afSessionMngr = Alamofire.SessionManager(configuration:config)
         
+//        let afSessionMngr = Alamofire.SessionManager.default;
+//        afSessionMngr.set
         
-        Alamofire.request(serverurl, method: method, parameters: questionDict, encoding: URLEncoding.default, headers: nil).responseJSON { (response:DataResponse) in
+        afSessionMngr?.request(serverurl, method: method, parameters: questionDict, encoding: URLEncoding.default, headers: nil).responseJSON { (response:DataResponse) in
             
             switch(response.result) {
             case .success(_):

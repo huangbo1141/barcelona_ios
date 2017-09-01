@@ -47,7 +47,8 @@
 //            let request = NSFetchRequest<HelpModel>.init(entityName: "HelpModel")
 //            request.predicate = NSPredicate(format: "iso = '%@'","aaa")
             let request = NSFetchRequest<HelpModel>.init(entityName: "HelpModel")
-            request.predicate = NSPredicate.init(format: " iso == '" + iso + "'");
+            
+            request.predicate = NSPredicate.init(format: " iso == '" + iso.lowercased() + "'");
             
             let rows = try context.fetch(request)
 //            let rows = try context.fetch(HelpModel.fetchRequest())
@@ -73,7 +74,7 @@
         let context = delegate.persistentContainer.viewContext
         let user = HelpModel(context:context)
         
-        user.iso = self.iso
+        user.iso = self.iso.lowercased()
         user.html = text
         
         return delegate.saveContext()

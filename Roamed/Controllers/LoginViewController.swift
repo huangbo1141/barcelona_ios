@@ -8,25 +8,27 @@
 
 import UIKit
 
-class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource {
+class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource,UITextFieldDelegate {
     
     
     @IBOutlet weak var view0: UIView!
     @IBOutlet weak var view1: UIView!
     
     
-    @IBOutlet weak var imgLogo1: UIImageView!
+    @IBOutlet weak var toolbar: UIToolbar!
+//    @IBOutlet weak var imgLogo1: UIImageView!
     
     @IBOutlet weak var viewName: UIView!
     @IBOutlet weak var txtName: UITextField!
     
-    @IBOutlet weak var viewPhone: UIView!
+//    @IBOutlet weak var viewPhone: UIView!
     @IBOutlet weak var txtPhone: UITextField!
     
-    @IBOutlet weak var viewCountry: UIView!
+//    @IBOutlet weak var viewCountry: UIView!
     @IBOutlet weak var txtCountry: UITextField!
     @IBOutlet weak var btnVerify: RoundCornerBorderButton!
     
+    @IBOutlet weak var backitem: UIBarButtonItem!
     
     @IBOutlet weak var txtVerifyCode: UITextField!
     var country:TblCountry?
@@ -61,15 +63,11 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         self.view0.backgroundColor = UIColor.clear
         
         
-//        let appdelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate;
-//        
-//        if let data = appdelegate.dbManager?.getCountries(){
-//            for item in data {
-//                if let idata = item as? WNACountry {
-//                    self.countryData.append(idata)
-//                }
-//            }
-//        }
+        let font:UIFont = UIFont.boldSystemFont(ofSize: 16)
+        backitem.setTitleTextAttributes([NSForegroundColorAttributeName:Constants.COLOR_TOOLBAR_TEXT,NSFontAttributeName:font], for: .normal)
+        
+        self.txtVerifyCode.delegate = self
+        
         DispatchQueue.main.async {
             self.initCountryData()
         }
@@ -119,6 +117,11 @@ class LoginViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
     }
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true;
+    }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return true }
+        let newLength = text.characters.count + string.characters.count - range.length
+        return newLength <= 4 // Bool
     }
     func ClickView(view:UIView){
         let tag = view.tag;
