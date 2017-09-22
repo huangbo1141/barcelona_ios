@@ -109,6 +109,7 @@
 		4D6FC5B31E5C91C900ECD774 /* CallHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6FC5B11E5C91C900ECD774 /* CallHistoryTableViewCell.swift */; };
 		4D6FC5B41E5C91C900ECD774 /* CallHistoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D6FC5B21E5C91C900ECD774 /* CallHistoryTableViewCell.xib */; };
 		4D6FC5B61E5C986800ECD774 /* CallResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6FC5B51E5C986700ECD774 /* CallResponse.swift */; };
+		4D7496E11F596E5300D85159 /* NextPurchaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7496E01F596E5300D85159 /* NextPurchaseResponse.swift */; };
 		F901EB5A1EEB06A700331C0B /* ico_down.png in Resources */ = {isa = PBXBuildFile; fileRef = F901EB591EEB06A700331C0B /* ico_down.png */; };
 		F99C43F81F03FB8700CE32D0 /* RTLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F99C43F71F03FB8700CE32D0 /* RTLabel.m */; };
 		F9D575571ECCA5E8007D6615 /* logo1.png in Resources */ = {isa = PBXBuildFile; fileRef = F9D575561ECCA5E8007D6615 /* logo1.png */; };
@@ -257,6 +258,7 @@
 		4D6FC5B11E5C91C900ECD774 /* CallHistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallHistoryTableViewCell.swift; sourceTree = "<group>"; };
 		4D6FC5B21E5C91C900ECD774 /* CallHistoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CallHistoryTableViewCell.xib; sourceTree = "<group>"; };
 		4D6FC5B51E5C986700ECD774 /* CallResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallResponse.swift; sourceTree = "<group>"; };
+		4D7496E01F596E5300D85159 /* NextPurchaseResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NextPurchaseResponse.swift; sourceTree = "<group>"; };
 		F28E3DDE339E0F4FA107A46B /* Pods-Roamed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roamed.release.xcconfig"; path = "Pods/Target Support Files/Pods-Roamed/Pods-Roamed.release.xcconfig"; sourceTree = "<group>"; };
 		F901EB591EEB06A700331C0B /* ico_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ico_down.png; sourceTree = "<group>"; };
 		F99C43F61F03FB8700CE32D0 /* RTLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTLabel.h; sourceTree = "<group>"; };
@@ -577,6 +579,7 @@
 				4D6FC5B51E5C986700ECD774 /* CallResponse.swift */,
 				4D3B65B91E6859FB00929A59 /* PurchaseDetailResponse.swift */,
 				4D3B65BD1E6862B300929A59 /* CountryResponse.swift */,
+				4D7496E01F596E5300D85159 /* NextPurchaseResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -845,6 +848,7 @@
 				4D6FC5921E5C38D500ECD774 /* RoundCornerBorderView.swift in Sources */,
 				0716DA211E78DA4D002FF63E /* PurchaseViewController.swift in Sources */,
 				4D6FC55B1E5C38D500ECD774 /* GlobalSwift.swift in Sources */,
+				4D7496E11F596E5300D85159 /* NextPurchaseResponse.swift in Sources */,
 				4D3B65BE1E6862B300929A59 /* CountryResponse.swift in Sources */,
 				4D6FC5621E5C38D500ECD774 /* EnvVar.m in Sources */,
 				4D6FC5721E5C38D500ECD774 /* NSString+Common.m in Sources */,

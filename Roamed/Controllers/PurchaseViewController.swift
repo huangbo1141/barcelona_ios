@@ -182,11 +182,9 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
                             if let status = temp.status{
                                 if status == "success" {
                                     self.requestTerm = request
-                                    let product = self.iapProducts[index]
-                                    self.purchaseMyProduct(product: product)
+                                    let product = self.iapProducts_all[index]
                                     
-                                    
-                                    
+                                    self.checkProduct(product: product)
                                     
                                 }else{
                                     if let message = temp.message {
@@ -203,6 +201,38 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
             }
         }
         
+    }
+    func checkProduct(product:SKProduct){
+        // check next purchase and find from all products and do "self.purchaseMyProduct(product: product)"
+        if let firArray = GlobalSwift.getNumberDay(product: product) {
+            let day1 = firArray[0]
+            debugPrint(firArray[1])
+            
+            let manager = NetworkUtil.sharedManager
+            let request = RequestLogin()
+            request.setDefaultkeySecret()
+            
+            CGlobal.showIndicator(self)
+            manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_CHECK_NEXT_PURCHASE) { (dict, error) in
+                
+                if error == nil {
+                    let response = NextPurchaseResponse.init(dictionary: dict)
+                    let numday_str = String(day1)
+                    if let next_purchase = response.next_purchase,let day2 = Int(next_purchase) {
+                        if let product = GlobalSwift.findProductInArray(day1: day1, day2: day2, array: self.iapProducts_all) {
+                            
+                            // success
+                            self.purchaseMyProduct(product: product)
+                        }
+                    }else{
+                        
+                    }
+                }else{
+                    //CGlobal.alertMessage("Server Error", title: nil)
+                }
+                CGlobal.stopIndicator(self)
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -261,42 +291,54 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         if (response.products.count > 0) {
-            iapProducts = response.products
-            iapProducts.sort(by: { (first, second) -> Bool in
-                let fir = GlobalSwift.getNumberDay(product: first)
-                let sec = GlobalSwift.getNumberDay(product: second)
+            self.iapProducts_all = response.products
+            self.iapProducts_head = [SKProduct]();
+            
+            self.iapProducts_all.sort(by: { (first, second) -> Bool in
+                var fir:Int = 0;
+                var sec:Int = 0;
+                if let firArray = GlobalSwift.getNumberDay(product: first) {
+                    fir = firArray[0]*Constants.PRODUCT_ID_MULTI + firArray[1];
+                }
+                if let secArray = GlobalSwift.getNumberDay(product: second) {
+                    sec = secArray[0]*Constants.PRODUCT_ID_MULTI + secArray[1];
+                }
                 return fir < sec
             });
             
-            iapProducts = iapProducts.filter({ (product) -> Bool in
-                let num = GlobalSwift.getNumberDay(product: product)
-                if num == 3 {
-                    return false
+            for i in 0..<self.iapProducts_all.count {
+                let iproduct = self.iapProducts_all[i];
+                if let firArray = GlobalSwift.getNumberDay(product: iproduct) {
+                    //let day1 = firArray[0]
+                    let day2 = firArray[1]
+                    if day2 == 1 {
+                        self.iapProducts_head.append(self.iapProducts_all[i])
+                    }
                 }
-                return true
-            })
+                
+            }
             
             
             
             // 1st IAP Product (Consumable) ------------------------------------
             
-            var height = CGFloat(50)*CGFloat(self.iapProducts.count);
+            var height = CGFloat(50)*CGFloat(self.iapProducts_head.count);
             height = max(height, CGFloat(50))
             constraint_ProductHeight.constant = height
             stackProduct.setNeedsUpdateConstraints();
             stackProduct.layoutIfNeeded()
             self.productDays = [String]()
             
-            for i in 0..<self.iapProducts.count {
+            for i in 0..<self.iapProducts_head.count {
                 
                 if let view:PurchaseItemView = Bundle.main.loadNibNamed("PurchaseItemView", owner: self, options: nil)?[0] as? PurchaseItemView{
-                    view.setData(firstProduct: self.iapProducts[i], i: i, vc: self, mode: 1)
+                    view.setData(firstProduct: self.iapProducts_head[i], i: i, vc: self, mode: 1)
                     if let numStr = view.numStr{
                         stackProduct.addArrangedSubview(view)
                         
                         productDays.append(view.numStr!)
                         
-                        if i == self.iapProducts.count - 1 {
+                        if i == self.iapProducts_head.count - 1 {
                             view.viewLineBottom.isHidden = false
                         }else{
                             view.viewLineBottom.isHidden = true
@@ -315,7 +357,8 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     
     var productID = ""
     var productsRequest = SKProductsRequest()
-    var iapProducts = [SKProduct]()
+    var iapProducts_all = [SKProduct]()
+    var iapProducts_head = [SKProduct]()
     func inappInit(){
         // Check your In-App Purchases
         
@@ -324,12 +367,12 @@ class PurchaseViewController: UIViewController,UIPickerViewDelegate,UIPickerView
     }
     func fetchAvailableProducts()  {
         
-        if self.iapProducts.count <= 0 , isLoadingPurchase == false {
+        if self.iapProducts_all.count <= 0 , isLoadingPurchase == false {
             // Put here your IAP Products ID's
             var arrays:[String] = [String]()
-            for i in 7..<100{
-                
-                arrays.append(Constants.PRODUCT_ID_DAY + "\(i)")
+            for i in 1..<15{
+                arrays.append(Constants.PRODUCT_ID_DAY + "7_\(i)")
+                arrays.append(Constants.PRODUCT_ID_DAY + "14_\(i)")
             }
             let productIdentifiers = NSSet(array: arrays)
             

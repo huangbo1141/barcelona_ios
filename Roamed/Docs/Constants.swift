@@ -24,6 +24,7 @@ class Constants:NSObject{
 //    https://roamed.co/api/register/?key=abc123&secret=123abc&phone=92997764&country=sg&name=test
     
     public static let PRODUCT_ID_DAY = "com.simpsy.roamed.daya"
+    public static let PRODUCT_ID_MULTI:Int = 1000;
     
     static let PATH_APNS = "apnsv2";
     static let APISERVICE_IP_URL = "http://ip-api.com/json";
@@ -42,7 +43,7 @@ class Constants:NSObject{
     static let ACTION_SETNOTI = "/api/set_notification/";
     static let ACTION_SAVETOKEN = "/api/register/";
     static let ACTION_GETPRICE = "/api/get_price/";
-
+    static let ACTION_CHECK_NEXT_PURCHASE = "/api/check/";
     
     static let ACTION_UPLOAD = "/assets/rest/" + PATH_APNS + "/fileuploadmm.php";
     static let ACTION_UPLOAD_V = "/assets/rest/" + PATH_APNS + "/fileuploadvv.php";  //fileuploadvv.php
@@ -159,7 +160,7 @@ class Constants:NSObject{
     
     static let STORYTYPE_TRIP = "t";
     
-    static var iapProducts = [SKProduct]()
+    static var iapProducts_all = [SKProduct]()
 //    static var PRE_EXPLORE_PAGE:[BaseModelSwift] {
 //        get {
 //            let data1 = BaseModelSwift.init()

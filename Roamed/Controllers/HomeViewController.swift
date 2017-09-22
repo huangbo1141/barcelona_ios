@@ -230,11 +230,12 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     func fetchAvailableProducts()  {
         
-        if Constants.iapProducts.count <= 0 {
+        if Constants.iapProducts_all.count <= 0 {
             // Put here your IAP Products ID's
             var arrays:[String] = [String]()
-            for i in 0..<100{
-                arrays.append(Constants.PRODUCT_ID_DAY + "\(i)")
+            for i in 1..<15{
+                arrays.append(Constants.PRODUCT_ID_DAY + "7_\(i)")
+                arrays.append(Constants.PRODUCT_ID_DAY + "14_\(i)")
             }
             let productIdentifiers = NSSet(array: arrays)
             
@@ -249,11 +250,17 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         if (response.products.count > 0) {
             debugPrint("enter 1")
-            Constants.iapProducts = response.products
+            Constants.iapProducts_all = response.products
             
-            Constants.iapProducts.sort(by: { (first, second) -> Bool in
-                let fir = GlobalSwift.getNumberDay(product: first)
-                let sec = GlobalSwift.getNumberDay(product: second)
+            Constants.iapProducts_all.sort(by: { (first, second) -> Bool in
+                var fir:Int = 0;
+                var sec:Int = 0;
+                if let firArray = GlobalSwift.getNumberDay(product: first) {
+                    fir = firArray[0]*Constants.PRODUCT_ID_MULTI + firArray[1];
+                }
+                if let secArray = GlobalSwift.getNumberDay(product: second) {
+                    sec = secArray[0]*Constants.PRODUCT_ID_MULTI + secArray[1];
+                }
                 return fir < sec
             });
             

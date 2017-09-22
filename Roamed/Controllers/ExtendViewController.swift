@@ -48,38 +48,59 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
         let tag = sender.tag
         if  tag >= 400 {
             let index = tag - 400
-            let product = self.iapProducts[index]
-            let productID = product.productIdentifier
-            if productID.hasPrefix(PRODUCT_ID_DAY) {
+            let product = self.iapProducts_head[index]
+            debugPrint(product.productIdentifier)
+            if let firArray = GlobalSwift.getNumberDay(product: product) {
+                let day1 = firArray[0]
+                debugPrint(firArray[1])
                 
+                let manager = NetworkUtil.sharedManager
+                let request = RequestLogin()
+                request.setDefaultkeySecret()
                 
-                let index = productID.index(productID.startIndex, offsetBy: PRODUCT_ID_DAY.characters.count)
-                let numday_str = productID.substring(from: index)
-                if let numday = Int(numday_str){
-                    if self.isLoading == false {
-                        let global = GlobalSwift.sharedManager
-                        if let user = global.curUser{
-                            let manager = NetworkUtil.sharedManager
-                            let request = RequestLogin()
-                            request.setDefaultkeySecret()
-                            request.userid = user.userid
-                            request.phone = user.phoneno
-                            request.iso = self.inputData?.country_iso
-                            if request.iso == nil {
-                                request.iso = self.tblPurchaseDetail?.country_iso
-                            }
-                            request.days = numday_str
-                            request.purchase_id = self.inputData?.id
-                            if request.purchase_id == nil {
-                                request.purchase_id = self.tblPurchaseDetail?.id
+                CGlobal.showIndicator(self)
+                manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_CHECK_NEXT_PURCHASE) { (dict, error) in
+                    
+                    if error == nil {
+                        let response = NextPurchaseResponse.init(dictionary: dict)
+                        let numday_str = String(day1)
+                        if let next_purchase = response.next_purchase,let day2 = Int(next_purchase) {
+                            if let product = GlobalSwift.findProductInArray(day1: day1, day2: day2, array: self.iapProducts_all) {
+                                if self.isLoading == false {
+                                    let global = GlobalSwift.sharedManager
+                                    if let user = global.curUser{
+                                        //let manager = NetworkUtil.sharedManager
+                                        let request = RequestLogin()
+                                        request.setDefaultkeySecret()
+                                        request.userid = user.userid
+                                        request.phone = user.phoneno
+                                        request.iso = self.inputData?.country_iso
+                                        if request.iso == nil {
+                                            request.iso = self.tblPurchaseDetail?.country_iso
+                                        }
+                                        request.days = numday_str
+                                        request.purchase_id = self.inputData?.id
+                                        if request.purchase_id == nil {
+                                            request.purchase_id = self.tblPurchaseDetail?.id
+                                        }
+                                        
+                                        self.requestTerm = request
+                                        self.purchaseMyProduct(product: product)
+                                        
+                                        
+                                    }
+                                }
                             }
                             
-                            self.requestTerm = request
-                            self.purchaseMyProduct(product: product)
+                            // success
                             
+                        }else{
                             
                         }
+                    }else{
+                        //CGlobal.alertMessage("Server Error", title: nil)
                     }
+                    CGlobal.stopIndicator(self)
                 }
             }
             
@@ -113,17 +134,35 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
                 return
             }
             debugPrint("enter 1")
-            iapProducts = response.products
+            self.iapProducts_all = response.products
+            self.iapProducts_head = [SKProduct]();
             
-            iapProducts.sort(by: { (first, second) -> Bool in
-                let fir = GlobalSwift.getNumberDay(product: first)
-                let sec = GlobalSwift.getNumberDay(product: second)
+            self.iapProducts_all.sort(by: { (first, second) -> Bool in
+                var fir:Int = 0;
+                var sec:Int = 0;
+                if let firArray = GlobalSwift.getNumberDay(product: first) {
+                    fir = firArray[0]*Constants.PRODUCT_ID_MULTI + firArray[1];
+                }
+                if let secArray = GlobalSwift.getNumberDay(product: second) {
+                    sec = secArray[0]*Constants.PRODUCT_ID_MULTI + secArray[1];
+                }
                 return fir < sec
             });
             
+            for i in 0..<self.iapProducts_all.count {
+                let iproduct = self.iapProducts_all[i];
+                if let firArray = GlobalSwift.getNumberDay(product: iproduct) {
+                    //let day1 = firArray[0]
+                    let day2 = firArray[1]
+                    if day2 == 1 {
+                        self.iapProducts_head.append(self.iapProducts_all[i])
+                    }
+                }
+                
+            }
             // 1st IAP Product (Consumable) ------------------------------------
             
-            var height = CGFloat(50)*CGFloat(self.iapProducts.count);
+            var height = CGFloat(50)*CGFloat(self.iapProducts_head.count);
             height = max(height, CGFloat(50))
             if let cons = self.constraint_ProductHeight {
                 debugPrint("enter 2",cons)
@@ -133,12 +172,12 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
                 stackProduct.layoutIfNeeded()
                 
                 debugPrint("enter 3",cons)
-                for i in 0..<self.iapProducts.count {
+                for i in 0..<self.iapProducts_head.count {
                     if let view:PurchaseItemView = Bundle.main.loadNibNamed("PurchaseItemView", owner: self, options: nil)?[0] as? PurchaseItemView{
-                        view.setData(firstProduct: self.iapProducts[i], i: i, vc: self,mode: 2)
+                        view.setData(firstProduct: self.iapProducts_head[i], i: i, vc: self,mode: 2)
                         stackProduct.addArrangedSubview(view)
                         
-                        if i == self.iapProducts.count - 1 {
+                        if i == self.iapProducts_head.count - 1 {
                             view.viewLineBottom.isHidden = false
                         }else{
                             view.viewLineBottom.isHidden = true
@@ -158,14 +197,16 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
     
     var productID = ""
     var productsRequest = SKProductsRequest()
-    var iapProducts = [SKProduct]()
+    var iapProducts_all = [SKProduct]()
+    var iapProducts_head = [SKProduct]()
     func fetchAvailableProducts()  {
         
-        if self.iapProducts.count <= 0 , isLoadingPurchase == false {
+        if self.iapProducts_all.count <= 0 , isLoadingPurchase == false {
             // Put here your IAP Products ID's
             var arrays:[String] = [String]()
-            for i in 6..<100{
-                arrays.append(PRODUCT_ID_DAY + "\(i)")
+            for i in 1..<15{
+                arrays.append(Constants.PRODUCT_ID_DAY + "7_\(i)")
+                arrays.append(Constants.PRODUCT_ID_DAY + "14_\(i)")
             }
             let productIdentifiers = NSSet(array: arrays)
             
@@ -249,8 +290,8 @@ class ExtendViewController: UIViewController,SKProductsRequestDelegate,SKPayment
                     SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
                     
                     // The Consumable product (10 coins) has been purchased -> gain 10 extra coins!
-                    if productID.hasPrefix(PRODUCT_ID_DAY) {
-                        let index = productID.index(productID.startIndex, offsetBy: PRODUCT_ID_DAY.characters.count)
+                    if productID.hasPrefix(Constants.PRODUCT_ID_DAY) {
+                        let index = productID.index(productID.startIndex, offsetBy: Constants.PRODUCT_ID_DAY.characters.count)
                         let numday_str = productID.substring(from: index)
                         if let numday = Int(numday_str){
                             self.requestTerm?.days = numday_str;

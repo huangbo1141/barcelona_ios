@@ -100,17 +100,30 @@ class GlobalSwift:NSObject{
         }
         return timezone
     }
-    static func getNumberDay(product:SKProduct)->Int{
+    static func getNumberDay(product:SKProduct)->[Int]?{
         let productID = product.productIdentifier
-        var numday1:Int = 0
         if productID.hasPrefix(Constants.PRODUCT_ID_DAY) {
             let index = productID.index(productID.startIndex, offsetBy: Constants.PRODUCT_ID_DAY.characters.count)
-            let numday_str = productID.substring(from: index)
-            if let day1 = Int(numday_str){
-                numday1 = day1
+            let suffix = productID.substring(from: index)
+            let suffixArr = suffix.characters.split{$0 == " "}.map(String.init)
+            if suffixArr.count == 2 {
+                if let day1 = Int(suffixArr[0]),let day2 = Int(suffixArr[1]){
+                    return [day1,day2];
+                }
+            }
+            
+        }
+        return nil;
+    }
+    static func findProductInArray(day1:Int,day2:Int,array:[SKProduct])->SKProduct?{
+        for i in 0..<array.count {
+            let product = array[i]
+            let productID = product.productIdentifier
+            if productID == Constants.PRODUCT_ID_DAY + "\(day1)_\(day2)" {
+                return product;
             }
         }
-        return numday1;
+        return nil;
     }
     
 }
