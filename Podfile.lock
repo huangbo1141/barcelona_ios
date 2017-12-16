@@ -15,6 +15,11 @@ PODS:
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - Alamofire (4.3.0)
+  - GoogleMaps (2.5.0):
+    - GoogleMaps/Maps (= 2.5.0)
+  - GoogleMaps/Base (2.5.0)
+  - GoogleMaps/Maps (2.5.0):
+    - GoogleMaps/Base
   - IQKeyboardManagerSwift (4.0.8)
   - ReachabilitySwift (3)
   - SDWebImage (3.8.2):
@@ -24,6 +29,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
   - Alamofire (~> 4.0)
+  - GoogleMaps
   - IQKeyboardManagerSwift
   - ReachabilitySwift
   - SDWebImage (~> 3.7)
@@ -31,10 +37,11 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
+  GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   IQKeyboardManagerSwift: c04bc9f68473823f825eb44d958fce98d921bead
   ReachabilitySwift: f5b9bb30a0777fac8f09ce8b067e32faeb29bb64
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
 
-PODFILE CHECKSUM: 394bb4e27114e620a30648c6d56a06b2d146d961
+PODFILE CHECKSUM: 6c153e96f36367675e0aeca5ba5fa9c2b2467be3
 
-COCOAPODS: 1.2.0.beta.1
+COCOAPODS: 1.3.1

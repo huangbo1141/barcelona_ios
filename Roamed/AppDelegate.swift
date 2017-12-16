@@ -14,39 +14,31 @@ import UserNotifications
 import Alamofire
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate,CLLocationManagerDelegate {
 
     var window: UIWindow?
     var dbManager:DBManager?
     var afManager:SessionManager!
     var fromNotBackground:Bool = false
+    var location:CLLocation?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         fromNotBackground = true;
         initData(application: application)
-        initServices(application: application)
+//        initServices(application: application)
         
         //defaultMainWindow()
         let global = CGlobal.sharedId();
-        
+        self.startLocationService()
         // check the launchOptions
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             // your code here
             self.fromNotBackground = false
         }
         
-        switch -2 {
+        switch 1 {
         case 1:
-            
-            
-            //            self.doLogin(username: "fb_alfredlam2010@yahoo.com.hk", password: "alfredlam2010@yahoo.com.hk",type:"0")
-            
-            //            self.doLogin(username: "fb_in_a_happy_shineing_days@hotmail.com", password: "in_a_happy_shineing_days@hotmail.com",type:"0")
-            
-            //            self.doLogin(username: "fb_bohuang29@hotmail.com", password: "bohuang29@hotmail.com",type:"0")
-            
-            
             break;
         case 2:
             self.defaultLogin()
@@ -126,6 +118,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return false
     }
+    var locationManager = CLLocationManager.init()
+    func startLocationService() {
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        locationManager.startUpdatingLocation()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            switch(CLLocationManager.authorizationStatus()){
+            case .notDetermined:
+                locationManager.requestWhenInUseAuthorization()
+                print("no access")
+            case .restricted,.denied:
+                print("no access")
+                let av = UIAlertView.init(title: "Location Service", message: "Location services were previously denied by the you. Please enable location services for this app in settings.", delegate: nil, cancelButtonTitle: "OK")
+                av.show();
+                return;
+                
+            case .authorizedAlways,.authorizedWhenInUse:
+                print("access")
+            }
+            
+            locationManager.delegate = self
+            locationManager.startUpdatingLocation()
+        }else{
+            let av = UIAlertView.init(title: "Location Service", message: "Location services were previously denied by the you. Please enable location services for this app in settings.", delegate: nil, cancelButtonTitle: "OK")
+            av.show();
+            
+        }
+    }
+    
     func getRequestInfoLogin()->RequestLogin{
         let ret = RequestLogin()
         return ret
@@ -362,15 +384,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func defaultLogin(){
         if let env = CGlobal.sharedId().env{
             env.lastLogin = 0
-            let ms = UIStoryboard.init(name: "Main2", bundle: nil);
+            let ms = UIStoryboard.init(name: "Main", bundle: nil);
             
             DispatchQueue.main.async {
                 if let viewcon = ms.instantiateViewController(withIdentifier: "CLoginNav") as? UINavigationController{
-                    if viewcon.childViewControllers.count > 0 {
-                        if let lc = viewcon.childViewControllers[0] as? LoginViewController {
-                            lc.showProgress = false
-                        }
-                    }
+//                    if viewcon.childViewControllers.count > 0 {
+//                        if let lc = viewcon.childViewControllers[0] as? MainViewController {
+//                            lc.showProgress = false
+//                        }
+//                    }
                     self.window?.rootViewController = viewcon
                 }
             }
@@ -540,5 +562,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return false
     }
 
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if locations.count>0{
+            let lc = locations[0];
+            
+            print("app_lat",lc.coordinate.latitude)
+            print("app_lng",lc.coordinate.longitude)
+            self.location = lc
+        }
+    }
 }
 

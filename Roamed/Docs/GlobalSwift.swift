@@ -21,8 +21,8 @@ class GlobalSwift:NSObject{
         
     }
     // http://45.33.95.201/adminuser    http://139.162.42.92/adminuser
-    static let g_baseUrl = "http://roamed.co";
-    
+    static let g_baseUrl = "http://82.223.19.247/barcelona/index.php/api/";
+    static let g_basePhoto = "http://82.223.19.247/barcelona/";
 
     static let g_baseUrl2 = "https://stream-hk.travpholer.com/adminuser";
     
@@ -41,7 +41,7 @@ class GlobalSwift:NSObject{
     }
     
     static func getPhotoPath(filename:String)->String{
-        let uploadpath = g_baseUrl + "/assets/uploads/" + filename;
+        let uploadpath = g_basePhoto + filename;
         return uploadpath;
     }
     

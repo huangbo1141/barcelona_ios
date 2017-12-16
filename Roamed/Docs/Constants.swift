@@ -45,6 +45,9 @@ class Constants:NSObject{
     static let ACTION_GETPRICE = "/api/get_price/";
     static let ACTION_CHECK_NEXT_PURCHASE = "/api/check/";
     
+    static let ACTION_GET_CLUB = "getClub";
+    static let ACTION_GET_NEARBY = "getNearBy";
+    
     static let ACTION_UPLOAD = "/assets/rest/" + PATH_APNS + "/fileuploadmm.php";
     static let ACTION_UPLOAD_V = "/assets/rest/" + PATH_APNS + "/fileuploadvv.php";  //fileuploadvv.php
 
