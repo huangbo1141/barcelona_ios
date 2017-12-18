@@ -12,6 +12,7 @@ import IQKeyboardManagerSwift
 import ReachabilitySwift
 import UserNotifications
 import Alamofire
+import GoogleMaps
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate,CLLocationManagerDelegate {
@@ -25,54 +26,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate,CLLocationManagerDelegate 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         fromNotBackground = true;
-        initData(application: application)
-//        initServices(application: application)
         
-        //defaultMainWindow()
+        
+        
+        GMSServices.provideAPIKey("AIzaSyAPN34OpSc-JfgEi_bCO08qmd1GOTTmeF0")
         let global = CGlobal.sharedId();
         self.startLocationService()
-        // check the launchOptions
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            // your code here
-            self.fromNotBackground = false
-        }
-        
-        switch 1 {
-        case 1:
-            break;
-        case 2:
-            self.defaultLogin()
-            break
-        default:
-            
-            if let env = global?.env {
-                if env.lastLogin > 0 {
-                    
-//                    CGlobal.alertMessage("didFinishLaunchingWithOptions", title: "didFinishLaunchingWithOptions")
-                    if self.checkOption(option: launchOptions){
-//                        CGlobal.alertMessage("checkOption true", title: "checkOption true")
-                        return true;
-                    }
-                    self.defaultMainWindow()
-                    return true;
-                }else{
-                    if env.introviewed == 1 {
-                        self.defaultLogin()
-                        return true;
-                    }else{
-                        let ms = UIStoryboard.init(name: "Main2", bundle: nil);
-                        DispatchQueue.main.async {
-                            let viewcon = ms.instantiateViewController(withIdentifier: "IntroViewController");
-                            self.window?.rootViewController = viewcon
-                        }
-                        return true;
-                    }
-                }
-            }
-            
-            self.defaultLogin()
-            break;
-        }
         return true
     }
     func checkOption(option:[UIApplicationLaunchOptionsKey: Any]?)->Bool{

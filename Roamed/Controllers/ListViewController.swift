@@ -16,6 +16,7 @@ class ListViewController: UIViewController , UITableViewDelegate, UITableViewDat
     @IBOutlet weak var btnBack2: UIButton!
     
     @IBAction func backPressed(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     @IBOutlet weak var txtSearch: RoundTextField!
     @IBOutlet weak var btnSearch: UIButton!
@@ -27,9 +28,12 @@ class ListViewController: UIViewController , UITableViewDelegate, UITableViewDat
         let visible = txtSearch.isHidden
         txtSearch.isHidden = !visible
     }
-    
+    var cellHeight:CGFloat = 0
     func setTitle(){
+        let width = UIScreen.main.bounds.size.width
+        cellHeight = width * 0.5
         self.txtSearch.placeholder = "Search"
+        self.txtSearch.isHidden = true
         switch id {
             case 1:
             imgTitle.image = UIImage.init(named: "title_disco")
@@ -64,8 +68,12 @@ class ListViewController: UIViewController , UITableViewDelegate, UITableViewDat
         self.tableview.dataSource = self
         let nib1 = UINib.init(nibName: "CellType1TableViewCell", bundle: nil)
         let nib2 = UINib.init(nibName: "CellType2TableViewCell", bundle: nil)
+        let nib3 = UINib.init(nibName: "CellType3TableViewCell", bundle: nil)
         tableview.register(nib1, forCellReuseIdentifier: "cell1")
         tableview.register(nib2, forCellReuseIdentifier: "cell2")
+        tableview.register(nib3, forCellReuseIdentifier: "cell3")
+        
+        tableview.separatorStyle = .none
     }
     
     
@@ -78,7 +86,7 @@ class ListViewController: UIViewController , UITableViewDelegate, UITableViewDat
         
         let manager = NetworkUtil.sharedManager
         CGlobal.showIndicator(self)
-        manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_GET_CLUB) { (dict, error) in
+        manager.ontemplateGeneralRequest(data: request,method:.post, url: Constants.ACTION_GET_CLUB) { (dict, error) in
             
             if error == nil {
                 let response = ClubResponse.init(dictionary: dict)
@@ -97,7 +105,7 @@ class ListViewController: UIViewController , UITableViewDelegate, UITableViewDat
     var isSearch = false
     @objc private func textFieldDidChange(textField:UITextField){
         if textField == txtSearch {
-            if let str = textField.text{
+            if let str = textField.text {
                 if str.characters.count == 0 {
                     isSearch = false
                     self.tableview.reloadData()
@@ -142,6 +150,13 @@ class ListViewController: UIViewController , UITableViewDelegate, UITableViewDat
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return self.cellHeight
+    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var item = TblItem()
         if isSearch {
@@ -194,9 +209,8 @@ class ListViewController: UIViewController , UITableViewDelegate, UITableViewDat
             if let tag = dict["tag"] as? Int {
                 if tag == 0 {
                     if let phone = model.phone {
-                        if !phone.contains("@") && phone.contains("+"),let url = URL(string:"tel://" + phone){
-                            
-                            UIApplication.shared.open(url, options: [:])
+                        if !phone.contains("@") && phone.contains("+"){
+                            GlobalSwift.callNumber(phone: phone)
                         }else if phone.contains("@"){
                             let mailComposeViewController = self.configuredMailComposeViewController(mail: phone)
                             if MFMailComposeViewController.canSendMail() {
@@ -223,9 +237,9 @@ class ListViewController: UIViewController , UITableViewDelegate, UITableViewDat
         else if view.isKind(of: CellType3TableViewCell.self) {
             // id 4
             if let phone = model.phone {
-                if !phone.contains("@") && phone.contains("+"),let url = URL(string:"tel://" + phone){
+                if !phone.contains("@") && phone.contains("+"){
                     
-                    UIApplication.shared.open(url, options: [:])
+                    GlobalSwift.callNumber(phone: phone)
                 }else if phone.contains("@"){
                     let mailComposeViewController = self.configuredMailComposeViewController(mail: phone)
                     if MFMailComposeViewController.canSendMail() {

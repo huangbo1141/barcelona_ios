@@ -310,20 +310,6 @@ class PurchaseDetailViewController: UIViewController {
             UIPasteboard.general.string = self.purchaseDetail?.divert_number
             
             CGlobal.alertMessage("Number have been copy", title: nil)
-            // call forwarding
-            
-            //            if let detail = self.purchaseDetail , let number = detail.divert_number , !number.isEmpty{
-            //                let phonenumber = "tel://" + number
-            //                var url:URL? =  URL.init(string: phonenumber)
-            //                if let url = url {
-            //                    UIApplication.shared.openURL(URL.init(string: UIApplicationOpenSettingsURLString)!)
-            //                    UIApplication.shared.openURL(url)
-            //                }
-            //
-            //
-            //            }else{
-            //
-            //            }
             break
         case 101:
             // divert code

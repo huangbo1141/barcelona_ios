@@ -17,6 +17,8 @@
 		076B38F51E7AD90000C19E40 /* ColoredLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076B38F41E7AD90000C19E40 /* ColoredLabel.swift */; };
 		076B38F71E7ADFBE00C19E40 /* SetNotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076B38F61E7ADFBE00C19E40 /* SetNotificationViewController.swift */; };
 		0F9BCE9157C6441D8208F23A /* Pods_Roamed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AAE91820C8FDA8CD19B898D /* Pods_Roamed.framework */; };
+		101BFF671FE5719C0082092B /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BFF661FE5719C0082092B /* IAPHelper.swift */; };
+		101BFF691FE571A20082092B /* RageProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BFF681FE571A20082092B /* RageProducts.swift */; };
 		4D3B65B21E684A0F00929A59 /* PastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65B11E684A0F00929A59 /* PastViewController.swift */; };
 		4D3B65B51E684D0800929A59 /* PastTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B65B31E684D0800929A59 /* PastTableViewCell.swift */; };
 		4D3B65B61E684D0800929A59 /* PastTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D3B65B41E684D0800929A59 /* PastTableViewCell.xib */; };
@@ -150,7 +152,6 @@
 		E27873A21FE3CE900089C0FC /* button_club.png in Resources */ = {isa = PBXBuildFile; fileRef = E27873791FE3CE900089C0FC /* button_club.png */; };
 		E281BA541FE5631400643540 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E281BA531FE5631400643540 /* MapViewController.swift */; };
 		E281BA561FE5660A00643540 /* NearByResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E281BA551FE5660A00643540 /* NearByResponse.swift */; };
-		E281BA581FE56AE700643540 /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E281BA571FE56AE700643540 /* IAPHelper.swift */; };
 		E298A2331FE4FCBF003F532E /* CellType3TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E298A2311FE4FCBF003F532E /* CellType3TableViewCell.swift */; };
 		E298A2341FE4FCBF003F532E /* CellType3TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E298A2321FE4FCBF003F532E /* CellType3TableViewCell.xib */; };
 		E298A2381FE50A61003F532E /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E298A2371FE50A61003F532E /* DetailViewController.swift */; };
@@ -181,6 +182,8 @@
 		076B38F21E7AD7E700C19E40 /* ExtendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtendViewController.swift; sourceTree = "<group>"; };
 		076B38F41E7AD90000C19E40 /* ColoredLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColoredLabel.swift; sourceTree = "<group>"; };
 		076B38F61E7ADFBE00C19E40 /* SetNotificationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetNotificationViewController.swift; sourceTree = "<group>"; };
+		101BFF661FE5719C0082092B /* IAPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
+		101BFF681FE571A20082092B /* RageProducts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RageProducts.swift; sourceTree = "<group>"; };
 		1E0C74FB537DF2FCC0877A8E /* Pods-Roamed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roamed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Roamed/Pods-Roamed.debug.xcconfig"; sourceTree = "<group>"; };
 		3AAE91820C8FDA8CD19B898D /* Pods_Roamed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Roamed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D3B65B11E684A0F00929A59 /* PastViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastViewController.swift; sourceTree = "<group>"; };
@@ -350,7 +353,6 @@
 		E27873791FE3CE900089C0FC /* button_club.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_club.png; sourceTree = "<group>"; };
 		E281BA531FE5631400643540 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		E281BA551FE5660A00643540 /* NearByResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearByResponse.swift; sourceTree = "<group>"; };
-		E281BA571FE56AE700643540 /* IAPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
 		E298A2311FE4FCBF003F532E /* CellType3TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellType3TableViewCell.swift; sourceTree = "<group>"; };
 		E298A2321FE4FCBF003F532E /* CellType3TableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellType3TableViewCell.xib; sourceTree = "<group>"; };
 		E298A2371FE50A61003F532E /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -386,6 +388,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		101BFF651FE571870082092B /* IAP */ = {
+			isa = PBXGroup;
+			children = (
+				101BFF661FE5719C0082092B /* IAPHelper.swift */,
+				101BFF681FE571A20082092B /* RageProducts.swift */,
+			);
+			path = IAP;
+			sourceTree = "<group>";
+		};
 		4D3B65C11E68757500929A59 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -425,6 +436,7 @@
 				4D6FC4B11E5C2EBE00ECD774 /* Main.storyboard */,
 				4D6FC4B71E5C2EBE00ECD774 /* Assets.xcassets */,
 				4D6FC4B91E5C2EBE00ECD774 /* LaunchScreen.storyboard */,
+				101BFF651FE571870082092B /* IAP */,
 				F9FE281B1F2B2AD0005C8125 /* intro_pic */,
 				4D6FC4C91E5C38D500ECD774 /* Controllers */,
 				4D6FC59E1E5C724C00ECD774 /* Cells */,
@@ -468,7 +480,6 @@
 				E29DAC2B1FE4BC69007C3035 /* ListViewController.swift */,
 				E298A2371FE50A61003F532E /* DetailViewController.swift */,
 				E281BA531FE5631400643540 /* MapViewController.swift */,
-				E281BA571FE56AE700643540 /* IAPHelper.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -866,14 +877,14 @@
 				TargetAttributes = {
 					4D6FC4A91E5C2EBE00ECD774 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 6BQ95S6MAJ;
+						DevelopmentTeam = TGT323YWLK;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
 							com.apple.Push = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -1043,7 +1054,7 @@
 				4D3B65C81E68757500929A59 /* UIView+Property.swift in Sources */,
 				4D6FC55C1E5C38D500ECD774 /* NetworkUtil.swift in Sources */,
 				4D6FC5911E5C38D500ECD774 /* RoundCornerBorderButton.swift in Sources */,
-				E281BA581FE56AE700643540 /* IAPHelper.swift in Sources */,
+				101BFF671FE5719C0082092B /* IAPHelper.swift in Sources */,
 				4D3B65C71E68757500929A59 /* UIView+Animation.m in Sources */,
 				4D6FC5701E5C38D500ECD774 /* MGSwipeTableCell.m in Sources */,
 				4D3B65BA1E6859FB00929A59 /* PurchaseDetailResponse.swift in Sources */,
@@ -1086,6 +1097,7 @@
 				4D6FC5631E5C38D500ECD774 /* NetworkParser.m in Sources */,
 				4D6FC5561E5C38D500ECD774 /* LoginViewController.swift in Sources */,
 				076B38F71E7ADFBE00C19E40 /* SetNotificationViewController.swift in Sources */,
+				101BFF691FE571A20082092B /* RageProducts.swift in Sources */,
 				4D6FC5761E5C38D500ECD774 /* UIViewController+BetterLayoutGuides.m in Sources */,
 				E29DAC291FE4B711007C3035 /* CellType2TableViewCell.swift in Sources */,
 				4D6FC5B61E5C986800ECD774 /* CallResponse.swift in Sources */,
@@ -1258,17 +1270,17 @@
 			baseConfigurationReference = 1E0C74FB537DF2FCC0877A8E /* Pods-Roamed.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Roamed/Roamed.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Tan Long (T2935VR5G8)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tan Long (T2935VR5G8)";
-				DEVELOPMENT_TEAM = 6BQ95S6MAJ;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Huang Bo (9YJ5VA6D8A)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Huang Bo (9YJ5VA6D8A)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = TGT323YWLK;
 				INFOPLIST_FILE = Roamed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.simpsy.roamed1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alex.Barocelona;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9bf96dfa-29ba-48a3-aa64-acaed03ac1a8";
-				PROVISIONING_PROFILE_SPECIFIER = "Roamed Dev";
+				PROVISIONING_PROFILE = "1185d7dd-1299-4140-9a4c-22bdfc86ac9f";
+				PROVISIONING_PROFILE_SPECIFIER = "barocelona dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "Roamed/Roamed-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1279,17 +1291,17 @@
 			baseConfigurationReference = F28E3DDE339E0F4FA107A46B /* Pods-Roamed.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Roamed/Roamed.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Tan Long (T2935VR5G8)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tan Long (T2935VR5G8)";
-				DEVELOPMENT_TEAM = 6BQ95S6MAJ;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Huang Bo (9YJ5VA6D8A)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Huang Bo (9YJ5VA6D8A)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = TGT323YWLK;
 				INFOPLIST_FILE = Roamed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.simpsy.roamed1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alex.Barocelona;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9bf96dfa-29ba-48a3-aa64-acaed03ac1a8";
-				PROVISIONING_PROFILE_SPECIFIER = "Roamed Dev";
+				PROVISIONING_PROFILE = "1185d7dd-1299-4140-9a4c-22bdfc86ac9f";
+				PROVISIONING_PROFILE_SPECIFIER = "barocelona dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "Roamed/Roamed-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};

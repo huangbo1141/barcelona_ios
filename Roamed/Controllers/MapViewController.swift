@@ -19,33 +19,33 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         self.initView()
-        self.getNearByList()
+        
         // Do any additional setup after loading the view.
     }
     @IBAction func tapBack(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
     func initView(){
-        if mode == 0{
+        if mode == 1{
             self.viewTitle.isHidden = true
             
             let marker = GMSMarker.init()
             marker.position = CLLocationCoordinate2DMake(lat, lng)
             marker.title = ""
-            let camera = GMSCameraPosition.init(target: marker.position, zoom: 2.0, bearing: 0, viewingAngle: 0)
+            let camera = GMSCameraPosition.init(target: marker.position, zoom: Constants.zoom_level, bearing: 0, viewingAngle: 0)
             mapView.camera = camera
             marker.map = self.mapView
-        }else if mode == 1 {
-            self.viewTitle.isHidden = false
-            
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            if let location = appDelegate.location {
-                lat = location.coordinate.latitude
-                lng = location.coordinate.longitude
+        }else if mode == 2 {
+            let delegate = UIApplication.shared.delegate as! AppDelegate
+            if let loc = delegate.location {
+                self.lat =  loc.coordinate.latitude
+                self.lng =  loc.coordinate.longitude
             }
-            let camera = GMSCameraPosition.init(target: CLLocationCoordinate2DMake(lat, lng), zoom: 2.0, bearing: 0, viewingAngle: 0)
+            print("location: ",self.lat,self.lng)
+            let camera = GMSCameraPosition.init(target: CLLocationCoordinate2DMake(lat, lng), zoom: Constants.zoom_level, bearing: 0, viewingAngle: 0)
             mapView.camera = camera
-            
+            self.viewTitle.isHidden = false
+            self.getNearByList()
         }
     }
     
@@ -58,7 +58,7 @@ class MapViewController: UIViewController {
         
         let manager = NetworkUtil.sharedManager
         CGlobal.showIndicator(self)
-        manager.ontemplateGeneralRequest(data: request,method:.get, url: Constants.ACTION_GET_NEARBY) { (dict, error) in
+        manager.ontemplateGeneralRequest(data: request,method:.post, url: Constants.ACTION_GET_NEARBY) { (dict, error) in
             
             if error == nil {
                 let response = NearByResponse.init(dictionary: dict)
@@ -79,7 +79,7 @@ class MapViewController: UIViewController {
                             marker.map = self.mapView
                         }
                     }
-                    let camera = GMSCameraPosition.init(target: CLLocationCoordinate2DMake(self.lat, self.lng), zoom: 2.0, bearing: 0, viewingAngle: 0)
+                    let camera = GMSCameraPosition.init(target: CLLocationCoordinate2DMake(self.lat, self.lng), zoom: Constants.zoom_level, bearing: 0, viewingAngle: 0)
                     self.mapView.camera = camera
                 }
                 

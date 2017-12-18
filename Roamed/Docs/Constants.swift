@@ -17,7 +17,7 @@ class Constants:NSObject{
     public override init(){
         
     }
-    
+    static var zoom_level:Float = 15
     static var purchase_mode = 1
     //
     static let PRIMARY_COLOR = UIColor.init(colorLiteralRed: 21.0/255.0, green: 129.0/255.0, blue: 198.0/255.0, alpha: 1.0)

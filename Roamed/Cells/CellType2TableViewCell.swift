@@ -41,16 +41,10 @@ class CellType2TableViewCell: BaseTableViewCell {
                 
             }
             if include.lowercased().contains("0") {
-                self.viewText1.isHidden = false
                 self.btn1.isHidden = false
-                
-                self.viewText2.isHidden = true
                 self.btn2.isHidden = true
             }else{
-                self.viewText1.isHidden = true
                 self.btn1.isHidden = true
-                
-                self.viewText2.isHidden = false
                 self.btn2.isHidden = false
             }
         }

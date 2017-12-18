@@ -126,4 +126,13 @@ class GlobalSwift:NSObject{
         return nil;
     }
     
+    static func callNumber(phone:String){
+        var tt = phone.replacingOccurrences(of: "+", with: "")
+        tt = tt.replacingOccurrences(of: " ", with: "")
+        tt = tt.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let url = URL(string:"tel://" + tt) {
+            UIApplication.shared.open(url, options: [:])
+        }
+    }
+    
 }

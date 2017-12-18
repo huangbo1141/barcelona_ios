@@ -17,7 +17,7 @@ class CellType1TableViewCell: BaseTableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
+        self.lblTitle.isHidden = true
     }
     
     override func setData(data: AnyObject?) {
@@ -28,9 +28,7 @@ class CellType1TableViewCell: BaseTableViewCell {
                 include = temp
             }
             
-            self.lblTitle.text = item.title
-            
-            
+            //self.lblTitle.text = item.title
             if let image = item.image {
                 let photopath = GlobalSwift.getPhotoPath(filename: image)
                 let url = URL(string:photopath)

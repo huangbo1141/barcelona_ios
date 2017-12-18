@@ -11,7 +11,7 @@ import GoogleMaps
 import SDWebImage
 import MessageUI
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController,MFMailComposeViewControllerDelegate {
 
     var model:TblItem?
     
@@ -26,20 +26,31 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var btnCall: UIButton!
     @IBOutlet weak var viewPhone: UIView!
     @IBOutlet weak var viewSchedule: UIView!
-    
-    
+    @IBOutlet weak var viewMask: UIView!
     
     
     @IBOutlet weak var imgContent: UIImageView!
     
     @IBAction func tapMapView(_ sender: Any) {
+        let ms = UIStoryboard.init(name: "Main", bundle: nil);
+        if let item = self.model,let lat = item.lat,let lng = item.lng,let lat_v = Double(lat),let lng_v = Double(lng) {
+            DispatchQueue.main.async {
+                let viewcon = ms.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController;
+                viewcon.mode = 1
+                viewcon.lat = lat_v
+                viewcon.lng = lng_v
+                if let navc = self.navigationController {
+                    navc.pushViewController(viewcon, animated: true)
+                }
+            }
+        }
+        
     }
     
     @IBAction func tapCall(_ sender: Any) {
         if let phone = self.model?.phone{
-            if !phone.contains("@") && phone.contains("+"),let url = URL(string:"tel://" + phone){
-                
-                UIApplication.shared.open(url, options: [:])
+            if !phone.contains("@") && phone.contains("+"){
+                GlobalSwift.callNumber(phone: phone)
             }else if phone.contains("@"){
                 let mailComposeViewController = self.configuredMailComposeViewController(mail: phone)
                 if MFMailComposeViewController.canSendMail() {
@@ -51,6 +62,17 @@ class DetailViewController: UIViewController {
         }
         
     }
+    func configuredMailComposeViewController(mail:String) -> MFMailComposeViewController {
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property
+        
+        mailComposerVC.setToRecipients([mail])
+        mailComposerVC.setSubject("")
+        mailComposerVC.setMessageBody("", isHTML: false)
+        
+        return mailComposerVC
+    }
+    
     func showSendMailErrorAlert() {
         let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", delegate: self, cancelButtonTitle: "OK")
         sendMailErrorAlert.show()
@@ -82,7 +104,7 @@ class DetailViewController: UIViewController {
             if let location = item.location, location.utf8CString.count > 0 {
                 lblLocation.text = item.location
             }
-            if let phone = item.phone,phone.utf8CString.count>0 {
+            if let phone = item.phone,phone.characters.count>0 {
                 if phone.contains("+") || phone.contains("@"){
                     self.btnCall.setTitle("Reservation "+phone, for: .normal)
                     if(phone.contains("@")){
@@ -116,22 +138,23 @@ class DetailViewController: UIViewController {
         mapView.settings.compassButton = false
         
         
-        var lat = 35.89093
-        var lng = -106.324907
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        if let location = appDelegate.location {
-            lat = location.coordinate.latitude
-            lng = location.coordinate.longitude
+        var lat1 = 35.89093
+        var lng1 = -106.324907
+        if let item = self.model,let lat = item.lat,let lng = item.lng,let lat_v = Double(lat),let lng_v = Double(lng) {
+            lat1 = lat_v
+            lng1 = lng_v
         }
         
         let marker = GMSMarker.init()
-        marker.position = CLLocationCoordinate2DMake(lat, lng)
+        marker.position = CLLocationCoordinate2DMake(lat1, lng1)
         marker.title = ""
-        let camera = GMSCameraPosition.init(target: marker.position, zoom: 2.0, bearing: 0, viewingAngle: 0)
+        let camera = GMSCameraPosition.init(target: marker.position, zoom: 14.0, bearing: 0, viewingAngle: 0)
         mapView.camera = camera
         marker.map = self.mapView
         
-        
+        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+            self.viewMask.isHidden = false
+        }
     }
     var marker:GMSMarker?
 

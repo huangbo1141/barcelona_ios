@@ -27,7 +27,7 @@ class TblItem: BaseModelSwift {
         
         if let dict = dictionary {
             BaseModelSwift.parseResponse(targetClass: self, dict: dictionary)
-            if let val = dict["ddescription"] as? String {
+            if let val = dict["description"] as? String {
                 self.ddescription = val
             }
         }
