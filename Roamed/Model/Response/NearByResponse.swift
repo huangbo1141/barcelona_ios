@@ -14,24 +14,30 @@ class NearByResponse: BaseModelSwift {
     init(dictionary:[String:Any]?){
         super.init()
         if let dictionary = dictionary {
-            if let dict = dictionary["data"] as? [String:Any] {
+            if let array = dictionary["data"] as? [AnyObject] {
                 items = [TblItem]()
-                var model:TblItem?
-                if let club = dict["club"] as? [String:Any]{
-                    model = TblItem.init(dictionary: club)
-                }
-                
-                if let model = model {
-                    if let array = dict["schedule"] as? [AnyObject]{
-                        for obj in array{
-                            if let obj = obj as? [String:Any]{
-                                let time = TblTime.init(dictionary: obj)
-                                model.schedule.append(time)
+                for i in 0..<array.count {
+                    if let dict = array[i] as? [String:Any] {
+                        var model:TblItem?
+                        if let club = dict["club"] as? [String:Any]{
+                            model = TblItem.init(dictionary: club)
+                        }
+                        
+                        if let model = model {
+                            if let array = dict["schedule"] as? [AnyObject]{
+                                for obj in array{
+                                    if let obj = obj as? [String:Any]{
+                                        let time = TblTime.init(dictionary: obj)
+                                        model.schedule.append(time)
+                                    }
+                                }
                             }
+                            items.append(model)
                         }
                     }
-                    items.append(model)
                 }
+                
+                
             }
         }
     }

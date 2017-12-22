@@ -36,11 +36,11 @@ class MapViewController: UIViewController {
             mapView.camera = camera
             marker.map = self.mapView
         }else if mode == 2 {
-//            let delegate = UIApplication.shared.delegate as! AppDelegate
-//            if let loc = delegate.location {
-//                self.lat =  loc.coordinate.latitude
-//                self.lng =  loc.coordinate.longitude
-//            }
+            let delegate = UIApplication.shared.delegate as! AppDelegate
+            if let loc = delegate.location {
+                self.lat =  loc.coordinate.latitude
+                self.lng =  loc.coordinate.longitude
+            }
             print("location: ",self.lat,self.lng)
             
             let camera = GMSCameraPosition.init(target: CLLocationCoordinate2DMake(lat, lng), zoom: Constants.zoom_level, bearing: 0, viewingAngle: 0)
@@ -69,17 +69,22 @@ class MapViewController: UIViewController {
                     if let lat = item.lat, let lng = item.lng,let lat_v = Double(lat), let lng_v = Double(lng) {
                         let pt = CLLocationCoordinate2DMake(lat_v,lng_v)
                         temp.append(pt)
+                        
+                        let marker = GMSMarker()
+                        marker.position = pt
+                        marker.map = self.mapView
+                        marker.title = item.title
                     }
                 }
                 if temp.count>0 {
-                    for i in 0..<temp.count {
-                        
-                        if let position = temp[i] as? CLLocationCoordinate2D {
-                            let marker = GMSMarker()
-                            marker.position = position
-                            marker.map = self.mapView
-                        }
-                    }
+//                    for i in 0..<temp.count {
+//
+//                        if let position = temp[i] as? CLLocationCoordinate2D {
+//                            let marker = GMSMarker()
+//                            marker.position = position
+//                            marker.map = self.mapView
+//                        }
+//                    }
                     let camera = GMSCameraPosition.init(target: CLLocationCoordinate2DMake(self.lat, self.lng), zoom: Constants.zoom_level, bearing: 0, viewingAngle: 0)
                     self.mapView.camera = camera
                 }

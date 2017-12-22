@@ -52,7 +52,8 @@ class NetworkUtil{
         if let data = data {
             questionDict = BaseModelSwift.getQuestionDict(targetClass: data)
         }
-        
+        debugPrint(serverurl)
+        debugPrint(questionDict)
         self.generalNetwork(serverurl: serverurl, questionDict: questionDict,method:method, completionBlock: completionBlock)
     }
     
