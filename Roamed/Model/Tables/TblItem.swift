@@ -30,6 +30,16 @@ class TblItem: BaseModelSwift {
             if let val = dict["description"] as? String {
                 self.ddescription = val
             }
+            
+            if let array = dict["schedule"] as? [AnyObject] {
+                schedule = [TblTime]()
+                for i in 0..<array.count {
+                    if let idict = array[i] as? [String:Any] {
+                        let ival = TblTime.init(dictionary: idict)
+                        schedule.append(ival)
+                    }
+                }
+            }
         }
     }
     required init(){

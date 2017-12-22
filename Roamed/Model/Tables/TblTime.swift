@@ -10,7 +10,7 @@ import UIKit
 
 class TblTime: BaseModelSwift {
     
-    var title:String?
+    var weekofday:String?
     var start:String?
     var end:String?
     

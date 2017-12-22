@@ -93,6 +93,7 @@ class DetailViewController: UIViewController,MFMailComposeViewControllerDelegate
             lblTitle.text = item.title
             lblInclude.text = item.include
             lblDescription.text = item.ddescription
+            lblSubTitle.text = item.title
             
             if let image = item.image2 {
                 let photopath = GlobalSwift.getPhotoPath(filename: image)
@@ -122,7 +123,7 @@ class DetailViewController: UIViewController,MFMailComposeViewControllerDelegate
                 var text = "";
                 for i in 0..<item.schedule.count {
                     let time = item.schedule[i]
-                    if let title = time.title {
+                    if let title = time.weekofday {
                         text = text + title + "\n"
                     }
                 }

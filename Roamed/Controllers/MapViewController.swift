@@ -13,8 +13,8 @@ class MapViewController: UIViewController {
     @IBOutlet weak var viewTitle: UIView!
     @IBOutlet weak var mapView: GMSMapView!
     var mode = 0
-    var lat = 35.89093
-    var lng = -106.326907
+    var lat = 40.42
+    var lng = -3.7
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,12 +36,13 @@ class MapViewController: UIViewController {
             mapView.camera = camera
             marker.map = self.mapView
         }else if mode == 2 {
-            let delegate = UIApplication.shared.delegate as! AppDelegate
-            if let loc = delegate.location {
-                self.lat =  loc.coordinate.latitude
-                self.lng =  loc.coordinate.longitude
-            }
+//            let delegate = UIApplication.shared.delegate as! AppDelegate
+//            if let loc = delegate.location {
+//                self.lat =  loc.coordinate.latitude
+//                self.lng =  loc.coordinate.longitude
+//            }
             print("location: ",self.lat,self.lng)
+            
             let camera = GMSCameraPosition.init(target: CLLocationCoordinate2DMake(lat, lng), zoom: Constants.zoom_level, bearing: 0, viewingAngle: 0)
             mapView.camera = camera
             self.viewTitle.isHidden = false

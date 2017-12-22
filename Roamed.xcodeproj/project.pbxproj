@@ -883,6 +883,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 0;
 							};
@@ -1270,8 +1273,8 @@
 			baseConfigurationReference = 1E0C74FB537DF2FCC0877A8E /* Pods-Roamed.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Huang Bo (9YJ5VA6D8A)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Huang Bo (9YJ5VA6D8A)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: TENABLED S.L (TGT323YWLK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: TENABLED S.L (TGT323YWLK)";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = TGT323YWLK;
 				INFOPLIST_FILE = Roamed/Info.plist;
@@ -1279,8 +1282,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alex.Barocelona;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1185d7dd-1299-4140-9a4c-22bdfc86ac9f";
-				PROVISIONING_PROFILE_SPECIFIER = "barocelona dev";
+				PROVISIONING_PROFILE = "33d7169a-2663-44bb-bc23-353d647e4f17";
+				PROVISIONING_PROFILE_SPECIFIER = "barocelona pro";
 				SWIFT_OBJC_BRIDGING_HEADER = "Roamed/Roamed-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1291,8 +1294,8 @@
 			baseConfigurationReference = F28E3DDE339E0F4FA107A46B /* Pods-Roamed.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Huang Bo (9YJ5VA6D8A)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Huang Bo (9YJ5VA6D8A)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: TENABLED S.L (TGT323YWLK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: TENABLED S.L (TGT323YWLK)";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = TGT323YWLK;
 				INFOPLIST_FILE = Roamed/Info.plist;
@@ -1300,8 +1303,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alex.Barocelona;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1185d7dd-1299-4140-9a4c-22bdfc86ac9f";
-				PROVISIONING_PROFILE_SPECIFIER = "barocelona dev";
+				PROVISIONING_PROFILE = "33d7169a-2663-44bb-bc23-353d647e4f17";
+				PROVISIONING_PROFILE_SPECIFIER = "barocelona pro";
 				SWIFT_OBJC_BRIDGING_HEADER = "Roamed/Roamed-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
